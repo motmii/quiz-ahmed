@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة مراجعة الاختبارات | دبلوم أمن المعلومات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3b82f6; --secondary-color: #1e40af; --accent-color: #f59e0b; 
+            --success-color: #10b981; --danger-color: #ef4444; --bg-gradient-1: #0f172a;
+            --bg-gradient-2: #1e293b; --text-light: #f8fafc; --text-muted: #94a3b8;
+            --glass-bg: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
+
+        body { background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2)); color: var(--text-light); min-height: 100vh; display: flex; justify-content: center; align-items: center; overflow-x: hidden; transition: 0.5s; }
+
+        .bg-circles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
+        .bg-circles div { position: absolute; border-radius: 50%; filter: blur(60px); transition: background 0.5s ease; }
+        .circle-1 { width: 400px; height: 400px; top: -100px; right: -100px; background: rgba(59, 130, 246, 0.15); }
+        .circle-2 { width: 300px; height: 300px; bottom: -50px; left: -50px; background: rgba(245, 158, 11, 0.1); }
+
+        .main-container { position: relative; background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 40px; width: 95%; max-width: 900px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); max-height: 90vh; overflow-y: auto; transition: 0.5s;}
+        .main-container::-webkit-scrollbar { width: 8px; } .main-container::-webkit-scrollbar-track { background: transparent; } .main-container::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
+
+        /* شريط البروفايل والأدوات */
+        .top-nav-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;}
+        .player-profile { display: flex; align-items: center; background: rgba(0,0,0,0.3); padding: 10px 20px; border-radius: 15px; border: 1px solid var(--glass-border); gap: 15px; flex: 1;}
+        .level-badge { background: linear-gradient(135deg, var(--accent-color), #d97706); color: #000; width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: 900; font-size: 1.3rem; box-shadow: 0 0 10px rgba(245, 158, 11, 0.5); border: 2px solid #fff; }
+        .xp-text { font-size: 1.1rem; font-weight: 700; color: var(--accent-color); }
+        
+        .streak-box { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; font-weight: bold; color: var(--text-muted); transition: all 0.3s; }
+        .streak-box.active { color: #f43f5e; text-shadow: 0 0 10px rgba(244, 63, 94, 0.5); transform: scale(1.1); }
+        .streak-box.active::before { content: '🔥'; animation: shake 0.5s infinite; }
+        @keyframes shake { 0% {transform: rotate(0deg);} 25% {transform: rotate(-10deg);} 50% {transform: rotate(0deg);} 75% {transform: rotate(10deg);} 100% {transform: rotate(0deg);} }
+
+        .btn-group { display: flex; gap: 10px; }
+        .action-btn { background: linear-gradient(135deg, #8b5cf6, #6d28d9); color: #fff; border: none; padding: 10px 15px; border-radius: 15px; font-weight: bold; font-size: 1rem; cursor: pointer; box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4); transition: 0.3s; display: flex; align-items: center; gap: 5px;}
+        .action-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(139, 92, 246, 0.6); }
+        .updates-btn { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4); }
+        .updates-btn:hover { box-shadow: 0 8px 20px rgba(16, 185, 129, 0.6); }
+
+        .developer-badge { background: rgba(59, 130, 246, 0.2); border: 1px solid var(--primary-color); color: var(--primary-color); padding: 5px 15px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; font-family: monospace; letter-spacing: 1px; }
+
+        h1, h2 { text-align: center; font-weight: 900; margin-bottom: 10px; color: #fff; } h1 { font-size: 2.3rem; }
+        .subtitle { text-align: center; color: var(--text-muted); font-size: 1.1rem; margin-bottom: 20px; }
+
+        /* تصميم جدول الاختبارات */
+        .schedule-title { color: var(--accent-color); font-weight: 900; margin-top: 30px; margin-bottom: 10px; text-align: center; font-size: 1.2rem; }
+        .schedule-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; background: rgba(0, 0, 0, 0.2); border-radius: 12px; overflow: hidden; font-size: 0.95rem; border: 1px solid var(--glass-border); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .schedule-table th, .schedule-table td { padding: 12px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .schedule-table th { background: rgba(59, 130, 246, 0.2); color: var(--primary-color); font-weight: 900; }
+        .schedule-table tr:hover { background: rgba(255, 255, 255, 0.05); }
+        .date-gregorian { display: block; font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; }
+
+        .primary-btn { display: block; width: fit-content; margin: 20px auto 0; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border: none; padding: 15px 40px; font-size: 1.3rem; font-weight: 700; border-radius: 50px; cursor: pointer; box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3); transition: all 0.3s; }
+        .primary-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(59, 130, 246, 0.5); }
+        .share-btn { background: linear-gradient(135deg, #10b981, #059669); margin-top: 15px; }
+        
+        .survival-btn { background: linear-gradient(135deg, #ef4444, #991b1b); color: white; box-shadow: 0 10px 20px rgba(239, 68, 68, 0.4); margin-top: 30px; width: 100%; max-width: 400px; padding: 15px; font-size: 1.3rem; font-weight: bold; text-align: center; border-radius: 20px; border: 2px solid #fca5a5; cursor: pointer; transition: 0.3s; display: block; margin-left: auto; margin-right: auto;}
+        .survival-btn:hover { transform: scale(1.05); box-shadow: 0 15px 30px rgba(239, 68, 68, 0.6); }
+
+        .subjects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .subject-card { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); padding: 20px 15px; border-radius: 16px; text-align: center; cursor: pointer; transition: all 0.3s; font-size: 1.1rem; font-weight: 700; position: relative; overflow: hidden; }
+        .subject-card:hover { background: rgba(59, 130, 246, 0.1); border-color: var(--primary-color); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+
+        .readiness-bar { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-top: 15px; overflow: hidden; }
+        .readiness-fill { height: 100%; background: var(--success-color); width: 0%; transition: width 0.8s; }
+        .readiness-text { font-size: 0.8rem; color: var(--text-muted); margin-top: 5px; display: block; font-weight: bold;}
+
+        /* عناصر الاختبار والانفنتوري */
+        .quiz-top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;}
+        .inventory-bar { display: flex; gap: 10px; background: rgba(0,0,0,0.3); padding: 5px 15px; border-radius: 20px; border: 1px solid var(--glass-border); }
+        .inv-item { background: transparent; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; position: relative; transition: 0.3s; display: flex; align-items: center; gap: 5px;}
+        .inv-item:hover:not(:disabled) { transform: scale(1.1); }
+        .inv-item:disabled { opacity: 0.3; cursor: not-allowed; filter: grayscale(100%); }
+        .inv-count { background: var(--accent-color); color: #000; font-size: 0.7rem; font-weight: bold; width: 18px; height: 18px; border-radius: 50%; display: flex; justify-content: center; align-items: center; position: absolute; top: -5px; right: -10px; }
+        .shield-active-glow { animation: shieldGlow 1.5s infinite; border-color: #3b82f6 !important; box-shadow: 0 0 20px rgba(59, 130, 246, 0.5) !important; }
+        @keyframes shieldGlow { 0% {box-shadow: 0 0 10px #3b82f6;} 50% {box-shadow: 0 0 30px #60a5fa;} 100% {box-shadow: 0 0 10px #3b82f6;} }
+
+        .back-home-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 0.9rem; }
+        .back-home-btn:hover { background: rgba(255,255,255,0.2); }
+        .bookmark-btn { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 0.9rem; }
+        .bookmark-btn.active { background: rgba(245, 158, 11, 0.2); box-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
+
+        .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; margin-top: 10px; }
+        .progress-bar-container { width: 100%; height: 10px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; margin-bottom: 30px; overflow: hidden; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary-color), #60a5fa); width: 0%; transition: width 0.4s; }
+
+        .question-box { font-size: 1.5rem; font-weight: 900; margin-bottom: 30px; line-height: 1.6; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .options-container { display: flex; flex-direction: column; gap: 12px; }
+        .option-item { background: rgba(0, 0, 0, 0.3); border: 2px solid var(--glass-border); color: var(--text-light); padding: 15px 20px; font-size: 1.1rem; font-weight: 500; border-radius: 12px; cursor: pointer; transition: all 0.2s; text-align: right; position: relative; overflow: hidden; }
+        .option-item:hover:not(.disabled) { border-color: var(--primary-color); background: rgba(59, 130, 246, 0.1); transform: translateX(-5px); }
+        .option-item.correct { background: rgba(16, 185, 129, 0.2); border-color: var(--success-color); color: var(--success-color); font-weight: bold; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
+        .option-item.wrong { background: rgba(239, 68, 68, 0.2); border-color: var(--danger-color); color: var(--danger-color); box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
+        .option-item.disabled { cursor: not-allowed; }
+        .option-item.hidden-hint { opacity: 0.1 !important; pointer-events: none; border-color: transparent; }
+
+        .explanation-box { display: none; margin-top: 20px; padding: 15px; border-radius: 12px; font-size: 1.05rem; line-height: 1.6; border-right: 5px solid; background: rgba(0, 0, 0, 0.4); }
+        .explanation-box.correct { border-color: var(--success-color); }
+        .explanation-box.wrong { border-color: var(--danger-color); }
+        .explanation-title { font-weight: 900; margin-bottom: 5px; font-size: 1.1rem; }
+
+        .nav-buttons { display: flex; gap: 15px; margin-top: 30px; }
+        .nav-btn { flex: 1; padding: 12px; border-radius: 12px; font-size: 1.1rem; font-weight: 900; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .btn-next { background: var(--primary-color); color: white; border: none; display: none; box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); }
+        .btn-next:hover { background: var(--secondary-color); transform: translateY(-2px); }
+        .btn-prev { background: transparent; border: 2px solid var(--text-muted); color: var(--text-muted); }
+
+        /* نوافذ (Modals) للمتجر والتحديثات */
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: var(--bg-gradient-2); border: 2px solid var(--primary-color); border-radius: 20px; padding: 30px; width: 90%; max-width: 500px; text-align: center; box-shadow: 0 0 30px rgba(59, 130, 246, 0.5); position: relative; max-height: 85vh; overflow-y: auto; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; color: #fff; cursor: pointer; background: transparent; border: none; }
+        
+        .shop-item { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 15px; border-radius: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; text-align: right;}
+        .buy-btn { background: var(--accent-color); color: #000; border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .buy-btn:hover { background: #fcd34d; }
+        .buy-btn:disabled { background: gray; cursor: not-allowed; }
+
+        .update-list-item { text-align: right; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin-bottom: 15px; }
+        .update-list-item h3 { color: var(--success-color); margin-bottom: 8px; font-size: 1.1rem; }
+        .update-list-item p { color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; }
+
+        .review-section { margin-top: 30px; text-align: right; background: rgba(0,0,0,0.3); padding: 20px; border-radius: 15px; border: 1px solid var(--glass-border); display: none; }
+        .review-item { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed rgba(255,255,255,0.1); }
+        .review-q { font-weight: bold; font-size: 1.1rem; color: #fff; margin-bottom: 5px; }
+        .review-wrong { color: var(--danger-color); text-decoration: line-through; font-size:0.95rem; }
+        .review-correct { color: var(--success-color); font-weight: bold; font-size:0.95rem; }
+
+        #subjects-screen, #quiz-screen, #result-screen { display: none; }
+        .fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .xp-popup { position: absolute; color: var(--accent-color); font-weight: 900; font-size: 1.5rem; pointer-events: none; animation: floatUp 1s ease forwards; z-index: 100; text-shadow: 0 0 10px #000; }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-50px) scale(1.5); } }
+
+        @media(max-width: 600px){
+            .top-nav-area { flex-direction: column; align-items: stretch; }
+            .player-profile { justify-content: space-between; }
+            .btn-group { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-circles">
+        <div class="circle-1" id="bg-circle-1"></div>
+        <div class="circle-2" id="bg-circle-2"></div>
+    </div>
+    <canvas id="canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;"></canvas>
+
+    <div class="modal-overlay" id="shop-modal">
+        <div class="modal-content" style="border-color: #8b5cf6; box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);">
+            <button class="close-modal" onclick="closeModal('shop-modal')">✖</button>
+            <h2 style="color: #a78bfa;">🛒 متجر الأدوات</h2>
+            <p style="margin-bottom: 20px; color: var(--accent-color); font-weight: bold;">رصيدك: <span id="shop-xp-display">0</span> XP</p>
+            
+            <div class="shop-item">
+                <div>
+                    <div style="font-size: 1.1rem; font-weight: bold; color: #fff;">⚖️ أداة 50/50</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">تحذف إجابتين خاطئة</div>
+                </div>
+                <button class="buy-btn" onclick="buyItem('fifty', 100)">100 XP</button>
+            </div>
+            
+            <div class="shop-item">
+                <div>
+                    <div style="font-size: 1.1rem; font-weight: bold; color: #fff;">🛡️ الدرع الواقي</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">يحميك من الإجابة الخاطئة لمرة واحدة</div>
+                </div>
+                <button class="buy-btn" onclick="buyItem('shield', 300)">300 XP</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="updates-modal">
+        <div class="modal-content" style="border-color: #10b981; box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);">
+            <button class="close-modal" onclick="closeModal('updates-modal')">✖</button>
+            <h2 style="color: #10b981;">🔔 سجل التحديثات والميزات</h2>
+            
+            <div class="update-list-item">
+                <h3>🚀 الإصدار الحالي (Ultimate 3.2)</h3>
+                <p>إضافة <b>وضع البقاء (Survival)</b> الصعب، وتفعيل <b>متجر الأدوات</b> لشراء المساعدات بنقاط الـ XP.</p>
+            </div>
+            <div class="update-list-item">
+                <h3>📊 الإصدار (3.1)</h3>
+                <p>إضافة عداد الجاهزية للمواد، ميزة <b>(حفظ الأسئلة ⭐)</b> للمراجعة، وزر مشاركة النتيجة عبر الواتساب.</p>
+            </div>
+            <div class="update-list-item">
+                <h3>💡 الإصدار (2.0)</h3>
+                <p>إطلاق <b>صندوق الشرح التفاعلي</b> لتوضيح سبب الإجابات، واستكمال بنك الأسئلة الشامل (250 سؤال).</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container" id="main-ui">
+        
+        <div class="top-nav-area fade-in">
+            <div class="player-profile">
+                <div class="player-info" style="display:flex; gap:15px; align-items:center;">
+                    <div class="level-badge" id="player-level">1</div>
+                    <div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted);">المستوى</div>
+                        <div class="xp-text"><span id="player-xp">0</span> XP</div>
+                    </div>
+                </div>
+                <div class="streak-box" id="streak-box">الستريك: <span id="streak-count">0</span></div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="action-btn updates-btn" onclick="openModal('updates-modal')">🔔 التحديثات</button>
+                <button class="action-btn" onclick="openModal('shop-modal'); document.getElementById('shop-xp-display').textContent = playerXP;">🛒 المتجر</button>
+            </div>
+            <div class="developer-badge">Dev: Ahmed Mutmi</div>
+        </div>
+
+        <div id="welcome-screen" class="fade-in">
+            <h1 id="main-title">منصة مراجعة الاختبارات</h1>
+            <p class="subtitle" id="main-sub">دبلوم أمن المعلومات - تدريب، تفاعل، واستعداد تام</p>
+            
+            <div class="schedule-title">📅 جدول الاختبارات النصفية:</div>
+            <table class="schedule-table">
+<table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>اليوم والتاريخ</th>
+                        <th>المقرر</th>
+                        <th>الوقت</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>الأحد <span class="date-gregorian">12/4/2026</span></td>
+                        <td>أساسيات البرمجة</td>
+                        <td>12:00-1:30</td>
+                    </tr>
+                    <tr>
+                        <td>الإثنين <span class="date-gregorian">13/4/2026</span></td>
+                        <td>أساسيات الشبكات</td>
+                        <td>12:00-1:30</td>
+                    </tr>
+                    <tr>
+                        <td>الثلاثاء <span class="date-gregorian">14/4/2026</span></td>
+                        <td>أساسيات قواعد البيانات</td>
+                        <td>12:00-1:30</td>
+                    </tr>
+                    <tr>
+                        <td>الأربعاء <span class="date-gregorian">15/4/2026</span></td>
+                        <td>الرياضيات التمهيدية للأمن السيبراني</td>
+                        <td>12:00-1:30</td>
+                    </tr>
+                    <tr>
+                        <td>الخميس <span class="date-gregorian">16/4/2026</span></td>
+                        <td>اللغة الإنجليزية التقنية لأمن المعلومات</td>
+                        <td>12:00-1:30</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="primary-btn" onclick="showSubjects()">دخول الاختبار 📚</button>
+        </div>
+
+        <div id="subjects-screen" class="fade-in">
+            <h2>اختر المقرر الدراسي</h2>
+            <div class="subjects-grid">
+                <div class="subject-card" onclick="startSubject('sub1')">💻 أساسيات البرمجة<div class="readiness-bar"><div class="readiness-fill" id="prog-sub1"></div></div><span class="readiness-text" id="prog-text-sub1">الجاهزية: 0%</span></div>
+                <div class="subject-card" onclick="startSubject('sub2')">🧮 رياضيات السيبراني<div class="readiness-bar"><div class="readiness-fill" id="prog-sub2"></div></div><span class="readiness-text" id="prog-text-sub2">الجاهزية: 0%</span></div>
+                <div class="subject-card" onclick="startSubject('sub3')">🔤 الإنجليزي التقني<div class="readiness-bar"><div class="readiness-fill" id="prog-sub3"></div></div><span class="readiness-text" id="prog-text-sub3">الجاهزية: 0%</span></div>
+                <div class="subject-card" onclick="startSubject('sub4')">🗄️ قواعد البيانات<div class="readiness-bar"><div class="readiness-fill" id="prog-sub4"></div></div><span class="readiness-text" id="prog-text-sub4">الجاهزية: 0%</span></div>
+                <div class="subject-card" style="grid-column: 1 / -1;" onclick="startSubject('sub5')">🌐 أساسيات الشبكات<div class="readiness-bar"><div class="readiness-fill" id="prog-sub5"></div></div><span class="readiness-text" id="prog-text-sub5">الجاهزية: 0%</span></div>
+            </div>
+            
+            <button class="survival-btn" onclick="startSurvivalMode()">☠️ وضع البقاء (Survival)<br><span style="font-size:1rem; font-weight:normal;">أسئلة من كل المواد - خطأ واحد = تخسر!</span></button>
+        </div>
+
+        <div id="quiz-screen">
+            <div class="quiz-top-actions">
+                <div style="display:flex; gap:10px;">
+                    <button class="back-home-btn" onclick="goBackToSubjects()">🏠 خروج</button>
+                    <button id="bookmark-btn" class="bookmark-btn" onclick="toggleBookmark()">☆ حفظ</button>
+                </div>
+                
+                <div class="inventory-bar">
+                    <button class="inv-item" id="inv-fifty" onclick="useFiftyFifty()" title="حذف إجابتين">⚖️<span class="inv-count" id="count-fifty">0</span></button>
+                    <button class="inv-item" id="inv-shield" onclick="useShield()" title="تفعيل الدرع الواقي">🛡️<span class="inv-count" id="count-shield">0</span></button>
+                </div>
+            </div>
+            
+            <div class="quiz-header">
+                <span id="subject-title" style="font-size:1.2rem; color:#fff; font-weight:900;">اسم المادة</span>
+                <span id="question-tracker" style="font-size:1.1rem; color:var(--primary-color); font-weight:bold;">1 / 50</span>
+            </div>
+            
+            <div class="progress-bar-container"><div class="progress-bar-fill" id="progress"></div></div>
+            <div class="question-box" id="question-text">جاري التحميل...</div>
+            <div class="options-container" id="options-container"></div>
+            
+            <div class="explanation-box" id="explanation-box"></div>
+            
+            <div class="nav-buttons">
+                <button class="nav-btn btn-prev" id="prev-btn" onclick="prevQuestion()">🔙 تراجع</button>
+                <button class="nav-btn btn-next" id="next-btn" onclick="nextQuestion()">التالي ➔</button>
+            </div>
+        </div>
+
+        <div id="result-screen" class="fade-in" style="padding: 20px 0;">
+            <div style="text-align: center;">
+                <div class="result-icon" id="result-emoji">🎓</div>
+                <h1 id="final-rank">اكتمل التحدي</h1>
+                <div style="font-size: 2.5rem; font-weight: 900; color: var(--accent-color); margin-bottom: 10px;" id="final-score"></div>
+                <div style="color: var(--success-color); font-size: 1.2rem; font-weight: bold; margin-bottom: 15px;">
+                    + <span id="earned-xp"></span> XP ✨
+                </div>
+            </div>
+
+            <div class="review-section" id="review-section">
+                <h3 style="color: var(--danger-color); margin-bottom: 15px; border-bottom: 1px solid; padding-bottom: 5px; display: inline-block;">🔍 الأخطاء:</h3>
+                <div id="review-list"></div>
+            </div>
+
+            <div class="review-section" id="bookmarks-section">
+                <h3 style="color: var(--accent-color); margin-bottom: 15px; border-bottom: 1px solid; padding-bottom: 5px; display: inline-block;">⭐ المرجع السريع:</h3>
+                <div id="bookmarks-list"></div>
+            </div>
+
+            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:30px;">
+                <button class="primary-btn share-btn" style="margin:0;" onclick="shareResult()">شارك نتيجتي 📲</button>
+                <button class="primary-btn" style="margin:0;" onclick="goBackToSubjects()">العودة للمواد 🏠</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. إعدادات الصوت ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
+            osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+            if (type === 'correct') { osc.type = 'sine'; osc.frequency.setValueAtTime(600, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1); gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15); osc.start(); osc.stop(audioCtx.currentTime + 0.15); }
+            else if (type === 'wrong') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.2); gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25); osc.start(); osc.stop(audioCtx.currentTime + 0.25); }
+            else if (type === 'levelUp') { osc.type = 'square'; osc.frequency.setValueAtTime(400, audioCtx.currentTime); osc.frequency.setValueAtTime(600, audioCtx.currentTime + 0.1); osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.2); gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.5); osc.start(); osc.stop(audioCtx.currentTime + 0.5); }
+            else if (type === 'shield_break') { osc.type = 'triangle'; osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.3); gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime); gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3); osc.start(); osc.stop(audioCtx.currentTime + 0.3); }
+        }
+
+        // --- 2. نظام XP والمخزون ---
+        let playerXP = parseInt(localStorage.getItem('devAhmedXP')) || 0;
+        let inventory = JSON.parse(localStorage.getItem('devAhmedInv')) || { fifty: 0, shield: 0 };
+        let streak = 0; let sessionXP = 0; let currentSubjectId = ""; 
+        let isSurvival = false; let shieldActive = false;
+
+        function getLevel(xp) { return Math.floor(Math.sqrt(xp / 100)) + 1; }
+        
+        function updateProfileUI() {
+            document.getElementById('player-xp').textContent = playerXP;
+            document.getElementById('player-level').textContent = getLevel(playerXP);
+            document.getElementById('streak-count').textContent = streak;
+            const streakBox = document.getElementById('streak-box');
+            if(streak >= 3) streakBox.classList.add('active'); else streakBox.classList.remove('active');
+            
+            document.getElementById('count-fifty').textContent = inventory.fifty;
+            document.getElementById('count-shield').textContent = inventory.shield;
+            document.getElementById('inv-fifty').disabled = (inventory.fifty <= 0);
+            document.getElementById('inv-shield').disabled = (inventory.shield <= 0);
+        }
+        updateProfileUI();
+
+        function addXP(amount, event) {
+            let multiplier = (streak >= 3) ? 2 : 1; let finalXP = amount * multiplier;
+            let oldLevel = getLevel(playerXP); playerXP += finalXP; sessionXP += finalXP;
+            localStorage.setItem('devAhmedXP', playerXP);
+            if (getLevel(playerXP) > oldLevel) playSound('levelUp');
+            updateProfileUI();
+            if(event && event.clientX) {
+                const xpPopup = document.createElement('div'); xpPopup.className = 'xp-popup';
+                xpPopup.textContent = `+${finalXP} XP ${multiplier > 1 ? '🔥' : ''}`;
+                xpPopup.style.left = `${event.clientX}px`; xpPopup.style.top = `${event.clientY}px`;
+                document.body.appendChild(xpPopup); setTimeout(() => xpPopup.remove(), 1000);
+            }
+        }
+
+        // --- 3. إدارة النوافذ المنبثقة ---
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        
+        function buyItem(item, price) {
+            if(playerXP >= price) {
+                playerXP -= price; inventory[item]++;
+                localStorage.setItem('devAhmedXP', playerXP); localStorage.setItem('devAhmedInv', JSON.stringify(inventory));
+                document.getElementById('shop-xp-display').textContent = playerXP;
+                updateProfileUI(); playSound('levelUp');
+            } else { alert("رصيدك من XP غير كافٍ!"); }
+        }
+
+        // --- 4. البارتيكلز ---
+        const canvas = document.getElementById('canvas'); const ctx = canvas.getContext('2d'); canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        let particlesArray = []; let globalSpeed = 1; let particleColor = '#3b82f6';
+        class Particle { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 1; this.speedX = (Math.random() * 1 - 0.5); this.speedY = (Math.random() * 1 - 0.5); } update() { this.x += this.speedX * globalSpeed; this.y += this.speedY * globalSpeed; if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX; if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY; } draw() { ctx.fillStyle = particleColor; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); } }
+        for (let i = 0; i < 70; i++) particlesArray.push(new Particle());
+        function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); particlesArray.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animateParticles); }
+        animateParticles();
+
+        function triggerBgReaction(isCorrect) {
+            const c1 = document.getElementById('bg-circle-1'); const c2 = document.getElementById('bg-circle-2');
+            if (isCorrect) { globalSpeed = 5; particleColor = '#10b981'; c1.style.background = 'rgba(16, 185, 129, 0.2)'; c2.style.background = 'rgba(16, 185, 129, 0.2)'; } 
+            else { globalSpeed = 0.2; particleColor = '#ef4444'; c1.style.background = 'rgba(239, 68, 68, 0.2)'; c2.style.background = 'rgba(239, 68, 68, 0.2)'; }
+            setTimeout(() => { 
+                globalSpeed = 1; particleColor = '#3b82f6'; c1.style.background = 'rgba(59, 130, 246, 0.15)'; c2.style.background = 'rgba(245, 158, 11, 0.1)'; 
+            }, 800);
+        }
+
+        // --- 5. قاعدة بيانات الأسئلة الـ 250 ---
+        const allSubjects = {
+            sub1: {
+                title: "أساسيات البرمجة",
+                questions: [
+                    { q: "ما هي البرمجة؟", options: ["إصلاح أعطال الحاسوب", "عملية كتابة تعليمات وأوامر للحاسوب بلغة يفهمها", "تصميم واجهات المستخدم الرسومية", "تجميع قطع الحاسوب"], correct: 1, explanation: "البرمجة تعتمد على التواصل مع الحاسوب باستخدام لغات مخصصة (مثل بايثون) لإعطائه أوامر دقيقة لتنفيذ المهام." },
+                    { q: "من أهميات البرمجة في عصرنا الحالي:", options: ["التحول الرقمي وحل المشكلات", "تقليل استخدام الإنترنت", "تصفح الويب بشكل أسرع", "زيادة استهلاك الطاقة"], correct: 0, explanation: "البرمجة هي المحرك الأساسي للتحول الرقمي، حيث تساهم في أتمتة العمليات وحل المشكلات المعقدة برمجياً." },
+                    { q: "أي مما يلي يُعد من مجالات استخدام بايثون في أمن المعلومات؟", options: ["تطوير ألعاب 3D", "اختبار الاختراق وتحليل الشبكات", "صيانة الأجهزة الصلبة", "كتابة المقالات"], correct: 1 },
+                    { q: "لغة الآلة (Machine Language) تُصنف كـ:", options: ["لغة عالية المستوى", "لغة وسيطة", "لغة منخفضة المستوى", "لغة تجميع"], correct: 2 },
+                    { q: "لغة بايثون (Python) تُعتبر من اللغات:", options: ["منخفضة المستوى", "عالية المستوى سهلة التعلم", "التي يصعب قراءتها", "المخصصة للآلة فقط"], correct: 1 },
+                    { q: "البرمجة التي تعتمد على الكائنات والفئات لتنظيم الكود تُسمى:", options: ["البرمجة الإجرائية", "البرمجة الوظيفية", "البرمجة الكائنية (OOP)", "البرمجة النصية"], correct: 2 },
+                    { q: "ما هو التفكير الخوارزمي (Algorithmic Thinking)؟", options: ["التفكير في التفاصيل الدقيقة", "القدرة على تحويل الحل إلى خطوات واضحة ومحددة", "حفظ الأكواد عن ظهر قلب", "القدرة على كتابة الكود بسرعة"], correct: 1 },
+                    { q: "الفرق الرئيسي بين البرمجة والبرمجيات هو:", options: ["لا يوجد فرق", "البرمجة هي العملية، والبرمجيات هي المنتج النهائي", "البرمجيات هي العملية، والبرمجة هي المنتج", "البرمجة هي العتاد الصلب"], correct: 1 },
+                    { q: "أنظمة التشغيل مثل Windows و Linux تُعتبر من:", options: ["برمجيات التطبيقات", "البرمجيات المدمجة", "برمجيات النظام", "ألعاب الفيديو"], correct: 2 },
+                    { q: "التطبيقات مثل WhatsApp و Microsoft Word تُصنف كـ:", options: ["برمجيات النظام", "برمجيات مدمجة", "أنظمة تشغيل", "برمجيات التطبيقات"], correct: 3 },
+                    { q: "البرمجيات الموجودة في أنظمة السيارات والأجهزة الطبية تسمى:", options: ["البرمجيات المدمجة (Embedded)", "برمجيات الويب", "أنظمة التشغيل", "التطبيقات المكتبية"], correct: 0 },
+                    { q: "لماذا تعتبر Python الخيار الأمثل للمبتدئين؟", options: ["لأنها صعبة وتحتوي على تحديات", "بسبب صيغتها القريبة جداً من الإنجليزية وسهولة قراءتها", "لأنها لا تحتوي على مكتبات", "لأنها لغة منخفضة المستوى"], correct: 1 },
+                    { q: "مكتبة Scapy في بايثون تُستخدم في:", options: ["تطوير ألعاب الجوال", "تحليل وفحص الشبكات", "الذكاء الاصطناعي", "تصميم المواقع"], correct: 1 },
+                    { q: "أي من المكتبات التالية تُستخدم في الذكاء الاصطناعي (التعلم العميق)؟", options: ["Django", "TensorFlow", "Requests", "Flask"], correct: 1 },
+                    { q: "ما هي بيئة التطوير المتكاملة (IDE)؟", options: ["لغة برمجة جديدة", "برنامج لتصفح الإنترنت", "برنامج يوفر أدوات شاملة لكتابة وتحرير واختبار الأكواد", "أداة لإنشاء الصور"], correct: 2 },
+                    { q: "أي من بيئات التطوير التالية يُعد خفيفاً، سريعاً، ومجانياً بالكامل من مايكروسوفت؟", options: ["Visual Studio Code", "PyCharm", "Jupyter", "Spyder"], correct: 0 },
+                    { q: "بيئة التطوير المجانية على السحابة التي تقدمها Google هي:", options: ["Replit", "IDLE", "GitHub Codespaces", "Google Colab"], correct: 3 },
+                    { q: "بيئة Jupyter Notebook تُستخدم بشكل مثالي في:", options: ["تطوير ألعاب الجوال", "تحليل البيانات والتعلم", "بناء أنظمة تشغيل", "تصميم واجهات المستخدم"], correct: 1 },
+                    { q: "ما هو المتغير (Variable) في لغة بايثون؟", options: ["رقم ثابت لا يتغير", "اسم رمزي يشير إلى موقع في ذاكرة الحاسوب", "برنامج مساعد", "دالة برمجية"], correct: 1 },
+                    { q: "ماذا تعني ميزة (Dynamic Typing) في بايثون؟", options: ["الكتابة السريعة", "تحديد نوع المتغير تلقائياً بناءً على القيمة المخصصة", "ضرورة تحديد النوع مسبقاً", "عدم إمكانية تغيير نوع المتغير"], correct: 1 },
+                    { q: "الصيغة الأساسية والصحيحة لتعريف المتغيرات هي:", options: ["القيمة = اسم_المتغير", "اسم_المتغير = القيمة", "اسم_المتغير : القيمة", "القيمة : اسم_المتغير"], correct: 1 },
+                    { q: "في بايثون، المتغير هو مرجع (Pointer) للكائن وليس الحاوية نفسها.", options: ["صح", "خطأ", "فقط في الأرقام", "فقط في النصوص"], correct: 0 },
+                    { q: "أي من أسماء المتغيرات التالية صحيح؟", options: ["2name", "user-name", "student_age", "my variable"], correct: 2 },
+                    { q: "هل يمكن لاسم المتغير أن يبدأ برقم؟", options: ["نعم", "لا", "نعم إذا كان الرقم 1", "في بعض الأحيان"], correct: 1 },
+                    { q: "أسماء المتغيرات حساسة لحالة الأحرف (Case Sensitive).", options: ["عبارة صحيحة", "عبارة خاطئة", "صحيحة في النصوص فقط", "خاطئة في الأرقام فقط"], correct: 0 },
+                    { q: "أي من الكلمات التالية لا يمكن استخدامها كاسم متغير لأنها محجوزة؟", options: ["name", "age", "class", "total"], correct: 2 },
+                    { q: "ما هي الطريقة الموصى بها (حسب PEP 8) لتسمية المتغيرات العادية؟", options: ["camelCase", "PascalCase", "snake_case", "SCREAMING_CASE"], correct: 2 },
+                    { q: "نوع البيانات المخصص للأعداد الصحيحة هو:", options: ["float", "str", "int", "bool"], correct: 2 },
+                    { q: "نوع البيانات المخصص للأعداد العشرية هو:", options: ["int", "bool", "float", "complex"], correct: 2 },
+                    { q: "الكلمة 'Jeddah' تعتبر من أي نوع بيانات؟", options: ["int", "float", "str", "bool"], correct: 2 },
+                    { q: "القيمتان True و False تمثلان نوع البيانات:", options: ["المنطقي (Boolean)", "النصي (String)", "العشري (Float)", "الصحيح (Integer)"], correct: 0 },
+                    { q: "كيف يتم دمج (Concatenation) نصين في بايثون؟", options: ["باستخدام %", "باستخدام +", "باستخدام -", "باستخدام /"], correct: 1 },
+                    { q: "إذا كان greeting = 'Hello' * 3 ماذا ستكون النتيجة؟", options: ["Hello3", "Hello Hello Hello", "خطأ برمجي", "Hello+3"], correct: 1 },
+                    { q: "في النص word = 'Python'، ماذا ينتج عند طلب word[0]؟", options: ["P", "y", "n", "o"], correct: 0 },
+                    { q: "للحصول على آخر حرف في سلسلة نصية نستخدم الفهرس:", options: ["1", "0", "len", "-1"], correct: 3 },
+                    { q: "في بايثون، عند استخدام التقطيع [0:5]، يتم إحضار الحروف حتى الفهرس:", options: ["5", "4 (الرقم الثاني غير شامل)", "6", "0 فقط"], correct: 1 },
+                    { q: "البرمجة التي تتطلب صبراً وعدم استسلام، تمثل أي مبدأ من عقلية المبرمج؟", options: ["التفكير الخوارزمي", "المثابرة والصبر", "التفكير المجرد", "التفكير المنطقي"], correct: 1 },
+                    { q: "لغة بايثون قابلة لتغيير محتويات قوائمها (Lists)، لكن السلاسل النصية (Strings):", options: ["قابلة للتغيير أيضاً", "غير قابلة للتغيير (Immutable)", "تتغير فقط بالأرقام", "لا يمكن قراءتها"], correct: 1 },
+                    { q: "طريقة الإسناد المتعدد لكتابة كود نظيف تتمثل في:", options: ["x = 5; y = 10", "x, y = 5, 10", "x = y = 5, 10", "x+y = 15"], correct: 1 },
+                    { q: "الرمز المستخدم لعملية القسمة الصحيحة (بدون أعشار) هو:", options: ["/", "//", "%", "**"], correct: 1 },
+                    { q: "الرمز المستخدم لمعرفة باقي القسمة (Modulus) هو:", options: ["/", "//", "%", "*"], correct: 2 },
+                    { q: "الرفع إلى أُس في بايثون يُكتب باستخدام الرمز:", options: ["^", "**", "//", "%"], correct: 1 },
+                    { q: "الرمز المستخدم للتحقق من المساواة في الشروط هو:", options: ["=", "==", "!=", "=>"], correct: 1 },
+                    { q: "ما هي نتيجة العملية: 5 != 3 ؟", options: ["False", "True", "Error", "None"], correct: 1 },
+                    { q: "في العمليات المنطقية، الرابط and يعطي نتيجة True متى؟", options: ["إذا كان أحد الشروط صحيحاً", "فقط إذا كانت جميع الشروط صحيحة", "دائماً يعطي True", "إذا كانت كل الشروط خاطئة"], correct: 1 },
+                    { q: "دالة التحويل (Type Casting) إلى رقم صحيح هي:", options: ["str()", "float()", "bool()", "int()"], correct: 3 },
+                    { q: "لدمج المتغيرات مع النصوص بسهولة باستخدام {} داخل النص نستخدم:", options: ["الفاصلة", "علامة الجمع +", "f-strings", "d-strings"], correct: 2 },
+                    { q: "ما هي الدالة المستخدمة لطباعة المخرجات على الشاشة؟", options: ["input()", "show()", "print()", "display()"], correct: 2 },
+                    { q: "لقراءة بيانات من المستخدم عبر لوحة المفاتيح نستخدم دالة:", options: ["print()", "read()", "input()", "get()"], correct: 2 },
+                    { q: "دالة input() تُرجع البيانات دائماً على شكل:", options: ["int", "float", "str (نص)", "bool"], correct: 2 }
+                ]
+            },
+            sub2: {
+                title: "رياضيات الأمن السيبراني",
+                questions: [
+                    { q: "ما هو الأمن السيبراني؟", options: ["صيانة أجهزة الحاسوب", "ممارسة حماية الأنظمة والشبكات من الهجمات الرقمية", "برمجة مواقع الويب", "تطوير الألعاب الإلكترونية"], correct: 1 },
+                    { q: "لماذا تُستخدم الاحتمالات والإحصاء في الأمن السيبراني؟", options: ["لتصميم واجهات المستخدم", "لتحليل البيانات واكتشاف الأنماط غير الطبيعية", "لتسريع الإنترنت", "لتبريد المعالج"], correct: 1 },
+                    { q: "أي من المجالات الرياضية التالية يُعتبر أساس التشفير؟", options: ["نظرية الأعداد", "التحليل الرياضي", "الهندسة الفراغية", "حساب التفاضل"], correct: 0 },
+                    { q: "النظام العشري (Decimal) يعتمد على الأساس:", options: ["2", "8", "10", "16"], correct: 2 },
+                    { q: "النظام الثنائي (Binary) يستخدم الأرقام:", options: ["من 0 إلى 9", "0 و 1 فقط", "من 1 إلى 10", "A إلى F"], correct: 1 },
+                    { q: "النظام الست عشري (Hexadecimal) يعتمد على الأساس:", options: ["10", "16", "2", "8"], correct: 1 },
+                    { q: "في النظام الست عشري، الحرف F يمثل الرقم العشري:", options: ["10", "12", "15", "16"], correct: 2 },
+                    { q: "ما هو ناتج تحويل العدد الثنائي 1011 إلى نظام عشري؟", options: ["10", "11", "12", "13"], correct: 1 },
+                    { q: "ما هو ناتج تحويل العدد الست عشري 2F إلى نظام عشري؟", options: ["25", "37", "47", "52"], correct: 2 },
+                    { q: "تحليل التعقيد الحسابي للأنظمة الأمنية يعتمد على:", options: ["الرياضيات التطبيقية", "التاريخ", "الفيزياء", "الكيمياء"], correct: 0 },
+                    { q: "ما هو المتغير (Variable) في الجبر؟", options: ["قيمة ثابتة لا تتغير مثل π", "رمز يمثل قيمة غير معروفة أو قابلة للتغيير", "عملية جمع فقط", "رقم صحيح فقط"], correct: 1 },
+                    { q: "أي مما يلي يُعتبر ثابتاً (Constant)؟", options: ["x", "y", "5", "z"], correct: 2 },
+                    { q: "ما هي مكونات التعبير الجبري؟", options: ["حدود، معاملات، أسس", "ألوان وأشكال", "شاشات ولوحات مفاتيح", "شبكات وسيرفرات"], correct: 0 },
+                    { q: "حل المعادلة الخطية التالية: 3x + 5 = 20", options: ["3", "4", "5", "15"], correct: 2 },
+                    { q: "ما هو تعريف الدالة (Function) رياضياً؟", options: ["عملية ضرب رقمين", "علاقة تربط كل عنصر من المدخلات بعنصر واحد فقط من المخرجات", "مجموعة من الأرقام العشوائية", "تخمين القيمة المجهولة"], correct: 1 },
+                    { q: "إذا كانت الدالة f(x) = 2x + 3، فما هي قيمة f(2)؟", options: ["5", "6", "7", "8"], correct: 2 },
+                    { q: "إذا كانت الدالة f(x) = x²، فما هي قيمة f(2)؟", options: ["2", "4", "6", "8"], correct: 1 },
+                    { q: "ما هي القضية المنطقية (Proposition)؟", options: ["سؤال يحتاج لإجابة", "عبارة تعريفية يمكن أن تكون صحيحة (T) أو خاطئة (F) وليس كليهما", "جملة تعجبية", "رقم رياضي"], correct: 1 },
+                    { q: "أي من العبارات التالية تعتبر قضية منطقية صحيحة؟", options: ["كيف حالك؟", "الأرض مسطحة", "5 + 3 = 8", "اذهب إلى المدرسة"], correct: 2 },
+                    { q: "عملية الوصل (AND) تكون صحيحة (True) في حالة واحدة وهي:", options: ["إذا كانت إحدى العبارتين صحيحة", "إذا كانت جميع الشروط صحيحة", "إذا كانت جميع الشروط خاطئة", "دائماً صحيحة"], correct: 1 },
+                    { q: "عملية الفصل (OR) تكون خاطئة (False) في حالة واحدة وهي:", options: ["إذا كانت جميع الشروط خاطئة", "إذا كانت جميع الشروط صحيحة", "إذا اختلفت الشروط", "دائماً خاطئة"], correct: 0 },
+                    { q: "عملية الفصل الحصري (XOR) تعطي (True) متى؟", options: ["إذا كانا كلاهما True", "إذا كانا كلاهما False", "فقط إذا اختلفت قيمتا المدخلات", "دائماً تعطي True"], correct: 2 },
+                    { q: "في جداول الحقيقة، إذا كان لدينا 3 متغيرات (n=3)، فما هو عدد الصفوف؟", options: ["4", "6", "8", "9"], correct: 2 },
+                    { q: "حسب قانون دي مورغان، العبارة (p ^ q)¬ تكافئ:", options: ["p v q", "¬p v ¬q", "¬p ^ ¬q", "p ^ ¬q"], correct: 1 },
+                    { q: "قانون النفي المزدوج في المنطق ينص على أن نفي النفي يرجع:", options: ["القيمة المعكوسة", "الصفر", "القيمة الأصلية", "واحد"], correct: 2 },
+                    { q: "قانون التبديل في المنطق يعني أن:", options: ["p ^ q = q ^ p", "p ^ q = p v q", "p = q", "q = 0"], correct: 0 },
+                    { q: "في قوانين المنطق، العبارة (p v F) تساوي:", options: ["T", "F", "p", "¬p"], correct: 2 },
+                    { q: "في قوانين المنطق، العبارة (p ^ T) تساوي:", options: ["T", "F", "p", "¬p"], correct: 2 },
+                    { q: "ما هي المصفوفة؟", options: ["دائرة إلكترونية", "ترتيب مستطيل من الأعداد في صفوف وأعمدة", "نوع من أنواع الفيروسات", "كابل شبكة"], correct: 1 },
+                    { q: "ما هو الشرط الأساسي لجمع أو طرح مصفوفتين؟", options: ["أن تكون كلها أصفار", "أن تكون المصفوفتان من نفس الأبعاد (الصفوف والأعمدة)", "أن تكون مصفوفة مربعة فقط", "لا يوجد شرط"], correct: 1 },
+                    { q: "في الضرب القياسي (ضرب مصفوفة في رقم ثابت 3 مثلاً)، فإننا:", options: ["نضرب الصف الأول فقط", "نضرب كل عنصر في المصفوفة بهذا العدد", "نجمع الرقم مع المصفوفة", "نقسم المصفوفة"], correct: 1 },
+                    { q: "ما هو شرط ضرب مصفوفتين في بعضهما؟", options: ["أن تكونا بنفس الأبعاد تماماً", "عدد أعمدة المصفوفة الأولى = عدد صفوف المصفوفة الثانية", "عدد صفوف الأولى = عدد صفوف الثانية", "أن تحتوي على أرقام موجبة فقط"], correct: 1 },
+                    { q: "في مجال التشفير، يتم استخدام ضرب المصفوفات في خوارزمية:", options: ["RSA", "SHA-256", "Hill Cipher", "MD5"], correct: 2 },
+                    { q: "تطبيق (تمثيل الصور كمصفوفات من البكسلات) يعتبر من استخدامات:", options: ["الجبر البولي", "المصفوفات", "المعادلات الخطية", "التفكير الخوارزمي"], correct: 1 },
+                    { q: "الجبر البولي يتعامل مع القيم:", options: ["من 0 إلى 9", "الأرقام العشرية", "القيم الثنائية (True و False)", "الأحرف الأبجدية"], correct: 2 },
+                    { q: "حسب قانون التكامل في الجبر البولي، المتغير مع نفيه (A . A¯) دائماً يساوي:", options: ["A", "1", "0", "A¯"], correct: 2 },
+                    { q: "حسب قانون الهوية في الجبر البولي، (A + 0) يساوي:", options: ["0", "1", "A", "A¯"], correct: 2 },
+                    { q: "حسب قانون الصفر في الجبر البولي، (A + 1) دائماً يساوي:", options: ["A", "0", "1", "A¯"], correct: 2 },
+                    { q: "حسب قانون التكرار في الجبر البولي، (A + A) يساوي:", options: ["2A", "1", "0", "A"], correct: 3 },
+                    { q: "البوابات المنطقية (Logic Gates) تعمل بقيمتين فقط هما:", options: ["0 و 1", "1 و 2", "A و B", "+ و -"], correct: 0 },
+                    { q: "البوابة المنطقية التي تعطي 1 فقط إذا كان الإدخالان 1، هي:", options: ["OR", "NOT", "AND", "XOR"], correct: 2 },
+                    { q: "البوابة المنطقية التي تعطي 1 إذا كان أحد الإدخالين على الأقل 1، هي:", options: ["AND", "NAND", "OR", "NOR"], correct: 2 },
+                    { q: "البوابة المنطقية التي تعكس الإدخال (من 0 إلى 1 والعكس) هي:", options: ["AND", "NOT", "XOR", "OR"], correct: 1 },
+                    { q: "البوابة المنطقية NAND هي عكس بوابة:", options: ["OR", "NOT", "AND", "XOR"], correct: 2 },
+                    { q: "البوابة المنطقية NOR هي عكس بوابة:", options: ["AND", "OR", "NOT", "NAND"], correct: 1 },
+                    { q: "البوابة التي نتيجتها 1 (True) فقط إذا اختلف الإدخالان، هي:", options: ["AND", "OR", "NOR", "XOR"], correct: 3 },
+                    { q: "الرمز ⊕ يُستخدم للدلالة على أي بوابة منطقية؟", options: ["AND", "OR", "XOR", "NOT"], correct: 2 },
+                    { q: "ما هي الفائدة الرئيسية من تبسيط التعبيرات البولية؟", options: ["زيادة استهلاك الكهرباء", "تقليل عدد البوابات المنطقية وجعل النظام أسرع وأبسط", "تشفير البيانات بقوة أكبر", "تلوين واجهة المستخدم"], correct: 1 },
+                    { q: "في أنظمة التحكم في الوصول (Access Control)، تُستخدم العمليات المنطقية لـ:", options: ["تحديد من يُسمح له بالدخول بناءً على شروط", "تسريع سرعة الإنترنت", "تغيير شكل الموقع", "حذف الملفات"], correct: 0 },
+                    { q: "جدران الحماية (Firewalls) تستخدم القواعد المنطقية (مثل AND و OR) في:", options: ["فلترة حركة المرور للشبكة", "إنشاء حسابات مستخدمين", "تصميم الصور", "تخزين البيانات"], correct: 0 }
+                ]
+            },
+            sub3: {
+                title: "الإنجليزي التقني",
+                questions: [
+                    { q: "What is the definition of 'Cyberattack'?", options: ["An attempt by hackers to damage or destroy a network", "Software to protect data", "A type of hardware", "The state of being free from attention"], correct: 0 },
+                    { q: "What does 'Patch' mean in computer systems?", options: ["A string of characters for access", "An update or change to an OS or app", "Malicious software", "A computer bug"], correct: 1 },
+                    { q: "What is the definition of 'Password'?", options: ["An update", "A computer virus", "Software for monitoring", "A string of characters that allows access"], correct: 3 },
+                    { q: "What does 'Malicious' mean?", options: ["Protected against criminal use", "Being free from public attention", "Intending or intended to do harm", "An error in a program"], correct: 2 },
+                    { q: "The term 'Domain' refers to:", options: ["A computer bug", "An area of territory owned or controlled by a ruler", "Security software", "Anti-virus"], correct: 1 },
+                    { q: "What is a 'Bug' in software?", options: ["A gatekeeper", "An update", "A password", "An error, flaw or fault in a computer program"], correct: 3 },
+                    { q: "What is 'Spyware'?", options: ["Hardware for storage", "Software that obtains covert information about another's activities", "A strong password", "An error in code"], correct: 1 },
+                    { q: "What does 'Privacy' mean?", options: ["The state of being free from public attention", "A type of cyberattack", "A security control", "A software update"], correct: 0 },
+                    { q: "'Information Security' aims to protect:", options: ["Hardware from physical damage", "Users' private information from unauthorized access", "The internet speed", "Screens from breaking"], correct: 1 },
+                    { q: "'Network Security' aims to protect:", options: ["Software from bugs", "Passwords from being forgotten", "The usability and safety of a network", "Mice and keyboards"], correct: 2 },
+                    { q: "'Application Security' aims to protect:", options: ["Networks from physical access", "Users from spam calls", "Servers from overheating", "Software applications from vulnerabilities"], correct: 3 },
+                    { q: "Identify the part of speech for the word: 'protecting'", options: ["Noun", "Verb", "Adjective", "Adverb"], correct: 1 },
+                    { q: "Identify the part of speech for the word: 'security'", options: ["Noun", "Verb", "Adjective", "Adverb"], correct: 0 },
+                    { q: "Identify the part of speech for the word: 'innovative'", options: ["Noun", "Verb", "Adjective", "Adverb"], correct: 2 },
+                    { q: "Identify the part of speech for the word: 'enforce'", options: ["Noun", "Verb", "Adjective", "Adverb"], correct: 1 },
+                    { q: "Identify the part of speech for the word: 'restrict'", options: ["Noun", "Verb", "Adjective", "Adverb"], correct: 1 },
+                    { q: "Identify the part of speech for the word: 'application'", options: ["Noun", "Verb", "Adjective", "Adverb"], correct: 0 },
+                    { q: "Identify the part of speech for the word: 'attachments'", options: ["Noun", "Verb", "Adjective", "Adverb"], correct: 0 },
+                    { q: "Identify the part of speech for the word: 'effectively'", options: ["Noun", "Verb", "Adjective", "Adverb"], correct: 3 },
+                    { q: "Identify the part of speech for the word: 'malware'", options: ["Noun", "Verb", "Adjective", "Adverb"], correct: 0 },
+                    { q: "Identify the part of speech for the word: 'detect'", options: ["Noun", "Verb", "Adjective", "Adverb"], correct: 1 },
+                    { q: "Identify the part of speech for the word: 'malicious'", options: ["Noun", "Verb", "Adjective", "Adverb"], correct: 2 },
+                    { q: "Identify the part of speech for the word: 'slips'", options: ["Noun", "Verb", "Adjective", "Adverb"], correct: 1 },
+                    { q: "Cyber security is the practice of protecting systems from:", options: ["Rain", "Digital attacks", "Electricity outage", "Software updates"], correct: 1 },
+                    { q: "What acts as 'gatekeepers' between your computer and the internet?", options: ["Keyboards", "Passwords", "Firewalls", "Screens"], correct: 2 },
+                    { q: "Anti-spyware and anti-virus programs are examples of:", options: ["Security software", "Malicious code", "Hardware", "Operating systems"], correct: 0 },
+                    { q: "True or False: The way I operate my computer can affect other people.", options: ["True", "False", "Only in the morning", "Only if I use Wi-Fi"], correct: 0 },
+                    { q: "Why might someone break into (hack) your computer?", options: ["To commit a crime", "To distribute malicious programs", "Random vandalism", "All of the above"], correct: 3 },
+                    { q: "If you receive an email claiming to need your password, what should you do?", options: ["Reply with your password", "Report it as phishing/spam", "Delete your account", "Send it to all your friends"], correct: 1 },
+                    { q: "Can both email attachments and downloaded files spread malware?", options: ["Yes", "No", "Only attachments", "Only downloaded files"], correct: 0 },
+                    { q: "What is the best way to protect your information when you are away from your computer?", options: ["Turn the monitor off", "Lock the computer with a password", "Activate the screen saver", "Unplug the mouse"], correct: 1 },
+                    { q: "What is a firewall?", options: ["A program that creates viruses", "A wall that cannot catch on fire", "A filter for an internet connection that monitors activity", "An anti-virus software"], correct: 2 },
+                    { q: "A strong password should contain:", options: ["Only lowercase letters", "At least 8 characters with a mix of letters, numbers, and symbols", "The name of your pet", "Only numbers"], correct: 1 },
+                    { q: "The simple present tense describes:", options: ["Actions happening right now", "Habits and general truths", "Actions completed in the past", "Future plans only"], correct: 1 },
+                    { q: "Which sentence is an example of a 'General Truth'?", options: ["I am eating now", "I will go to Paris", "The sun rises in the east", "He went to school"], correct: 2 },
+                    { q: "The correct negative structure of Simple Present is:", options: ["S + do/does + not + V1", "S + is/are + not + V1", "S + not + V1", "S + did + not + V1"], correct: 0 },
+                    { q: "Choose the correct form: He ________ to school.", options: ["go", "goes", "going", "went"], correct: 1 },
+                    { q: "Choose the correct form: They ________ poor people.", options: ["helps", "helping", "help", "helped"], correct: 2 },
+                    { q: "Choose the correct form: Cyber security ________ the integrity of systems.", options: ["protect", "protects", "protecting", "protected"], correct: 1 },
+                    { q: "Choose the correct form: Cybersecurity ________ the practice of protecting systems.", options: ["is", "are", "am", "be"], correct: 0 },
+                    { q: "Choose the correct form: Cyber security ________ to the technologies and processes...", options: ["refers", "refer", "referring", "referred"], correct: 0 },
+                    { q: "Choose the correct form: Spyware is a program that ________ the user's computer activities.", options: ["monitor", "monitors", "monitored", "monitoring"], correct: 1 },
+                    { q: "Choose the correct form: Anti-Virus Software ________ to identify and eliminate viruses.", options: ["attempt", "attempts", "attempting", "attempted"], correct: 1 },
+                    { q: "Choose the correct form: Every one ________ electronic communications in some manner.", options: ["use", "uses", "using", "used"], correct: 1 },
+                    { q: "Choose the correct form: Companies and corporations ________ on different aspects of cyber security.", options: ["rely", "relies", "relying", "relied"], correct: 0 },
+                    { q: "Choose the correct form: Network penetration ________ a very important aspect.", options: ["are", "is", "am", "be"], correct: 1 },
+                    { q: "Choose the correct form: Cyber security ________ use of security standards.", options: ["make", "makes", "making", "made"], correct: 1 },
+                    { q: "Choose the correct form: John ________ not write a story.", options: ["do", "does", "is", "are"], correct: 1 },
+                    { q: "Choose the correct form: ________ it rain in the rainy season?", options: ["Do", "Does", "Is", "Are"], correct: 1 },
+                    { q: "Choose the correct form: ________ we speak English?", options: ["Do", "Does", "Is", "Are"], correct: 0 }
+                ]
+            },
+            sub4: {
+                title: "أساسيات قواعد البيانات",
+                questions: [
+                    { q: "ما هو وصف البيانات (Data) في العصر الرقمي الحديث؟", options: ["مجرد أرقام لا قيمة لها", "أحد أهم الموارد الاستراتيجية ووقود الأنظمة الذكية", "ملفات نصية فقط", "طريقة لتخزين الصور"], correct: 1 },
+                    { q: "ما هو الهدف الرئيس والأول لقواعد البيانات التقليدية؟", options: ["تخزين الصور فقط", "ضمان الدقة والاتساق وسرعة تنفيذ المعاملات اليومية (OLTP)", "تصفح الإنترنت", "تصميم واجهات المستخدم"], correct: 1 },
+                    { q: "أي مما يلي يُعد مثالاً تطبيقياً واقعياً لقواعد البيانات التقليدية؟", options: ["نظام شؤون الطلاب", "نظام الموارد البشرية", "الأنظمة المالية والمحاسبية", "جميع ما سبق"], correct: 3 },
+                    { q: "عند تحديث راتب موظف، يجب أن يتم التحديث بشكل متسق دون تعارض، هذا يسمى:", options: ["السرعة", "الاتساق (Consistency)", "الحذف", "التكرار"], correct: 1 },
+                    { q: "عملية إضافة بيانات جديدة بشكل مستمر لقاعدة البيانات تسمى:", options: ["Update", "Delete", "Insert", "Select"], correct: 2 },
+                    { q: "ما هي العملية التي تستخدم لتغيير بيانات موجودة مسبقاً؟", options: ["إدخال", "حذف", "تحديث (Update)", "بحث"], correct: 2 },
+                    { q: "لماذا تختلف قواعد البيانات في تصميمها ووظائفها؟", options: ["بسبب اختلاف اللون", "بسبب اختلاف الهدف والاستخدام", "لأن المصممين مختلفون", "لا توجد أسباب محددة"], correct: 1 },
+                    { q: "ما المقصود بـ (OLTP)؟", options: ["معالجة المعاملات عبر الإنترنت", "تحميل الملفات", "برمجة المواقع", "أمن الشبكات"], correct: 0 },
+                    { q: "البيانات التي تصلح للعمليات اليومية قد لا تصلح لـ:", options: ["الحذف", "الحفظ طويل المدى", "التحديث", "العرض"], correct: 1 },
+                    { q: "نمذجة الكيانات والعلاقات تُعرف اختصاراً بـ:", options: ["HTML", "CSS", "ER Diagram", "Python"], correct: 2 },
+                    { q: "في مخطط ER، الشيء الذي نجمع عنه البيانات (مثل موظف أو مشروع) يسمى:", options: ["Attribute", "Relationship", "Entity (كيان)", "Key"], correct: 2 },
+                    { q: "الخصائص التي تصف الكيان (مثل اسم الموظف أو عنوانه) تسمى:", options: ["كيانات", "صفات (Attributes)", "علاقات", "جداول"], correct: 1 },
+                    { q: "العلاقة التي تربط الكيان مع نفسه (مثل موظف يدير موظفين آخرين) تسمى:", options: ["Recursion", "Many-to-Many", "One-to-One", "Link"], correct: 0 },
+                    { q: "الرمز (N:M) أو (N:N) يشير إلى علاقة:", options: ["واحد لواحد", "واحد لمتعدد", "متعدد لمتعدد (Many to Many)", "لا توجد علاقة"], correct: 2 },
+                    { q: "تحويل نموذج ER إلى جداول فعلية يسمى:", options: ["تصميم الصور", "مخطط العلاقة (Relational Schema)", "برمجة الدوال", "تنسيق الصفحات"], correct: 1 },
+                    { q: "في مخطط العلاقة للموظف، (الاسم، العنوان، الراتب) تعتبر:", options: ["علاقات", "أعمدة/صفات", "كيانات مستقلة", "مفاتيح غريبة"], correct: 1 },
+                    { q: "عند التعامل مع علاقة (متعدد لمتعدد)، نحتاج عادة إلى:", options: ["حذف البيانات", "جدول وسيط/رابط (Join)", "إلغاء العلاقة", "تغيير اسم الكيان"], correct: 1 },
+                    { q: "الكيان (EMPLOYEE) في نظام الرواتب يعتبر:", options: ["حدث", "شيء مادي/منطقي نجمع عنه بيانات", "عملية حسابية", "دالة برمجية"], correct: 1 },
+                    { q: "أي مما يلي ليس من العمليات الأساسية على قواعد البيانات التقليدية؟", options: ["إدخال بيانات", "تحديث بيانات", "تعديل الكود المصدري للمعالج", "حذف بيانات"], correct: 2 },
+                    { q: "قواعد البيانات صممت أساساً لدعم العمليات:", options: ["التشغيلية اليومية", "الترفيهية", "الفردية فقط", "غير المنظمة"], correct: 0 },
+                    { q: "ماذا يحدث لو لم تضمن قاعدة البيانات الدقة والاتساق؟", options: ["يصبح النظام أسرع", "يحدث تضارب في البيانات", "لا يتأثر النظام", "يتحسن الأداء"], correct: 1 },
+                    { q: "في نموذج ER، الموظف (الاسم، الكود، الوظيفة) يمثل:", options: ["علاقة", "كيان بصفاته", "مخطط هيكلي", "نظام تشغيل"], correct: 1 },
+                    { q: "المشاريع في المؤسسات تعتبر كيانات لأننا:", options: ["نستخدمها للرسم", "نجمع عنها بيانات (الاسم، الميزانية، الرمز)", "نحذفها دائماً", "لا تهمنا بياناتها"], correct: 1 },
+                    { q: "كلمة (NULL) في جداول قواعد البيانات تعني:", options: ["قيمة صفرية", "لا توجد قيمة/قيمة مجهولة", "خطأ في النظام", "اسم موظف"], correct: 1 },
+                    { q: "التصميم الجيد لقاعدة البيانات يهدف إلى تقليل:", options: ["السرعة", "تكرار البيانات غير المبرر", "عدد المستخدمين", "الأمان"], correct: 1 },
+                    { q: "من وظائف نظام الموارد البشرية إدارة:", options: ["بيانات الموظفين", "حركة المرور", "الطقس", "الألعاب"], correct: 0 },
+                    { q: "العلاقة بين 'القسم' و 'الموظفين' (القسم الواحد فيه موظفين كثير) هي:", options: ["1:1", "1:N (واحد لمتعدد)", "N:M", "لا توجد علاقة"], correct: 1 },
+                    { q: "في 'مخطط العلاقة'، يتم كتابة اسم الكيان متبوعاً بـ:", options: ["الأرقام فقط", "الصفات بين قوسين", "الصور", "تاريخ اليوم"], correct: 1 },
+                    { q: "تخزين 'تاريخ الميلاد' كصفة للموظف يسمح للنظام بـ:", options: ["حذف الموظف", "حساب عمر الموظف", "تغيير عنوانه", "زيادة راتبه"], correct: 1 },
+                    { q: "البيانات (Data) تُعالج لتصبح:", options: ["أكواداً", "معلومات (Information)", "أجهزة صلبة", "شاشات"], correct: 1 },
+                    { q: "أي من هذه ليس كياناً منطقياً؟", options: ["الموظف", "المشروع", "عملية الجمع الحسابية", "الطالب"], correct: 2 },
+                    { q: "الميزانية (Budget) هي صفة تابعة لكيان:", options: ["الموظف", "المشروع", "العنوان", "تاريخ الميلاد"], correct: 1 },
+                    { q: "الهدف من مخطط ER هو:", options: ["كتابة الكود البرمجي", "تمثيل البيانات وعلاقاتها بشكل صوري قبل التنفيذ", "تلوين الجداول", "تسريع الإنترنت"], correct: 1 },
+                    { q: "علاقة 'يعمل في' بين الموظف والمشروع قد تحتوي على صفة مثل:", options: ["نوع السيارة", "تاريخ البداية في المشروع", "لون المكتب", "ماركة الجوال"], correct: 1 },
+                    { q: "في قواعد البيانات، الدقة تعني:", options: ["صحة البيانات المسجلة ومطابقتها للواقع", "سرعة الكتابة", "جمال الخط", "كبر حجم الملف"], correct: 0 },
+                    { q: "نظام الرواتب يحتاج لقاعدة بيانات لضمان:", options: ["حساب وصرف الرواتب بدقة", "تصميم الصور للموظفين", "إرسال رسائل خاصة", "تصفح يوتيوب"], correct: 0 },
+                    { q: "الصفة التي تميز كل كيان عن غيره بشكل فريد تسمى:", options: ["Attribute", "Key (مفتاح)", "Relationship", "Folder"], correct: 1 },
+                    { q: "تكرار البيانات في قاعدة البيانات يؤدي إلى:", options: ["تحسين الأداء", "هدر المساحة واحتمالية الخطأ", "زيادة الأمان", "تسهيل البحث"], correct: 1 },
+                    { q: "مخطط ER يساعد في:", options: ["فهم متطلبات النظام وتصميم هيكل البيانات", "صيانة المعالج", "شراء السيرفرات", "تثبيت الويندوز"], correct: 0 },
+                    { q: "العلاقة 'يدير' بين المدير والفرع هي غالباً علاقة:", options: ["1:1 (واحد لواحد)", "N:M", "علاقة دائرية", "لا شيء مما سبق"], correct: 0 },
+                    { q: "في الجداول، يمثل الصف (Row) الواحدة:", options: ["قاعدة بيانات كاملة", "سجل (Record) لكيان واحد", "عمود بيانات", "اسم الجدول"], correct: 1 },
+                    { q: "في الجداول، يمثل العمود (Column):", options: ["سجل موظف", "صفة معينة (Attribute) لكل السجلات", "العلاقة بين جدولين", "تاريخ الحفظ"], correct: 1 },
+                    { q: "تعديل عنوان سكن طالب في النظام يسمى عملية:", options: ["Insert", "Update", "Delete", "Search"], correct: 1 },
+                    { q: "البحث عن طالب برقم هويته يسمى عملية:", options: ["تحديث", "استعلام/بحث (Select/Search)", "إدخال", "حذف"], correct: 1 },
+                    { q: "قواعد البيانات التقليدية تركز على العمليات التي تحدث:", options: ["مرة في السنة", "بشكل يومي ومستمر", "عند تعطل النظام فقط", "في الماضي فقط"], correct: 1 },
+                    { q: "تعتبر (الميزانية) في كيان المشروع من أنواع البيانات:", options: ["النصية", "الرقمية", "الصور", "المنطقية"], correct: 1 },
+                    { q: "الربط بين جدول 'المؤلف' وجدول 'الكتاب' يمثل:", options: ["صفة", "علاقة (Relationship)", "كيان", "مفتاح"], correct: 1 },
+                    { q: "النمذجة تساعد في تقليل التكاليف لأنها:", options: ["تزيد عدد الموظفين", "تكتشف أخطاء التصميم قبل البدء في البرمجة", "تستخدم ألواناً رخيصة", "تحذف البيانات الزائدة"], correct: 1 },
+                    { q: "في نظام شؤون الطلاب، 'رقم الطالب' يعتبر:", options: ["صفة عادية", "مفتاح فريد للتمييز بين الطلاب", "علاقة", "جدول وسيط"], correct: 1 },
+                    { q: "أي مما يلي يصف العلاقة بين 'الطالب' و 'المواد الدراسية'؟", options: ["1:1", "N:M (متعدد لمتعدد)", "لا توجد علاقة", "علاقة حذف"], correct: 1 }
+                ]
+            },
+            sub5: {
+                title: "أساسيات الشبكات",
+                questions: [
+                    { q: "ما هي الوظيفة الأساسية لشبكات الحاسوب؟", options: ["تبريد الأجهزة", "ربط الأجهزة لتبادل البيانات والموارد", "برمجة التطبيقات", "حماية الأجهزة من الفيروسات"], correct: 1 },
+                    { q: "أي من الشبكات التالية تُستخدم لربط أجهزة في مساحة جغرافية صغيرة مثل مبنى أو مدرسة؟", options: ["WAN", "MAN", "LAN", "PAN"], correct: 2 },
+                    { q: "شبكة الإنترنت العالمية تعتبر مثالاً على أي نوع من الشبكات؟", options: ["LAN", "MAN", "WAN", "WLAN"], correct: 2 },
+                    { q: "ما هي المكونات الأساسية لأي شبكة حاسوب؟", options: ["الأجهزة، الوسائط، والبرمجيات", "الشاشة ولوحة المفاتيح", "الكهرباء فقط", "المعالج والذاكرة فقط"], correct: 0 },
+                    { q: "أي جهاز يقوم بإرسال البيانات لجميع المنافذ (Broadcast) ويسبب تصادمات في الشبكة؟", options: ["Switch", "Router", "Hub", "Modem"], correct: 2 },
+                    { q: "الجهاز الذي يفصل بين نطاقات التصادم (Collision Domains) ويحسن أداء الشبكة هو:", options: ["Hub", "Switch", "Repeater", "Cable"], correct: 1 },
+                    { q: "التأخير الذي يحدث بسبب معالجة الراوتر للحزمة (Processing Delay) يُقاس عادة بـ:", options: ["الجيجابايت", "الميكروثانية", "الساعات", "الكيلومتر"], correct: 1 },
+                    { q: "عندما تنتظر الحزمة دورها في طابور الراوتر، يُعرف هذا التأخير بـ:", options: ["Processing Delay", "Transmission Delay", "Queuing Delay", "Propagation Delay"], correct: 2 },
+                    { q: "كم عدد الطبقات في نموذج OSI (Open Systems Interconnection)؟", options: ["4 طبقات", "5 طبقات", "7 طبقات", "9 طبقات"], correct: 2 },
+                    { q: "كم عدد الطبقات في نموذج TCP/IP المذكور في المنهج (المستخدم في الإنترنت)؟", options: ["3 طبقات", "5 طبقات", "7 طبقات", "8 طبقات"], correct: 1 },
+                    { q: "أي طبقة في نموذج OSI مسؤولة عن توجيه الحزم (Routing) بين الشبكات المختلفة؟", options: ["Physical Layer", "Data Link Layer", "Network Layer", "Application Layer"], correct: 2 },
+                    { q: "عنوان MAC الفيزيائي يُستخدم في أي طبقة من نموذج OSI؟", options: ["Network Layer", "Data Link Layer", "Transport Layer", "Session Layer"], correct: 1 },
+                    { q: "بروتوكول UDP في طبقة النقل يوفر خدمة:", options: ["تسليم موثوق مع إعادة الإرسال", "تسليم غير موثوق ولا يعيد إرسال الحزم المفقودة", "توجيه الحزم بين الدول", "تشفير البيانات"], correct: 1 },
+                    { q: "عملية التغليف (Encapsulation) تحدث عند:", options: ["إرسال البيانات من الطبقات العليا (الأعلى) للأسفل", "استقبال البيانات وصعودها للأعلى", "انقطاع الاتصال", "حذف البيانات"], correct: 0 },
+                    { q: "في نموذج TCP/IP، طبقة Application تجمع وظائف أي طبقات من نموذج OSI؟", options: ["Physical و Data Link", "Network و Transport", "Application و Presentation و Session", "جميع الطبقات"], correct: 2 },
+                    { q: "أي بروتوكول يوفر اتصالاً موثوقاً (Reliable) ويضمن وصول البيانات كاملة؟", options: ["UDP", "TCP", "IP", "MAC"], correct: 1 },
+                    { q: "إزالة التغليف (Decapsulation) تحدث عندما:", options: ["يتم إرسال رسالة جديدة", "تستلم الوجهة البيانات وتصعد من الأسفل للأعلى", "يتم إطفاء الجهاز", "يحدث تصادم في الشبكة"], correct: 1 },
+                    { q: "ما هو طول عنوان IPv4؟", options: ["16 بت", "32 بت", "64 بت", "128 بت"], correct: 1 },
+                    { q: "ما هو العدد الإجمالي التقريبي لعناوين IPv4 المتاحة؟", options: ["4.3 مليون", "4.3 مليار", "100 مليار", "لا نهائي"], correct: 1 },
+                    { q: "ما هو طول عنوان IPv6؟", options: ["32 بت", "64 بت", "128 بت", "256 بت"], correct: 2 },
+                    { q: "يتم تمثيل عنوان IPv6 باستخدام نظام الترقيم:", options: ["الثنائي", "العشري المنقط", "الست عشري (Hexadecimal)", "الثماني"], correct: 2 },
+                    { q: "العنوان المنطقي (Logical Identifier) الذي يمكن تغييره لتحديد موقع الجهاز على الشبكة هو:", options: ["MAC Address", "IP Address", "Serial Number", "Port Number"], correct: 1 },
+                    { q: "ما هو البروتوكول الذي يقوم بترجمة العناوين الخاصة (Private) إلى عناوين عامة (Public) للاتصال بالإنترنت؟", options: ["DHCP", "DNS", "NAT", "HTTP"], correct: 2 },
+                    { q: "البروتوكول المسؤول عن التكوين الديناميكي وتوزيع عناوين IP تلقائياً للأجهزة هو:", options: ["DHCP", "NAT", "FTP", "MAC"], correct: 0 },
+                    { q: "في عنوان IPv6، يتم فصل المجموعات (Hextets) باستخدام:", options: ["نقطة (.)", "فاصلة (,)", "نقطتان عموديتان (:)", "شرطة (-)"], correct: 2 },
+                    { q: "عنوان Global Unicast (GUA) في IPv6 يشبه في وظيفته أي نوع من العناوين في IPv4؟", options: ["Private IP", "Public IP", "Loopback IP", "Broadcast IP"], correct: 1 },
+                    { q: "عنوان Unique Local (ULA) في IPv6 يُعادل في IPv4:", options: ["Private IP", "Public IP", "Multicast IP", "Anycast IP"], correct: 0 },
+                    { q: "أي من العناوين التالية لا يُوجه خارج الشبكة المحلية في IPv6 ويبدأ بـ fe80؟", options: ["Global Unicast", "Link-Local", "Multicast", "Broadcast"], correct: 1 },
+                    { q: "هل يحتاج بروتوكول IPv6 إلى تقنية NAT؟", options: ["نعم، دائماً", "لا حاجة لـ NAT في IPv6", "فقط في الشبكات الكبيرة", "فقط عند استخدام Wi-Fi"], correct: 1 },
+                    { q: "ميزة (SLAAC) في بروتوكول IPv6 تستخدم لـ:", options: ["حذف البيانات", "ترجمة العناوين", "التكوين التلقائي للعناوين بدون خادم", "إغلاق المنافذ"], correct: 2 },
+                    { q: "ما هي ميزة الأمان المدمجة افتراضياً في بروتوكول IPv6؟", options: ["Antivirus", "Firewall", "IPSec", "WPA3"], correct: 2 },
+                    { q: "عنوان IPv4 يتكون من 4 بايت (Octets)، كل بايت يمثل كم بت؟", options: ["4 بت", "8 بت", "16 بت", "32 بت"], correct: 1 },
+                    { q: "تقسيم الشبكات (Subnetting) باستخدام CIDR والتقسيم المتغير (VLSM) يهدف إلى:", options: ["زيادة استهلاك الطاقة", "الاستخدام الأمثل وتقليل الهدر في عناوين IP", "تغيير عناوين MAC", "تشفير البيانات"], correct: 1 },
+                    { q: "الطبقة الفيزيائية (Physical Layer) تتعامل مع البيانات على شكل:", options: ["حزم (Packets)", "إطارات (Frames)", "بتات وإشارات (Bits)", "برامج"], correct: 2 },
+                    { q: "عنوان IP يعمل في الطبقة الثالثة (Layer 3)، بينما عنوان MAC يعمل في الطبقة:", options: ["الأولى", "الثانية (Layer 2)", "الرابعة", "السابعة"], correct: 1 },
+                    { q: "ماذا يمثل الرمز (N:M) في قواعد البيانات المطبقة على الشبكات أو أي نظام آخر؟", options: ["واحد لواحد", "متعدد لمتعدد", "واحد لمتعدد", "لا يوجد علاقة"], correct: 1 },
+                    { q: "التأخير الكلي (Total Delay) في نقل حزمة بيانات يتكون من:", options: ["Processing و Queuing فقط", "Transmission و Propagation فقط", "مجموع التأخيرات الأربعة (Processing, Queuing, Transmission, Propagation)", "لا يوجد تأخير في الشبكات"], correct: 2 },
+                    { q: "معدل نقل البيانات الفعلي يسمى:", options: ["Delay", "Throughput", "IPSec", "Subnet"], correct: 1 },
+                    { q: "ما هو قناع الشبكة (Subnet Mask)؟", options: ["رقم يحدد سرعة الشبكة", "رقم يميز جزء الشبكة عن جزء المضيف في عنوان IP باستخدام عملية AND المنطقية", "برنامج حماية", "أداة لكسر التشفير"], correct: 1 },
+                    { q: "الحروف المستخدمة في نظام الترقيم الست عشري (Hexadecimal) لـ IPv6 هي:", options: ["من A إلى Z", "من A إلى F", "من X إلى Z", "لا توجد حروف"], correct: 1 },
+                    { q: "في IPv6، كم عدد البتات في كل مجموعة (Hextet) من المجموعات الثمانية؟", options: ["8 بت", "16 بت", "32 بت", "64 بت"], correct: 1 },
+                    { q: "التحويل من نظام Hub إلى Switch في المختبرات يقلل من:", options: ["الأمان", "سرعة النقل", "تصادم البيانات (Collisions)", "طول الكيابل"], correct: 2 },
+                    { q: "عملية إرسال البيانات من جهاز واحد لجميع الأجهزة في الشبكة تسمى:", options: ["Unicast", "Multicast", "Broadcast", "Anycast"], correct: 2 },
+                    { q: "البروتوكولات (Protocols) في شبكات الحاسوب تعني:", options: ["الأسلاك النحاسية", "القواعد والمعايير التي تحكم تبادل البيانات بين الأجهزة", "الفيروسات الإلكترونية", "مفاتيح الكهرباء"], correct: 1 },
+                    { q: "نجاح اتصال فيديو مباشر عبر الإنترنت يتطلب عمل أي طبقات في نموذج OSI؟", options: ["طبقة واحدة فقط", "الطبقات العليا فقط", "مساهمة جميع الطبقات (من Physical إلى Application)", "لا يعتمد على OSI"], correct: 2 },
+                    { q: "في نموذج TCP/IP الحديث، أي طبقة مسؤولة عن العنونة المنطقية (IP) وتوجيه الحزم؟", options: ["Network/Internet Layer", "Application Layer", "Data Link", "Physical"], correct: 0 },
+                    { q: "نموذج OSI يعتبر:", options: ["برنامج تطبيقي", "نموذج مرجعي نظري مقسم إلى 7 طبقات", "جهاز راوتر", "قاعدة بيانات"], correct: 1 },
+                    { q: "أي من التأخيرات التالية يتأثر بمسافة الكيبل بين الأجهزة (12,000 كم مثلاً)؟", options: ["Queuing Delay", "Propagation Delay", "Processing Delay", "Transmission Delay"], correct: 1 },
+                    { q: "توجيه الحزم (Routing) يتم بناءً على أي عنوان؟", options: ["MAC Address", "IP Address", "Email Address", "Port Number"], correct: 1 },
+                    { q: "تعتبر الشبكة المحلية (LAN) مناسبة أكثر لـ:", options: ["ربط قارتين", "توصيل مدن مختلفة", "توصيل أجهزة في مختبر حاسب أو مبنى واحد", "الفضاء الخارجي"], correct: 2 }
+                ]
+            }
+        };
+
+        function updateReadinessMeters() {
+            ['sub1', 'sub2', 'sub3', 'sub4', 'sub5'].forEach(sub => {
+                let high = localStorage.getItem('highScore_' + sub) || 0;
+                document.getElementById('prog-' + sub).style.width = high + '%';
+                document.getElementById('prog-text-' + sub).textContent = `الجاهزية: ${high}%`;
+            });
+        }
+        updateReadinessMeters();
+
+        function showSubjects() {
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('subjects-screen').style.display = 'block';
+            updateReadinessMeters();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+        function goBackToSubjects() { showSubjects(); }
+
+        function startSurvivalMode() {
+            isSurvival = true; currentSubjectId = "survival";
+            let mixedQuestions = [];
+            for (let key in allSubjects) mixedQuestions = mixedQuestions.concat(allSubjects[key].questions);
+            mixedQuestions.sort(() => Math.random() - 0.5);
+            
+            currentSubjectData = mixedQuestions;
+            document.getElementById('subject-title').textContent = "☠️ وضع البقاء (Survival)";
+            answers = new Array(currentSubjectData.length).fill(null);
+            hintsUsed = new Array(currentSubjectData.length).fill(false);
+            wrongAnswersReview = []; sessionBookmarks = []; sessionXP = 0; currentQ = 0;
+            
+            document.getElementById('subjects-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            document.getElementById('quiz-screen').classList.add('fade-in');
+            
+            renderQuestion();
+        }
+
+        function startSubject(subKey) {
+            isSurvival = false; currentSubjectId = subKey;
+            currentSubjectData = allSubjects[subKey].questions;
+            document.getElementById('subject-title').textContent = allSubjects[subKey].title;
+            answers = new Array(currentSubjectData.length).fill(null);
+            hintsUsed = new Array(currentSubjectData.length).fill(false);
+            wrongAnswersReview = []; sessionBookmarks = []; sessionXP = 0; currentQ = 0;
+            
+            document.getElementById('subjects-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            document.getElementById('quiz-screen').classList.add('fade-in');
+            
+            renderQuestion();
+        }
+
+        function toggleBookmark() {
+            const btn = document.getElementById('bookmark-btn');
+            if(sessionBookmarks.includes(currentQ)) { sessionBookmarks = sessionBookmarks.filter(i => i !== currentQ); btn.innerHTML = '☆ حفظ'; btn.classList.remove('active'); } 
+            else { sessionBookmarks.push(currentQ); btn.innerHTML = '⭐ محفوظ'; btn.classList.add('active'); }
+        }
+
+        function useFiftyFifty() {
+            if(inventory.fifty <= 0 || answers[currentQ] !== null || hintsUsed[currentQ]) return;
+            inventory.fifty--; localStorage.setItem('devAhmedInv', JSON.stringify(inventory)); updateProfileUI();
+            
+            const q = currentSubjectData[currentQ]; const optionsNodes = document.getElementById('options-container').children;
+            let wrongIndexes = []; q.options.forEach((opt, idx) => { if (idx !== q.correct) wrongIndexes.push(idx); });
+            let toHide1 = wrongIndexes.splice(Math.floor(Math.random() * wrongIndexes.length), 1)[0];
+            let toHide2 = wrongIndexes.splice(Math.floor(Math.random() * wrongIndexes.length), 1)[0];
+            optionsNodes[toHide1].classList.add('hidden-hint'); optionsNodes[toHide2].classList.add('hidden-hint');
+            hintsUsed[currentQ] = true; playSound('levelUp');
+        }
+
+        function useShield() {
+            if(inventory.shield <= 0 || answers[currentQ] !== null || shieldActive) return;
+            inventory.shield--; localStorage.setItem('devAhmedInv', JSON.stringify(inventory)); updateProfileUI();
+            shieldActive = true; document.getElementById('inv-shield').classList.add('shield-active-glow'); playSound('levelUp');
+        }
+
+        function renderQuestion() {
+            const q = currentSubjectData[currentQ];
+            const container = document.getElementById('options-container');
+            const qText = document.getElementById('question-text');
+            const expBox = document.getElementById('explanation-box');
+            const bmBtn = document.getElementById('bookmark-btn');
+            
+            qText.classList.remove('fade-in'); void qText.offsetWidth; qText.classList.add('fade-in');
+            expBox.style.display = 'none'; qText.textContent = q.q; container.innerHTML = '';
+            
+            document.getElementById('question-tracker').textContent = isSurvival ? `الصمود: ${currentQ}` : `${currentQ + 1} / ${currentSubjectData.length}`;
+            document.getElementById('progress').style.width = isSurvival ? '100%' : `${((currentQ) / currentSubjectData.length) * 100}%`;
+            
+            document.getElementById('prev-btn').style.display = (currentQ > 0 && !isSurvival) ? 'block' : 'none';
+            document.getElementById('next-btn').style.display = 'none';
+
+            let isAnswered = answers[currentQ] !== null;
+
+            if(sessionBookmarks.includes(currentQ)) { bmBtn.innerHTML = '⭐ محفوظ'; bmBtn.classList.add('active'); } 
+            else { bmBtn.innerHTML = '☆ حفظ'; bmBtn.classList.remove('active'); }
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('div');
+                btn.className = 'option-item fade-in';
+                btn.style.animationDelay = `${idx * 0.05}s`;
+                btn.textContent = opt;
+
+                if (isAnswered) {
+                    btn.classList.add('disabled');
+                    if (idx === q.correct) btn.classList.add('correct');
+                    else if (idx === answers[currentQ]) btn.classList.add('wrong');
+                } else {
+                    btn.onclick = (e) => handleAnswer(idx, btn, e);
+                }
+                container.appendChild(btn);
+            });
+
+            if (isAnswered) {
+                showExplanation();
+                document.getElementById('next-btn').style.display = 'block';
+                document.getElementById('next-btn').textContent = (currentQ === currentSubjectData.length - 1 || isSurvival) ? 'إظهار النتيجة 📊' : 'السؤال التالي ➔';
+            }
+        }
+
+        function handleAnswer(idx, btnNode, event) { 
+            if (answers[currentQ] !== null && !shieldActive) return; 
+            
+            const q = currentSubjectData[currentQ];
+            const isCorrect = (idx === q.correct);
+            
+            if (!isCorrect && shieldActive) {
+                shieldActive = false; document.getElementById('inv-shield').classList.remove('shield-active-glow');
+                playSound('shield_break'); btnNode.classList.add('wrong', 'disabled'); btnNode.onclick = null; return; 
+            }
+
+            shieldActive = false; document.getElementById('inv-shield').classList.remove('shield-active-glow');
+            answers[currentQ] = idx; 
+            
+            if (isCorrect) {
+                streak++; playSound('correct'); addXP(15, event); triggerBgReaction(true);
+            } else {
+                streak = 0; playSound('wrong'); updateProfileUI(); triggerBgReaction(false);
+                wrongAnswersReview.push({ q: q.q, wrongOpt: q.options[idx], correctOpt: q.options[q.correct] });
+                if(isSurvival) { setTimeout(() => showResult(), 1500); }
+            }
+            renderQuestion(); 
+        }
+
+        function showExplanation() {
+            const q = currentSubjectData[currentQ]; const isCorrect = (answers[currentQ] === q.correct);
+            const expBox = document.getElementById('explanation-box');
+            let customExplanation = q.explanation ? q.explanation : (isCorrect ? `إجابة دقيقة! المفهوم الأكاديمي الصحيح هو "${q.options[q.correct]}".` : `المفهوم الصحيح هو: "${q.options[q.correct]}". يرجى التركيز عليها.`);
+
+            if (isCorrect) { expBox.className = 'explanation-box correct fade-in'; expBox.innerHTML = `<div class="explanation-title">✅ ${streak >= 3 ? 'حماس 🔥' : 'ممتاز'}</div>${customExplanation}`; } 
+            else { expBox.className = 'explanation-box wrong fade-in'; expBox.innerHTML = `<div class="explanation-title">❌ ${isSurvival ? 'GAME OVER!' : 'إجابة غير دقيقة'}</div>${customExplanation}`; }
+            expBox.style.display = 'block';
+        }
+        
+        function nextQuestion() { 
+            if(isSurvival && answers[currentQ] !== currentSubjectData[currentQ].correct) { showResult(); return; }
+            if (currentQ < currentSubjectData.length - 1) { currentQ++; renderQuestion(); } 
+            else { showResult(); } 
+        }
+        function prevQuestion() { if (currentQ > 0) { currentQ--; renderQuestion(); } }
+
+        function showResult() {
+            document.getElementById('quiz-screen').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            shieldActive = false; document.getElementById('inv-shield').classList.remove('shield-active-glow');
+            
+            let rankText = ""; let emoji = "";
+            
+            if(isSurvival) {
+                document.getElementById('final-rank').textContent = "انتهى وضع البقاء ☠️";
+                document.getElementById('final-score').textContent = `صمدت لـ ${currentQ} سؤال!`;
+                let oldSurvHigh = localStorage.getItem('devAhmedSurvivalHigh') || 0;
+                if(currentQ > oldSurvHigh) localStorage.setItem('devAhmedSurvivalHigh', currentQ);
+                emoji = "🔥"; playSound('wrong');
+            } else {
+                let score = answers.reduce((acc, ans, i) => acc + (ans === currentSubjectData[i].correct ? 1 : 0), 0);
+                let percentage = Math.round((score / currentSubjectData.length) * 100);
+                let oldHigh = localStorage.getItem('highScore_' + currentSubjectId) || 0;
+                if (percentage > oldHigh) localStorage.setItem('highScore_' + currentSubjectId, percentage);
+
+                if (percentage === 100) { rankText = "أداء مثالي!"; emoji = "🏆"; playSound('levelUp'); }
+                else if (percentage >= 80) { rankText = "مستوى متقدم جداً"; emoji = "🌟"; }
+                else if (percentage >= 50) { rankText = "مستوى جيد"; emoji = "👍"; }
+                else { rankText = "تحتاج مراجعة مكثفة"; emoji = "📚"; }
+
+                document.getElementById('final-rank').textContent = rankText;
+                document.getElementById('final-score').textContent = `${percentage}%`;
+            }
+
+            document.getElementById('result-emoji').textContent = emoji;
+            document.getElementById('earned-xp').textContent = sessionXP;
+
+            const reviewSection = document.getElementById('review-section'); const reviewList = document.getElementById('review-list'); reviewList.innerHTML = '';
+            if (wrongAnswersReview.length > 0) {
+                reviewSection.style.display = 'block';
+                wrongAnswersReview.forEach((item, index) => {
+                    reviewList.innerHTML += `<div class="review-item"><div class="review-q">${index + 1}. ${item.q}</div><div class="review-wrong">❌ إجابتك: ${item.wrongOpt}</div><div class="review-correct">✅ الصحيحة: ${item.correctOpt}</div></div>`;
+                });
+            } else { reviewSection.style.display = 'none'; }
+
+            const bmSection = document.getElementById('bookmarks-section'); const bmList = document.getElementById('bookmarks-list'); bmList.innerHTML = '';
+            if (sessionBookmarks.length > 0) {
+                bmSection.style.display = 'block';
+                sessionBookmarks.forEach((qIndex, idx) => {
+                    let qObj = currentSubjectData[qIndex]; let correctAns = qObj.options[qObj.correct];
+                    bmList.innerHTML += `<div class="review-item"><div class="review-q">⭐ ${idx + 1}. ${qObj.q}</div><div style="color:var(--accent-color); font-weight:bold;">✔️ الإجابة: ${correctAns}</div></div>`;
+                });
+            } else { bmSection.style.display = 'none'; }
+        }
+
+        function shareResult() {
+            let text = "";
+            if(isSurvival) {
+                text = `لعبت (وضع البقاء ☠️) في منصة المراجعة الشاملة وصمدت لـ ${currentQ} سؤال متتالي بدون ولا غلطة! من يقدر يكسر رقمي؟ 🔥`;
+            } else {
+                let percentage = document.getElementById('final-score').textContent;
+                let subName = allSubjects[currentSubjectId].title;
+                text = `أنهيت مراجعة مادة [ ${subName} ] بنسبة ${percentage} 🌟 في منصة مراجعة الاختبارات (تطوير: أحمد مطمي). من يتحداي؟ 🚀`;
+            }
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.share-btn');
+                btn.textContent = "تم النسخ بنجاح! ✔️";
+                btn.style.background = "linear-gradient(135deg, #059669, #047857)";
+                setTimeout(() => { btn.textContent = "شارك نتيجتي 📲"; btn.style.background = "linear-gradient(135deg, #10b981, #059669)"; }, 3000);
+            });
+        }
+    </script>
+</body>
+</html>
