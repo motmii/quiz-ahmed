@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="description" content="منصة مراجعة تفاعلية — دبلوم أمن المعلومات">
     <title>منصة مراجعة الاختبارات | دبلوم أمن المعلومات</title>
+    <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -141,6 +144,66 @@
             .player-profile { justify-content: space-between; }
             .btn-group { justify-content: center; }
         }
+
+        /* نافذة ملخص مادة الشبكات */
+        .modal-content.summary-modal { max-width: min(92vw, 820px); text-align: right; padding-top: 45px; }
+        .summary-prose { color: #e2e8f0; font-size: 0.95rem; line-height: 1.9; text-align: right; }
+        .summary-prose h3 { color: var(--accent-color); font-size: 1.12rem; margin: 1.35rem 0 0.55rem; font-weight: 900; border-bottom: 1px solid rgba(245, 158, 11, 0.25); padding-bottom: 6px; }
+        .summary-prose h4 { color: #93c5fd; font-size: 1rem; margin: 1rem 0 0.4rem; font-weight: 800; }
+        .summary-prose p { margin-bottom: 0.65rem; }
+        .summary-prose ul { margin: 0.4rem 0 0.85rem; padding-right: 1.35rem; list-style: disc; }
+        .summary-prose li { margin-bottom: 0.35rem; }
+        .summary-prose .note { font-size: 0.88rem; color: var(--text-muted); background: rgba(0,0,0,0.25); padding: 10px 14px; border-radius: 10px; border-right: 3px solid var(--primary-color); margin: 1rem 0; }
+        .student-contrib { background: rgba(139, 92, 246, 0.12); border: 1px solid rgba(139, 92, 246, 0.35); border-radius: 14px; padding: 16px 18px; margin-top: 1.5rem; }
+        .student-contrib h3 { border-bottom-color: rgba(167, 139, 250, 0.4); color: #c4b5fd; }
+        .contrib-name { color: #fcd34d; font-weight: 800; margin-bottom: 0.75rem; font-size: 1rem; }
+        .summary-nav-btn { background: linear-gradient(135deg, #0ea5e9, #0369a1) !important; box-shadow: 0 5px 15px rgba(14, 165, 233, 0.35) !important; }
+        .summary-nav-btn:hover { box-shadow: 0 8px 20px rgba(14, 165, 233, 0.5) !important; }
+
+        html { font-size: calc(15px * var(--fs-scale, 1)); }
+        body.focus-mode .bg-circles, body.focus-mode #canvas { display: none !important; }
+        body.focus-mode .fade-in { animation: none !important; }
+        body.focus-mode .xp-popup { display: none !important; }
+        body.focus-mode .shield-active-glow { animation: none !important; }
+
+        .hub-mini { font-size: 0.78rem; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; margin-top: 8px; }
+        .hub-mini span { background: rgba(0,0,0,0.35); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--glass-border); }
+        .badges-strip { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 8px; min-height: 28px; }
+        .badge-pill { font-size: 0.72rem; padding: 4px 10px; border-radius: 999px; background: rgba(245,158,11,0.2); color: #fcd34d; border: 1px solid rgba(245,158,11,0.4); }
+
+        .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; text-align: center; margin-top: 15px; }
+        .tool-tile { background: rgba(255,255,255,0.06); border: 1px solid var(--glass-border); border-radius: 14px; padding: 14px 10px; cursor: pointer; transition: 0.2s; color: #e2e8f0; font-weight: 700; font-size: 0.88rem; }
+        .tool-tile:hover { border-color: var(--primary-color); transform: translateY(-2px); }
+
+        .pm-wrap { margin-top: 22px; padding: 16px; background: rgba(0,0,0,0.25); border-radius: 16px; border: 1px solid var(--glass-border); }
+        .pm-wrap h3 { font-size: 1rem; color: var(--accent-color); margin-bottom: 12px; text-align: center; }
+        .pm-subject { margin-bottom: 14px; }
+        .pm-label { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 6px; }
+        .pm-cells { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+        .pm-cell { width: 36px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); }
+        .pm-cell.on { background: rgba(16,185,129,0.35); border-color: var(--success-color); }
+
+        .resume-banner { display: none; margin-bottom: 16px; padding: 12px 16px; background: rgba(59,130,246,0.15); border: 1px solid var(--primary-color); border-radius: 12px; text-align: right; font-size: 0.92rem; }
+        .resume-banner button { margin-inline-start: 8px; margin-top: 6px; padding: 6px 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; }
+
+        .mock-timer { font-variant-numeric: tabular-nums; color: #f87171; font-weight: 900; font-size: 1.05rem; }
+
+        #flashcard-screen { display: none; }
+        .fc-card { perspective: 1000px; margin: 20px auto; max-width: 520px; min-height: 220px; cursor: pointer; }
+        .fc-inner { position: relative; width: 100%; min-height: 220px; transition: transform 0.5s; transform-style: preserve-3d; top: 0; left: 0; }
+        .fc-card.flipped .fc-inner { transform: rotateY(180deg); }
+        .fc-face { position: absolute; width: 100%; min-height: 220px; backface-visibility: hidden; border-radius: 16px; padding: 24px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 1.15rem; line-height: 1.7; border: 2px solid var(--glass-border); background: rgba(0,0,0,0.45); }
+        .fc-back { transform: rotateY(180deg); background: rgba(59,130,246,0.15); border-color: var(--primary-color); color: #bfdbfe; }
+        .fc-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+
+        .glossary-search { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 12px; text-align: right; }
+        .glossary-item { text-align: right; padding: 10px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); }
+        .glossary-item strong { color: var(--accent-color); }
+
+        .topic-report-box { text-align: right; background: rgba(15,23,42,0.6); padding: 14px; border-radius: 12px; margin-top: 16px; border: 1px solid var(--glass-border); display: none; }
+        .topic-report-box h4 { color: #a78bfa; margin-bottom: 8px; }
+
+        @media print { .no-print, .bg-circles, #canvas, .top-nav-area { display: none !important; } body { background: #fff; color: #000; } .main-container { box-shadow: none; max-height: none; } }
     </style>
 </head>
 <body>
@@ -181,8 +244,8 @@
             <h2 style="color: #10b981;">🔔 سجل التحديثات والميزات</h2>
             
             <div class="update-list-item">
-                <h3>🚀 الإصدار الحالي (Ultimate 3.2)</h3>
-                <p>إضافة <b>وضع البقاء (Survival)</b> الصعب، وتفعيل <b>متجر الأدوات</b> لشراء المساعدات بنقاط الـ XP.</p>
+                <h3>🚀 الإصدار الحالي (Ultimate 4.0)</h3>
+                <p><b>🎛️ مركز الطالب:</b> خطة مذاكرة، مسرد، بطاقات تذكّر، غرفة بذرة، اقتراح أسئلة، ملخصات لكل المواد، وضع تجريبي ومراجعة سريعة، تقرير مواضيع، طباعة، شارات، تحدي أسبوعي، استئناف جلسة، إعدادات (تركيز/خط)، تصدير/استيراد JSON، وPWA عند الاستضافة على HTTPS.</p>
             </div>
             <div class="update-list-item">
                 <h3>📊 الإصدار (3.1)</h3>
@@ -191,6 +254,271 @@
             <div class="update-list-item">
                 <h3>💡 الإصدار (2.0)</h3>
                 <p>إطلاق <b>صندوق الشرح التفاعلي</b> لتوضيح سبب الإجابات، واستكمال بنك الأسئلة الشامل (250 سؤال).</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="network-summary-modal">
+        <div class="modal-content summary-modal" style="border-color: #0ea5e9; box-shadow: 0 0 30px rgba(14, 165, 233, 0.35);">
+            <button type="button" class="close-modal" onclick="closeModal('network-summary-modal')" aria-label="إغلاق">✖</button>
+            <h2 style="color: #38bdf8; margin-bottom: 8px;">📡 ملخص مراجعة: أساسيات الشبكات</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">دروس 1–3 — تلخيص للمذاكرة (مع قسم مساهمة زميل)</p>
+            <div class="summary-prose">
+                <p class="note">هذا الملخص مُعدّ لمرافقة منهج المقرر ومطابقة أغلب مفاهيم بنك أسئلة المنصة. إن اختلفت صياغة المدرّس عن أي نقطة، اعتمد مرجع المحاضرة الرسمية.</p>
+
+                <h3>الدرس الأول — مقدمة في شبكات الحاسوب</h3>
+                <p>الشبكة هي ربط أجهزة (حواسيب، خوادم، طابعات، كاميرات…) عبر وسائط سلكية أو لاسلكية لتبادل <strong>البيانات</strong> والوصول إلى <strong>الموارد المشتركة</strong> (ملفات، إنترنت، خدمات). الهدف: توفير الاتصال بكفاءة، مع مراعاة التكلفة والأداء والأمان حسب حجم المؤسسة.</p>
+                <h4>أنواع الشبكات حسب الامتداد الجغرافي</h4>
+                <ul>
+                    <li><strong>PAN</strong> (شبكة شخصية): نطاق ضيق جداً (سماعات، ساعة، هاتف).</li>
+                    <li><strong>LAN</strong> (شبكة محلية): مبنى، مختبر، حرم جامعي — سرعات عالية وتكلفة ربط منخفضة نسبياً.</li>
+                    <li><strong>MAN</strong> (شبكة مدينة): تربط عدة مواقع داخل مدينة.</li>
+                    <li><strong>WAN</strong> (شبكة واسعة): تربط مدناً ودولاً؛ الإنترنت أشهر مثال.</li>
+                </ul>
+                <h4>مكوّنات الشبكة</h4>
+                <ul>
+                    <li><strong>الأجهزة الطرفية:</strong> الحاسوب، الهاتف، الخادم.</li>
+                    <li><strong>الوسائط:</strong> أسلاك نحاسية، ألياف ضوئية، موجات لاسلكية.</li>
+                    <li><strong>البرمجيات والبروتوكولات:</strong> قواعد تنسيق وتسليم الرسائل بين الأجهزة.</li>
+                </ul>
+                <h4>أجهزة الربط الشائعة</h4>
+                <ul>
+                    <li><strong>Hub:</strong> يعيد إرسال الإطارات لجميع المنافذ (broadcast) — يزيد <strong>التصادمات Collisions</strong> ويقلل الأداء.</li>
+                    <li><strong>Switch:</strong> يوجّه الإطار لميناء الجهاز المستهدف فقط — يفصل <strong>نطاقات التصادم Collision domains</strong> ويحسّن الأداء.</li>
+                    <li><strong>Router:</strong> يربط شبكات مختلفة ويتخذ قرارات <strong>التوجيه</strong> بناءً على عنوان منطقي (مثل IP).</li>
+                    <li><strong>Modem:</strong> يحوّل الإشارة بين الوسيط (مثل خط DSL أو الألياف) وبين الشبكة الداخلية غالباً.</li>
+                </ul>
+                <p><strong>البروتوكول:</strong> مجموعة قواعد ومعايير تحكم تنسيق الرسائل وتوقيت الإرسال والتصحيح عند الحاجة؛ بدون بروتوكولات مشتركة لا يفهم الجهازان بعضهما.</p>
+
+                <h3>الدرس الثاني — نموذج OSI ونموذج TCP/IP</h3>
+                <p>النماذج المرجعية تساعد على فهم «من أين لمن» في مسار الرسالة من تطبيقك حتى السلك والعكس.</p>
+                <h4>نموذج OSI (سبع طبقات)</h4>
+                <ul>
+                    <li><strong>7 — التطبيقات Application:</strong> واجهة المستخدم والخدمات (HTTP، DNS، البريد…).</li>
+                    <li><strong>6 — العرض Presentation:</strong> ترميز البيانات، التشفير، ضغط الملفات.</li>
+                    <li><strong>5 — الجلسة Session:</strong> إدارة الحوار بين طرفين (بدء/إيقاف/مزامنة).</li>
+                    <li><strong>4 — النقل Transport:</strong> تسليم طرف-إلى-طرف — أشهره <strong>TCP</strong> (موثوق) و<strong>UDP</strong> (سريع غير موثوق).</li>
+                    <li><strong>3 — الشبكة Network:</strong> عنوان منطقي وتوجيه الحزم بين الشبكات — <strong>IP</strong>.</li>
+                    <li><strong>2 — ربط البيانات Data Link:</strong> إطارات على الرابط الواحد، عنوان فيزيائي <strong>MAC</strong>.</li>
+                    <li><strong>1 — الفيزيائية Physical:</strong> البتات، الإشارات، الموصلات والمواصفات الكهربائية/الضوئية.</li>
+                </ul>
+                <h4>نموذج TCP/IP (أربع طبقات عملياً)</h4>
+                <p>يُستخدم في الإنترنت: طبقة <strong>Application</strong> تجمع وظائف طبقات OSI العليا (تطبيق + عرض + جلسة)، ثم <strong>Transport</strong>، ثم <strong>Internet/Network</strong> (IP والتوجيه)، ثم <strong>Network Access</strong> (تغطي الفيزيائية وربط البيانات).</p>
+                <h4>التغليف Encapsulation والفك Decapsulation</h4>
+                <ul>
+                    <li>عند <strong>الإرسال</strong> تنزل البيانات من الأعلى للأسفل: كل طبقة تضيف ترويسة (وأحياناً ذيلاً) — الناتج: قطع بأسماء مختلفة حسب الطبقة (بيانات → مقطع → حزمة → إطار → بتات).</li>
+                    <li>عند <strong>الاستقبال</strong> تُزال الترويسات صعوداً حتى تصل البيانات للتطبيق.</li>
+                </ul>
+                <h4>TCP مقابل UDP</h4>
+                <ul>
+                    <li><strong>TCP:</strong> اتصال موثوق، ترتيب، إعادة إرسال عند الفقدان — مناسب للويب، البريد، نقل ملفات يحتاج اكتمالاً.</li>
+                    <li><strong>UDP:</strong> بدون ضمان تسليم ولا إعادة إرسال تلقائية — أقل تأخيراً؛ مناسب للبث المباشر، الألعاب، DNS أحياناً.</li>
+                </ul>
+                <p><strong>عنوان MAC</strong> يعمل في الطبقة الثانية؛ <strong>عنوان IP</strong> في الطبقة الثالثة. التوجيه بين الشبكات يعتمد على <strong>IP</strong>، بينما التسليم داخل الرابط المحلي يستخدم غالباً <strong>MAC</strong>.</p>
+
+                <h3>الدرس الثالث — العنونة IPv4 وIPv6 والخدمات المساعدة</h3>
+                <h4>IPv4</h4>
+                <ul>
+                    <li>طول العنوان <strong>32 بت</strong>، يُعرض بأربعة أقسام عشرية (Octets).</li>
+                    <li>عدد العناوين الفريدة تقريباً <strong>4.3 مليار</strong> — أدى لنضج تقنين العناوين والاعتماد على NAT وغيره.</li>
+                    <li><strong>عنوان عام Public</strong> يظهر على الإنترنت؛ <strong>عنوان خاص Private</strong> داخل الشبكة الداخلية (مثل نطاقات 10.x، 172.16–31.x، 192.168.x).</li>
+                </ul>
+                <h4>NAT و DHCP</h4>
+                <ul>
+                    <li><strong>NAT:</strong> ترجمة العناوين الخاصة إلى عامة للخروج للإنترنت — يخفف نقص IPv4.</li>
+                    <li><strong>DHCP:</strong> توزيع عناوين IP وإعدادات الشبكة (مثل البوابة) تلقائياً للأجهزة.</li>
+                </ul>
+                <h4>IPv6</h4>
+                <ul>
+                    <li>عنوان <strong>128 بت</strong>، يُكتب بست عشري ومجموعات مفصولة بـ <strong>:</strong>.</li>
+                    <li><strong>Global Unicast (GUA)</strong> يشبه العنوان العام في IPv4.</li>
+                    <li><strong>Unique Local (ULA)</strong> يشبه العنوان الخاص في IPv4.</li>
+                    <li><strong>Link-Local</strong> يبدأ غالباً بـ <strong>fe80</strong> — للاتصال داخل الرابط المحلي فقط.</li>
+                    <li>غالباً <strong>لا حاجة لـ NAT</strong> كما في IPv4 بسبب وفرة العناوين.</li>
+                    <li><strong>SLAAC:</strong> تكوين تلقائي للعنوان بدون خادم DHCP في سيناريوهات معيّنة.</li>
+                    <li>دعم <strong>IPSec</strong> مدمج في تصميم IPv6 لخدمات أمان أقوى على مستوى الشبكة.</li>
+                </ul>
+                <h4>تقسيم الشبكات (Subnetting) باختصار</h4>
+                <p><strong>قناع الشبكة Subnet mask</strong> يميّز جزء الشبكة عن جزء المضيف عبر عملية منطقية (AND) مع عنوان IP. <strong>CIDR</strong> و<strong>VLSM</strong> يسمحان بتقسيم مرن لتقليل هدر العناوين وتحسين التوجيه.</p>
+                <h4>التأخيرات في الشبكات</h4>
+                <ul>
+                    <li><strong>Processing:</strong> وقت معالجة الراوتر للحزمة (غالباً بالميكروثانية).</li>
+                    <li><strong>Queuing:</strong> انتظار الحزمة في طابور المخرج.</li>
+                    <li><strong>Transmission:</strong> زمن وضع كل البتات على الوسيط.</li>
+                    <li><strong>Propagation:</strong> انتشار الإشارة في الوسيط — يتأثر ب<strong>المسافة</strong> (مثل كابلات بآلاف الكيلومترات).</li>
+                </ul>
+                <p><strong>Throughput</strong> هو معدل النقل الفعلي للبيانات بنجاح عبر المسار، ويختلف عن «سرعة الساعة» الإعلانية للرابط.</p>
+                <h4>أنماط الإرسال</h4>
+                <ul>
+                    <li><strong>Unicast:</strong> لجهاز واحد.</li>
+                    <li><strong>Multicast:</strong> لمجموعة مهتمة.</li>
+                    <li><strong>Broadcast:</strong> لجميع الأجهزة في نطاق البث (محدوث في IPv6 مقارنة بـ IPv4).</li>
+                </ul>
+
+                <div class="student-contrib">
+                    <h3>📎 ملخص زميل طالب (مساهمة طلابية)</h3>
+                    <p class="contrib-name">المساهم: <span id="student-summary-author">— لم يُستخرج الاسم تلقائياً من ملف Word في بيئة التحرير —</span></p>
+                    <p class="note" style="margin-top:0;">الملف المرجعي: <strong>ملخص أساسيات الشبكات عمل أحد الطلاب (1).docx</strong>. إن رغبت بظهور الاسم كما في المستند، انسخه من الملف واستبدل النص أعلاه في الكود، أو أرسل لي نص الملف لأدمجه لك.</p>
+                    <h4>مراجعة سريعة بأسلوب زميل (مكملة للفوق — ليست نسخة حرفية من الملف)</h4>
+                    <ul>
+                        <li><strong>OSI للحفظ:</strong> من الأعلى للأسفل: «كل شيء تلمسه» = تطبيق؛ «شكل البيانات» = عرض؛ «محادثة الجلسة» = جلسة؛ «موثوق أو سريع» = نقل (TCP/UDP)؛ «عنوان وتوجيه» = شبكة (IP)؛ «إطار وMAC» = ربط بيانات؛ «سلك وإشارة» = فيزيائية.</li>
+                        <li><strong>فرق سريع:</strong> Switch يعمل بذكاء على مستوى الإطار داخل LAN؛ Router يقرر أين تذهب الحزمة بين شبكات مختلفة.</li>
+                        <li><strong>IPv4:</strong> فكر بـ «4 أرقام من 0–255»؛ تذكر الخاص مقابل العام ودور NAT.</li>
+                        <li><strong>IPv6:</strong> أطول بكثير، ست عشري، fe80 للرابط المحلي، غالباً بدون NAT كما عهدته في المنزل على IPv4.</li>
+                        <li><strong>قبل الاختبار:</strong> اربط كل سؤال بطبقة OSI أو ببروتوكول (من يوفر موثوقية؟ من يعنون؟ من فيزيائي؟).</li>
+                    </ul>
+                </div>
+
+                <p class="note" style="margin-top:1.25rem;">نصيحة للمذاكرة: اقرأ الملخص مرة كاملة، ثم أغلق الصفحة واكتب من الذاكرة جدول OSI + فرق TCP/UDP + مثال IPv4 خاص مقابل عام + سبب وجود NAT — ثم ارجع للمقارنة.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="student-hub-modal">
+        <div class="modal-content summary-modal" style="border-color: #a78bfa;">
+            <button type="button" class="close-modal" onclick="closeModal('student-hub-modal')" aria-label="إغلاق">✖</button>
+            <h2 style="color: #c4b5fd;">🎛️ مركز الطالب</h2>
+            <p style="color: var(--text-muted); font-size: 0.88rem;">اختصارات لكل الأدوات التعليمية</p>
+            <div class="tool-grid">
+                <button type="button" class="tool-tile" onclick="closeModal('student-hub-modal'); openModal('settings-modal');">⚙️ إعدادات</button>
+                <button type="button" class="tool-tile" onclick="closeModal('student-hub-modal'); openModal('study-plan-modal');">📅 خطة المذاكرة</button>
+                <button type="button" class="tool-tile" onclick="closeModal('student-hub-modal'); openModal('glossary-modal');">📖 مسرد المصطلحات</button>
+                <button type="button" class="tool-tile" onclick="closeModal('student-hub-modal'); openModal('stats-modal');">🏅 إنجازاتي</button>
+                <button type="button" class="tool-tile" onclick="closeModal('student-hub-modal'); openModal('other-summaries-modal');">📚 ملخصات المواد</button>
+                <button type="button" class="tool-tile" onclick="closeModal('student-hub-modal'); openFlashcardScreen();">🃏 بطاقات تذكّر</button>
+                <button type="button" class="tool-tile" onclick="closeModal('student-hub-modal'); openModal('room-seed-modal');">🔗 غرفة مراجعة (بذرة)</button>
+                <button type="button" class="tool-tile" onclick="closeModal('student-hub-modal'); openModal('suggest-question-modal');">✉️ اقتراح سؤال</button>
+                <button type="button" class="tool-tile" onclick="closeModal('student-hub-modal'); openModal('mode-pick-modal'); document.getElementById('mode-pick-title').textContent='📝 اختر المادة — امتحان تجريبي'; window.__modePick='mock';">📝 امتحان تجريبي</button>
+                <button type="button" class="tool-tile" onclick="closeModal('student-hub-modal'); openModal('mode-pick-modal'); document.getElementById('mode-pick-title').textContent='⚡ اختر المادة — مراجعة سريعة'; window.__modePick='quick';">⚡ مراجعة سريعة</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="mode-pick-modal">
+        <div class="modal-content" style="border-color: #38bdf8;">
+            <button type="button" class="close-modal" onclick="closeModal('mode-pick-modal')" aria-label="إغلاق">✖</button>
+            <h3 id="mode-pick-title" style="color: #7dd3fc; margin-bottom: 14px;">اختر المادة</h3>
+            <div class="tool-grid">
+                <button type="button" class="tool-tile" onclick="pickModeSubject('sub1')">💻 برمجة</button>
+                <button type="button" class="tool-tile" onclick="pickModeSubject('sub2')">🧮 رياضيات</button>
+                <button type="button" class="tool-tile" onclick="pickModeSubject('sub3')">🔤 إنجليزي</button>
+                <button type="button" class="tool-tile" onclick="pickModeSubject('sub4')">🗄️ قواعد بيانات</button>
+                <button type="button" class="tool-tile" onclick="pickModeSubject('sub5')">🌐 شبكات</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="room-seed-modal">
+        <div class="modal-content" style="border-color: #22c55e;">
+            <button type="button" class="close-modal" onclick="closeModal('room-seed-modal')" aria-label="إغلاق">✖</button>
+            <h3 style="color: #86efac;">🔗 غرفة مراجعة بنفس ترتيب الأسئلة</h3>
+            <p style="color: var(--text-muted); font-size: 0.88rem; text-align: right;">اتفق مع زملائك على <strong>نص بذرة</strong> واحد (مثل اسم المجموعة + اليوم). نفس البذرة = نفس ترتيب الأسئلة في وضع البقاء أو المراجعة السريعة عند التفعيل.</p>
+            <input type="text" id="room-seed-input" class="glossary-search" placeholder="اكتب البذرة هنا..." dir="ltr" style="text-align:left;">
+            <button type="button" class="primary-btn" style="margin-top:12px; width:100%;" onclick="window.__modePick='quick-seed'; closeModal('room-seed-modal'); document.getElementById('mode-pick-title').textContent='⚡ بذرة — مراجعة سريعة'; openModal('mode-pick-modal');">متابعة لمراجعة سريعة ببذرة</button>
+            <button type="button" class="survival-btn" style="margin-top:10px;" onclick="startSeededSurvival()">☠️ بقاء ببذرة محفوظة في الحقل</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal-content summary-modal" style="border-color: #64748b;">
+            <button type="button" class="close-modal" onclick="closeModal('settings-modal')" aria-label="إغلاق">✖</button>
+            <h2 style="color: #cbd5e1;">⚙️ إعدادات العرض والبيانات</h2>
+            <div style="text-align:right; margin-top:16px;">
+                <label class="summary-prose" style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                    <input type="checkbox" id="opt-focus-mode" onchange="toggleFocusMode(this.checked)"> وضع تركيز (إخفاء الخلفية المتحركة)
+                </label>
+                <p style="margin-top:14px; color:var(--text-muted); font-size:0.88rem;">حجم الخط</p>
+                <input type="range" id="font-scale-range" min="0.85" max="1.35" step="0.05" style="width:100%;" oninput="setFontScale(this.value)">
+                <p style="margin-top:16px; color:var(--accent-color); font-weight:800;">نسخ احتياطي / استعادة</p>
+                <button type="button" class="primary-btn" style="width:100%; margin-top:8px;" onclick="exportAllData()">⬇️ تصدير كل التقدم (JSON)</button>
+                <textarea id="import-json-area" class="glossary-search" style="min-height:80px; margin-top:8px;" placeholder="الصق JSON هنا للاستيراد" dir="ltr"></textarea>
+                <button type="button" class="buy-btn" style="width:100%; margin-top:8px; padding:12px;" onclick="importAllData()">⬆️ استيراد</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="study-plan-modal">
+        <div class="modal-content" style="border-color: #f472b6;">
+            <button type="button" class="close-modal" onclick="closeModal('study-plan-modal')" aria-label="إغلاق">✖</button>
+            <h2 style="color: #f9a8d4;">📅 خطة مذاكرة</h2>
+            <div style="text-align:right;">
+                <label style="color:var(--text-muted); font-size:0.9rem;">تاريخ الاختبار</label>
+                <input type="date" id="plan-exam-date" class="glossary-search">
+                <label style="color:var(--text-muted); font-size:0.9rem; margin-top:10px; display:block;">المادة</label>
+                <select id="plan-subject" class="glossary-search">
+                    <option value="sub1">أساسيات البرمجة</option>
+                    <option value="sub2">رياضيات السيبراني</option>
+                    <option value="sub3">الإنجليزي التقني</option>
+                    <option value="sub4">قواعد البيانات</option>
+                    <option value="sub5">أساسيات الشبكات</option>
+                </select>
+                <p id="plan-output" style="margin-top:14px; padding:12px; background:rgba(0,0,0,0.3); border-radius:10px; line-height:1.7;"></p>
+                <button type="button" class="primary-btn" style="width:100%; margin-top:10px;" onclick="computeStudyPlan()">احسب الخطة</button>
+                <button type="button" class="updates-btn" style="width:100%; margin-top:8px; border:none; padding:12px; border-radius:12px; color:#fff; font-weight:800; cursor:pointer;" onclick="requestPlanNotification()">🔔 تذكير يومي (إن وافق المتصفح)</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="glossary-modal">
+        <div class="modal-content summary-modal" style="border-color: #34d399;">
+            <button type="button" class="close-modal" onclick="closeModal('glossary-modal')" aria-label="إغلاق">✖</button>
+            <h2 style="color: #6ee7b7;">📖 مسرد مصطلحات</h2>
+            <input type="search" class="glossary-search" id="glossary-filter" placeholder="بحث..." oninput="filterGlossary()" aria-label="بحث في المسرد">
+            <div id="glossary-list" class="summary-prose" style="max-height:55vh; overflow-y:auto; text-align:right;"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="stats-modal">
+        <div class="modal-content summary-modal" style="border-color: #eab308;">
+            <button type="button" class="close-modal" onclick="closeModal('stats-modal')" aria-label="إغلاق">✖</button>
+            <h2 style="color: #fde047;">🏅 لوحة إنجازاتك (محلية)</h2>
+            <p style="color:var(--text-muted); font-size:0.88rem; text-align:right;">لا يوجد خادم — كل البيانات على جهازك فقط.</p>
+            <div id="stats-body" class="summary-prose" style="text-align:right; margin-top:12px;"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="suggest-question-modal">
+        <div class="modal-content summary-modal" style="border-color: #fb923c;">
+            <button type="button" class="close-modal" onclick="closeModal('suggest-question-modal')" aria-label="إغلاق">✖</button>
+            <h2 style="color: #fdba74;">✉️ اقتراح سؤال للمراجعة</h2>
+            <p style="font-size:0.85rem; color:var(--text-muted); text-align:right;">يُحفظ محلياً لنسخه للمشرف. لن يُضاف تلقائياً لبنك الأسئلة.</p>
+            <textarea id="sq-text" class="glossary-search" style="min-height:70px;" placeholder="نص السؤال"></textarea>
+            <input type="text" id="sq-opts" class="glossary-search" placeholder="الخيارات مفصولة بفاصلة منقوطة" dir="auto">
+            <input type="text" id="sq-correct" class="glossary-search" placeholder="رقم الإجابة الصحيحة (0-3)">
+            <button type="button" class="primary-btn" style="width:100%; margin-top:10px;" onclick="submitSuggestedQuestion()">حفظ الاقتراح</button>
+            <div id="sq-saved-list" class="summary-prose" style="margin-top:14px; max-height:30vh; overflow-y:auto;"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="other-summaries-modal">
+        <div class="modal-content summary-modal" style="border-color: #60a5fa;">
+            <button type="button" class="close-modal" onclick="closeModal('other-summaries-modal')" aria-label="إغلاق">✖</button>
+            <h2 style="color: #93c5fd;">📚 ملخصات مراجعة — مواد أخرى</h2>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:12px 0;">
+                <button type="button" class="buy-btn" onclick="showSummaryTab('sum1')">برمجة</button>
+                <button type="button" class="buy-btn" onclick="showSummaryTab('sum2')">رياضيات</button>
+                <button type="button" class="buy-btn" onclick="showSummaryTab('sum3')">إنجليزي</button>
+                <button type="button" class="buy-btn" onclick="showSummaryTab('sum4')">قواعد بيانات</button>
+            </div>
+            <div id="sum1" class="summary-prose summary-tab" style="display:block;">
+                <h3>💻 أساسيات البرمجة (مختصر)</h3>
+                <p>البرمجة: كتابة تعليمات بلغة يفهمها الحاسوب. بايثون: لغة عالية المستوى، سهلة القراءة، ديناميكية الأنواع. المتغير اسم لموقع في الذاكرة؛ التسمية الموصى بها snake_case. الأنواع: int, float, str, bool. السلاسل غير قابلة للتغيير؛ القوائم قابلة. العمليات: // قسمة صحيحة، % باقي، ** أس. الشروط: == و != و and/or. المدخلات والمخرجات: input() دائماً نص؛ print() للعرض؛ f-strings لدمج القيم.</p>
+                <p><strong>روابط موثوقة:</strong> <a href="https://docs.python.org/3/tutorial/" target="_blank" rel="noopener" style="color:#7dd3fc;">دليل بايثون الرسمي (Tutorial)</a> — <a href="https://pep8.org/" target="_blank" rel="noopener" style="color:#7dd3fc;">PEP 8</a></p>
+            </div>
+            <div id="sum2" class="summary-prose summary-tab" style="display:none;">
+                <h3>🧮 رياضيات السيبراني (مختصر)</h3>
+                <p>أنظمة العد: عشري 10، ثنائي 0-1، ست عشري 0-9/A-F. التحويل بين الأنظمة أساسي للتشفير. الجبر: متغيرات، تعبيرات، معادلات خطية. الدوال: f(x) تربط مدخلاً بمخرجات. المنطق: قضايا صح/خطأ، AND/OR/XOR، جداول حقيقة، قوانين دي مورغان. المصفوفات: صفوف وأعمدة؛ جمع/طرح بنفس الأبعاد؛ ضرب صف×عمود. الجبر البولي والبوابات AND/OR/NOT/XOR/NAND/NOR؛ التبسيط يقلل التكلفة. التطبيق الأمني: تحليل أنماط، تصميم دوائر التحكم بالوصول.</p>
+                <p><strong>مرجع:</strong> <a href="https://www.khanacademy.org/computing/computer-science/informationtheory" target="_blank" rel="noopener" style="color:#7dd3fc;">مقدمات نظرية المعلومات (خارجي)</a></p>
+            </div>
+            <div id="sum3" class="summary-prose summary-tab" style="display:none;">
+                <h3>🔤 الإنجليزي التقني (مختصر)</h3>
+                <p>مصطلحات أمنية: cyberattack, malware, patch, firewall, spyware, phishing. أجزاء الكلام: اسم/فعل/صفة/ظرف. Simple Present للعادات والحقائق: الفاعل الثالث يأخذ s (he goes). الجمع والضمائر: they help / companies rely. صيغة النفي: do/does + not + فعل مجرد. حماية الحساب: كلمات مرور قوية، قفل الجهاز، عدم مشاركة كلمات المرور، الإبلاغ عن رسائل التصيد.</p>
+                <p><strong>مرجع:</strong> <a href="https://www.merriam-webster.com/" target="_blank" rel="noopener" style="color:#7dd3fc;">قاموس Merriam-Webster</a></p>
+            </div>
+            <div id="sum4" class="summary-prose summary-tab" style="display:none;">
+                <h3>🗄️ قواعد البيانات (مختصر)</h3>
+                <p>البيانات مورد استراتيجي؛ قواعد OLTP تهدف للدقة والاتساق والمعاملات اليومية. العمليات: Insert, Update, Delete, Select/Search. ER: كيان Entity، صفة Attribute، علاقة Relationship؛ 1:1، 1:N، N:M يحتاج جدول وسيط. المخطط العلاقي: تحويل ER لجداول؛ المفتاح يميّز السجل؛ NULL = لا قيمة. الصف سجل، العمود صفة. التصميم الجيد يقلل التكرار. أمثلة: شؤون الطلاب، الموارد البشرية، الرواتب.</p>
+                <p><strong>مرجع:</strong> <a href="https://dev.mysql.com/doc/refman/8.0/en/" target="_blank" rel="noopener" style="color:#7dd3fc;">توثيق MySQL</a></p>
             </div>
         </div>
     </div>
@@ -210,10 +538,17 @@
             </div>
             
             <div class="btn-group">
-                <button class="action-btn updates-btn" onclick="openModal('updates-modal')">🔔 التحديثات</button>
-                <button class="action-btn" onclick="openModal('shop-modal'); document.getElementById('shop-xp-display').textContent = playerXP;">🛒 المتجر</button>
+                <button type="button" class="action-btn" style="background:linear-gradient(135deg,#475569,#334155);" onclick="openModal('student-hub-modal')" aria-label="مركز الطالب">🎛️ المركز</button>
+                <button type="button" class="action-btn summary-nav-btn" onclick="openModal('network-summary-modal')" aria-label="ملخص الشبكات">📖 الشبكات</button>
+                <button type="button" class="action-btn updates-btn" onclick="openModal('updates-modal')">🔔 التحديثات</button>
+                <button type="button" class="action-btn" onclick="openModal('shop-modal'); document.getElementById('shop-xp-display').textContent = playerXP;">🛒 المتجر</button>
             </div>
             <div class="developer-badge">Dev: Ahmed Mutmi</div>
+            <div class="hub-mini" id="hub-mini-bar" aria-live="polite">
+                <span id="weekly-chip">التحدي الأسبوعي: 0/50</span>
+                <span id="badge-count-chip">🏅 0 شارة</span>
+            </div>
+            <div class="badges-strip" id="badges-strip" aria-label="الشارات المفتوحة"></div>
         </div>
 
         <div id="welcome-screen" class="fade-in">
@@ -222,7 +557,6 @@
             
             <div class="schedule-title">📅 جدول الاختبارات النصفية:</div>
             <table class="schedule-table">
-<table class="schedule-table">
                 <thead>
                     <tr>
                         <th>اليوم والتاريخ</th>
@@ -258,11 +592,17 @@
                     </tr>
                 </tbody>
             </table>
-            <button class="primary-btn" onclick="showSubjects()">دخول الاختبار 📚</button>
+            <button type="button" class="primary-btn" onclick="showSubjects()">دخول الاختبار 📚</button>
+            <p style="text-align:center; color:var(--text-muted); font-size:0.9rem; margin-top:14px;">تلميح: افتح <strong>🎛️ المركز</strong> للوصول لخطة المذاكرة، البطاقات، الامتحان التجريبي، التصدير، وغيرها.</p>
         </div>
 
         <div id="subjects-screen" class="fade-in">
             <h2>اختر المقرر الدراسي</h2>
+            <div id="resume-banner" class="resume-banner">
+                <span id="resume-banner-text"></span><br>
+                <button type="button" style="background:var(--primary-color); color:#fff;" onclick="resumeSavedSession()">▶️ متابعة</button>
+                <button type="button" style="background:transparent; color:var(--text-muted); border:1px solid var(--glass-border);" onclick="dismissResume()">تجاهل</button>
+            </div>
             <div class="subjects-grid">
                 <div class="subject-card" onclick="startSubject('sub1')">💻 أساسيات البرمجة<div class="readiness-bar"><div class="readiness-fill" id="prog-sub1"></div></div><span class="readiness-text" id="prog-text-sub1">الجاهزية: 0%</span></div>
                 <div class="subject-card" onclick="startSubject('sub2')">🧮 رياضيات السيبراني<div class="readiness-bar"><div class="readiness-fill" id="prog-sub2"></div></div><span class="readiness-text" id="prog-text-sub2">الجاهزية: 0%</span></div>
@@ -271,25 +611,32 @@
                 <div class="subject-card" style="grid-column: 1 / -1;" onclick="startSubject('sub5')">🌐 أساسيات الشبكات<div class="readiness-bar"><div class="readiness-fill" id="prog-sub5"></div></div><span class="readiness-text" id="prog-text-sub5">الجاهزية: 0%</span></div>
             </div>
             
-            <button class="survival-btn" onclick="startSurvivalMode()">☠️ وضع البقاء (Survival)<br><span style="font-size:1rem; font-weight:normal;">أسئلة من كل المواد - خطأ واحد = تخسر!</span></button>
+            <button type="button" class="survival-btn" onclick="startSurvivalMode()">☠️ وضع البقاء (Survival)<br><span style="font-size:1rem; font-weight:normal;">أسئلة من كل المواد - خطأ واحد = تخسر!</span></button>
+
+            <div class="pm-wrap">
+                <h3>🗺️ خريطة تقدّم تقريبية (5 وحدات حسب الجاهزية المحفوظة)</h3>
+                <div id="progress-map-root"></div>
+            </div>
         </div>
 
         <div id="quiz-screen">
             <div class="quiz-top-actions">
-                <div style="display:flex; gap:10px;">
-                    <button class="back-home-btn" onclick="goBackToSubjects()">🏠 خروج</button>
-                    <button id="bookmark-btn" class="bookmark-btn" onclick="toggleBookmark()">☆ حفظ</button>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                    <button type="button" class="back-home-btn" onclick="goBackToSubjects()" aria-label="الخروج للمواد">🏠 خروج</button>
+                    <button type="button" id="bookmark-btn" class="bookmark-btn" onclick="toggleBookmark()" aria-label="حفظ السؤال">☆ حفظ</button>
+                    <span id="quiz-mode-chip" style="font-size:0.8rem; color:var(--accent-color); font-weight:800;"></span>
                 </div>
                 
-                <div class="inventory-bar">
-                    <button class="inv-item" id="inv-fifty" onclick="useFiftyFifty()" title="حذف إجابتين">⚖️<span class="inv-count" id="count-fifty">0</span></button>
-                    <button class="inv-item" id="inv-shield" onclick="useShield()" title="تفعيل الدرع الواقي">🛡️<span class="inv-count" id="count-shield">0</span></button>
+                <div class="inventory-bar" id="inventory-bar">
+                    <button type="button" class="inv-item" id="inv-fifty" onclick="useFiftyFifty()" title="حذف إجابتين" aria-label="خمسين خمسين">⚖️<span class="inv-count" id="count-fifty">0</span></button>
+                    <button type="button" class="inv-item" id="inv-shield" onclick="useShield()" title="تفعيل الدرع الواقي" aria-label="الدرع الواقي">🛡️<span class="inv-count" id="count-shield">0</span></button>
                 </div>
             </div>
             
             <div class="quiz-header">
                 <span id="subject-title" style="font-size:1.2rem; color:#fff; font-weight:900;">اسم المادة</span>
                 <span id="question-tracker" style="font-size:1.1rem; color:var(--primary-color); font-weight:bold;">1 / 50</span>
+                <span id="quiz-timer-display" class="mock-timer" style="display:none;" aria-live="polite"></span>
             </div>
             
             <div class="progress-bar-container"><div class="progress-bar-fill" id="progress"></div></div>
@@ -324,34 +671,85 @@
                 <div id="bookmarks-list"></div>
             </div>
 
-            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:30px;">
-                <button class="primary-btn share-btn" style="margin:0;" onclick="shareResult()">شارك نتيجتي 📲</button>
-                <button class="primary-btn" style="margin:0;" onclick="goBackToSubjects()">العودة للمواد 🏠</button>
+            <div id="topic-report-box" class="topic-report-box no-print">
+                <h4>📊 تقرير المواضيع (تقديري من نص الأسئلة)</h4>
+                <div id="topic-report-content"></div>
+            </div>
+
+            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:30px;" class="no-print">
+                <button type="button" class="primary-btn share-btn" style="margin:0;" onclick="shareResult()">شارك نتيجتي 📲</button>
+                <button type="button" class="primary-btn" style="margin:0; background:linear-gradient(135deg,#6366f1,#4f46e5);" onclick="printResultReport()">🖨️ طباعة / PDF</button>
+                <button type="button" class="primary-btn" style="margin:0;" onclick="goBackToSubjects()">العودة للمواد 🏠</button>
             </div>
         </div>
     </div>
 
+    <div class="main-container" id="flashcard-screen" style="display:none; max-height: 90vh;">
+        <h2 style="margin-bottom:8px;">🃏 بطاقات تذكّر</h2>
+        <p style="text-align:center; color:var(--text-muted); font-size:0.9rem;">اضغط البطاقة لقلبها — «صعب» يعيدها لاحقاً</p>
+        <div class="fc-card" id="fc-card" onclick="flipFcCard()" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')flipFcCard()" aria-label="قلب البطاقة">
+            <div class="fc-inner">
+                <div class="fc-face fc-front" id="fc-front">جاري التحميل...</div>
+                <div class="fc-face fc-back" id="fc-back"></div>
+            </div>
+        </div>
+        <div class="fc-actions">
+            <button type="button" class="back-home-btn" onclick="fcMark(false)">↩️ صعب / لاحقاً</button>
+            <button type="button" class="bookmark-btn active" onclick="fcMark(true)">✅ سهل / تمّ</button>
+            <button type="button" class="primary-btn" style="margin:0;" onclick="nextFcCard()">بطاقة أخرى ➜</button>
+            <button type="button" class="back-home-btn" onclick="closeFlashcardScreen()">🏠 إغلاق</button>
+        </div>
+    </div>
+
     <script>
-        // --- 1. إعدادات الصوت ---
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        const audioCtx = new AudioContext();
+        if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+            navigator.serviceWorker.register('sw.js').catch(function () {});
+        }
+        // --- 1. إعدادات الصوت (إنشاء السياق عند أول تفاعل لتفادي تحذيرات المتصفح) ---
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx && AudioContextClass) audioCtx = new AudioContextClass();
+            return audioCtx;
+        }
         function playSound(type) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator(); const gainNode = audioCtx.createGain();
-            osc.connect(gainNode); gainNode.connect(audioCtx.destination);
-            if (type === 'correct') { osc.type = 'sine'; osc.frequency.setValueAtTime(600, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1); gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15); osc.start(); osc.stop(audioCtx.currentTime + 0.15); }
-            else if (type === 'wrong') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.2); gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25); osc.start(); osc.stop(audioCtx.currentTime + 0.25); }
-            else if (type === 'levelUp') { osc.type = 'square'; osc.frequency.setValueAtTime(400, audioCtx.currentTime); osc.frequency.setValueAtTime(600, audioCtx.currentTime + 0.1); osc.frequency.setValueAtTime(800, audioCtx.currentTime + 0.2); gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime); gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.5); osc.start(); osc.stop(audioCtx.currentTime + 0.5); }
-            else if (type === 'shield_break') { osc.type = 'triangle'; osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.3); gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime); gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3); osc.start(); osc.stop(audioCtx.currentTime + 0.3); }
+            const ctx = getAudioContext();
+            if (!ctx) return;
+            if (ctx.state === 'suspended') ctx.resume();
+            const osc = ctx.createOscillator(); const gainNode = ctx.createGain();
+            osc.connect(gainNode); gainNode.connect(ctx.destination);
+            if (type === 'correct') { osc.type = 'sine'; osc.frequency.setValueAtTime(600, ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.1); gainNode.gain.setValueAtTime(0.2, ctx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15); osc.start(); osc.stop(ctx.currentTime + 0.15); }
+            else if (type === 'wrong') { osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.2); gainNode.gain.setValueAtTime(0.2, ctx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25); osc.start(); osc.stop(ctx.currentTime + 0.25); }
+            else if (type === 'levelUp') { osc.type = 'square'; osc.frequency.setValueAtTime(400, ctx.currentTime); osc.frequency.setValueAtTime(600, ctx.currentTime + 0.1); osc.frequency.setValueAtTime(800, ctx.currentTime + 0.2); gainNode.gain.setValueAtTime(0.2, ctx.currentTime); gainNode.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.5); osc.start(); osc.stop(ctx.currentTime + 0.5); }
+            else if (type === 'shield_break') { osc.type = 'triangle'; osc.frequency.setValueAtTime(800, ctx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.3); gainNode.gain.setValueAtTime(0.3, ctx.currentTime); gainNode.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.3); osc.start(); osc.stop(ctx.currentTime + 0.3); }
         }
 
         // --- 2. نظام XP والمخزون ---
         let playerXP = parseInt(localStorage.getItem('devAhmedXP')) || 0;
         let inventory = JSON.parse(localStorage.getItem('devAhmedInv')) || { fifty: 0, shield: 0 };
-        let streak = 0; let sessionXP = 0; let currentSubjectId = ""; 
+        let streak = 0; let sessionXP = 0; let currentSubjectId = "";
         let isSurvival = false; let shieldActive = false;
+        let currentSubjectData = [];
+        let answers = [];
+        let hintsUsed = [];
+        let wrongAnswersReview = [];
+        let sessionBookmarks = [];
+        let currentQ = 0;
+        let quizMode = 'normal';
+        let mockTimerInterval = null;
+        let quickTimerInterval = null;
+        let mockTimeLeftSec = 0;
+        let quickTimeLeftSec = 0;
+        let activeRoomSeed = '';
+        let lastTopicReportHtml = '';
+        let fcCurrent = null;
 
         function getLevel(xp) { return Math.floor(Math.sqrt(xp / 100)) + 1; }
+        function getXPPerCorrect() {
+            if (quizMode === 'quick') return 5;
+            if (quizMode === 'mock') return 8;
+            return 15;
+        }
         
         function updateProfileUI() {
             document.getElementById('player-xp').textContent = playerXP;
@@ -382,7 +780,12 @@
         }
 
         // --- 3. إدارة النوافذ المنبثقة ---
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+            if (id === 'glossary-modal') buildGlossary();
+            if (id === 'stats-modal') refreshStatsModal();
+            if (id === 'suggest-question-modal') renderSuggestList();
+        }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         
         function buyItem(item, price) {
@@ -390,17 +793,422 @@
                 playerXP -= price; inventory[item]++;
                 localStorage.setItem('devAhmedXP', playerXP); localStorage.setItem('devAhmedInv', JSON.stringify(inventory));
                 document.getElementById('shop-xp-display').textContent = playerXP;
-                updateProfileUI(); playSound('levelUp');
+                updateProfileUI(); playSound('correct');
             } else { alert("رصيدك من XP غير كافٍ!"); }
+        }
+
+        function strToSeed(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619); return h >>> 0; }
+        function mulberry32(a) {
+            return function () {
+                let t = a += 0x6D2B79F5;
+                t = Math.imul(t ^ t >>> 15, t | 1);
+                t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+                return ((t ^ t >>> 14) >>> 0) / 4294967296;
+            };
+        }
+        function shuffleWithSeedStr(arr, seedStr) {
+            const a = arr.slice();
+            const rnd = mulberry32(strToSeed(seedStr || 'seed'));
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(rnd() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+        function getISOWeekKey() {
+            const now = new Date(); const d = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+            const dayNum = d.getUTCDay() || 7; d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+            const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+            return d.getUTCFullYear() + '-W' + weekNo;
+        }
+        function bumpWeeklyQuestions(n) {
+            const wk = getISOWeekKey();
+            let o = JSON.parse(localStorage.getItem('weeklyStats_v1') || 'null');
+            if (!o || o.week !== wk) o = { week: wk, count: 0 };
+            o.count += n;
+            localStorage.setItem('weeklyStats_v1', JSON.stringify(o));
+            refreshHubChips();
+            if (o.count >= 50) unlockBadge('week50');
+        }
+        function getWeeklyCount() {
+            const o = JSON.parse(localStorage.getItem('weeklyStats_v1') || 'null');
+            if (!o || o.week !== getISOWeekKey()) return 0;
+            return o.count;
+        }
+        function getBadges() { return JSON.parse(localStorage.getItem('badgesUnlocked_v1') || '[]'); }
+        function unlockBadge(id) {
+            const b = getBadges();
+            if (b.includes(id)) return;
+            b.push(id);
+            localStorage.setItem('badgesUnlocked_v1', JSON.stringify(b));
+            refreshHubChips();
+        }
+        function refreshHubChips() {
+            const el = document.getElementById('weekly-chip');
+            if (el) el.textContent = 'التحدي الأسبوعي: ' + getWeeklyCount() + '/50';
+            const bc = document.getElementById('badge-count-chip');
+            if (bc) bc.textContent = '🏅 ' + getBadges().length + ' شارة';
+            renderBadgesStrip();
+        }
+        function renderBadgesStrip() {
+            const strip = document.getElementById('badges-strip');
+            if (!strip) return;
+            const labels = { week50: 'أسبوع 50 سؤالاً', perfect100: 'درجة كاملة', survival20: 'بقاء 20+', mockhero: 'امتحان تجريبي', flash10: '10 بطاقات' };
+            strip.innerHTML = getBadges().map(id => '<span class="badge-pill">' + (labels[id] || id) + '</span>').join('');
+        }
+        function clearQuizTimers() {
+            if (mockTimerInterval) { clearInterval(mockTimerInterval); mockTimerInterval = null; }
+            if (quickTimerInterval) { clearInterval(quickTimerInterval); quickTimerInterval = null; }
+            const td = document.getElementById('quiz-timer-display');
+            if (td) { td.style.display = 'none'; td.textContent = ''; }
+        }
+        function formatSec(s) { const m = Math.floor(s / 60), sec = s % 60; return m + ':' + (sec < 10 ? '0' : '') + sec; }
+        function startMockTimer() {
+            const td = document.getElementById('quiz-timer-display');
+            td.style.display = 'inline';
+            td.textContent = '⏱️ ' + formatSec(mockTimeLeftSec);
+            mockTimerInterval = setInterval(() => {
+                mockTimeLeftSec--;
+                td.textContent = '⏱️ ' + formatSec(Math.max(0, mockTimeLeftSec));
+                if (mockTimeLeftSec <= 0) { clearQuizTimers(); showResult(); }
+            }, 1000);
+        }
+        function startQuickTimer(sec) {
+            quickTimeLeftSec = sec;
+            const td = document.getElementById('quiz-timer-display');
+            td.style.display = 'inline';
+            td.textContent = '⏱️ ' + formatSec(quickTimeLeftSec);
+            quickTimerInterval = setInterval(() => {
+                quickTimeLeftSec--;
+                td.textContent = '⏱️ ' + formatSec(Math.max(0, quickTimeLeftSec));
+                if (quickTimeLeftSec <= 0) { clearQuizTimers(); showResult(); }
+            }, 1000);
+        }
+        function updateQuizChrome() {
+            const inv = document.getElementById('inventory-bar');
+            const bm = document.getElementById('bookmark-btn');
+            const ch = document.getElementById('quiz-mode-chip');
+            if (!inv || !bm || !ch) return;
+            const hideInv = quizMode === 'mock' || quizMode === 'quick';
+            inv.style.display = hideInv ? 'none' : 'flex';
+            bm.style.display = quizMode === 'mock' ? 'none' : 'inline-block';
+            ch.textContent = quizMode === 'mock' ? '📝 وضع تجريبي' : quizMode === 'quick' ? '⚡ مراجعة سريعة' : '';
+        }
+        function saveResumeSnapshot() {
+            try {
+                const payload = {
+                    currentSubjectId, currentQ, answers, hintsUsed, sessionXP, quizMode, isSurvival,
+                    bank: currentSubjectData
+                };
+                localStorage.setItem('quizResume_v1', JSON.stringify(payload));
+            } catch (e) {}
+        }
+        function clearResumeSnapshot() { localStorage.removeItem('quizResume_v1'); }
+        function tryShowResumeBanner() {
+            const b = document.getElementById('resume-banner');
+            const raw = localStorage.getItem('quizResume_v1');
+            if (!b || !raw) { if (b) b.style.display = 'none'; return; }
+            let d; try { d = JSON.parse(raw); } catch (e) { return; }
+            if (d.quizMode === 'mock' || d.quizMode === 'quick') { clearResumeSnapshot(); b.style.display = 'none'; return; }
+            b.style.display = 'block';
+            const name = allSubjects[d.currentSubjectId] ? allSubjects[d.currentSubjectId].title : d.currentSubjectId;
+            document.getElementById('resume-banner-text').textContent = 'لديك جلسة غير مكتملة: «' + name + '» — السؤال ' + (d.currentQ + 1);
+        }
+        function dismissResume() { clearResumeSnapshot(); tryShowResumeBanner(); }
+        function resumeSavedSession() {
+            const raw = localStorage.getItem('quizResume_v1');
+            if (!raw) return;
+            const d = JSON.parse(raw);
+            currentSubjectId = d.currentSubjectId;
+            currentQ = d.currentQ;
+            answers = d.answers;
+            hintsUsed = d.hintsUsed || [];
+            sessionXP = d.sessionXP || 0;
+            quizMode = d.quizMode || 'normal';
+            isSurvival = !!d.isSurvival;
+            currentSubjectData = d.bank && d.bank.length ? d.bank : (allSubjects[currentSubjectId] ? allSubjects[currentSubjectId].questions : []);
+            document.getElementById('subject-title').textContent = isSurvival ? '☠️ وضع البقاء (Survival)' : (allSubjects[currentSubjectId] ? allSubjects[currentSubjectId].title : '');
+            document.getElementById('subjects-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('welcome-screen').style.display = 'none';
+            streak = 0;
+            shieldActive = false;
+            document.getElementById('inv-shield').classList.remove('shield-active-glow');
+            updateQuizChrome();
+            if (quizMode === 'mock') { mockTimeLeftSec = 30 * 60; startMockTimer(); }
+            renderQuestion();
+            updateProfileUI();
+        }
+        function pickModeSubject(subKey) {
+            closeModal('mode-pick-modal');
+            const mode = window.__modePick;
+            if (mode === 'mock') startMockExamFor(subKey);
+            else if (mode === 'quick') {
+                if (confirm('تفعيل مؤقت 15 دقيقة لهذه الجولة؟')) startQuickTimer(15 * 60);
+                activeRoomSeed = '';
+                startQuickReviewFor(subKey, false);
+            } else if (mode === 'quick-seed') {
+                activeRoomSeed = (document.getElementById('room-seed-input') && document.getElementById('room-seed-input').value.trim()) || 'seed';
+                localStorage.setItem('roomSeedLast', activeRoomSeed);
+                if (confirm('تفعيل مؤقت 15 دقيقة؟')) startQuickTimer(15 * 60);
+                startQuickReviewFor(subKey, true);
+            }
+        }
+        function startQuickReviewFor(subKey, useSeed) {
+            clearQuizTimers();
+            quizMode = 'quick'; isSurvival = false; activeRoomSeed = useSeed ? activeRoomSeed : '';
+            let pool = allSubjects[subKey].questions.slice();
+            if (useSeed && activeRoomSeed) pool = shuffleWithSeedStr(pool, activeRoomSeed);
+            else shuffleInPlace(pool);
+            currentSubjectData = pool.slice(0, Math.min(10, pool.length));
+            currentSubjectId = subKey;
+            answers = new Array(currentSubjectData.length).fill(null);
+            hintsUsed = new Array(currentSubjectData.length).fill(false);
+            wrongAnswersReview = []; sessionBookmarks = []; sessionXP = 0; currentQ = 0; streak = 0; shieldActive = false;
+            clearResumeSnapshot();
+            document.getElementById('subject-title').textContent = allSubjects[subKey].title + ' — مراجعة سريعة';
+            document.getElementById('subjects-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            document.getElementById('quiz-screen').classList.add('fade-in');
+            updateQuizChrome();
+            renderQuestion();
+        }
+        function startMockExamFor(subKey) {
+            clearQuizTimers();
+            quizMode = 'mock'; isSurvival = false;
+            let pool = allSubjects[subKey].questions.slice();
+            shuffleInPlace(pool);
+            currentSubjectData = pool.slice(0, Math.min(20, pool.length));
+            currentSubjectId = subKey;
+            answers = new Array(currentSubjectData.length).fill(null);
+            hintsUsed = new Array(currentSubjectData.length).fill(false);
+            wrongAnswersReview = []; sessionBookmarks = []; sessionXP = 0; currentQ = 0; streak = 0; shieldActive = false;
+            mockTimeLeftSec = 30 * 60;
+            clearResumeSnapshot();
+            document.getElementById('subject-title').textContent = allSubjects[subKey].title + ' — امتحان تجريبي';
+            document.getElementById('subjects-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            document.getElementById('quiz-screen').classList.add('fade-in');
+            updateQuizChrome();
+            startMockTimer();
+            renderQuestion();
+        }
+        function startSeededSurvival() {
+            activeRoomSeed = (document.getElementById('room-seed-input') && document.getElementById('room-seed-input').value.trim()) || 'seed';
+            localStorage.setItem('roomSeedLast', activeRoomSeed);
+            closeModal('room-seed-modal');
+            let mixedQuestions = [];
+            for (let key in allSubjects) mixedQuestions = mixedQuestions.concat(allSubjects[key].questions);
+            mixedQuestions = shuffleWithSeedStr(mixedQuestions, activeRoomSeed);
+            isSurvival = true; quizMode = 'normal'; currentSubjectId = 'survival';
+            currentSubjectData = mixedQuestions;
+            document.getElementById('subject-title').textContent = '☠️ بقاء (بذرة)';
+            answers = new Array(currentSubjectData.length).fill(null);
+            hintsUsed = new Array(currentSubjectData.length).fill(false);
+            wrongAnswersReview = []; sessionBookmarks = []; sessionXP = 0; currentQ = 0; streak = 0; shieldActive = false;
+            clearQuizTimers();
+            clearResumeSnapshot();
+            document.getElementById('subjects-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'block';
+            document.getElementById('quiz-screen').classList.add('fade-in');
+            updateQuizChrome();
+            renderQuestion();
+        }
+        function toggleFocusMode(on) {
+            document.body.classList.toggle('focus-mode', !!on);
+            localStorage.setItem('focusMode_v1', on ? '1' : '0');
+        }
+        function setFontScale(v) {
+            document.documentElement.style.setProperty('--fs-scale', v);
+            localStorage.setItem('fontScale_v1', v);
+        }
+        function loadSettingsUI() {
+            try {
+                const om = document.getElementById('opt-focus-mode');
+                const fr = document.getElementById('font-scale-range');
+                if (om) { om.checked = localStorage.getItem('focusMode_v1') === '1'; toggleFocusMode(om.checked); }
+                if (fr) { fr.value = localStorage.getItem('fontScale_v1') || '1'; setFontScale(fr.value); }
+            } catch (e) {}
+        }
+        const GLOSSARY_TERMS = [
+            ['NAT', 'ترجمة العناوين من الشبكة الخاصة إلى عامة للخروج للإنترنت.'],
+            ['OSI', 'نموذج مرجعي من 7 طبقات يصف اتصال الشبكات.'],
+            ['TCP', 'بروتوكول نقل موثوق مع ترتيب وإعادة إرسال.'],
+            ['UDP', 'نقل غير موثوق، أقل تأخيراً، مناسب للبث التفاعلي.'],
+            ['IP', 'عنونة منطقية في طبقة الشبكة.'],
+            ['MAC', 'عنوان فيزيائي في طبقة ربط البيانات.'],
+            ['DHCP', 'توزيع عناوين IP تلقائياً.'],
+            ['DNS', 'ترجمة الأسماء إلى عناوين IP.'],
+            ['Firewall', 'جدار حماية يفلتر حركة الشبكة.'],
+            ['Subnet', 'تقسيم شبكة IP إلى أجزاء أصغر.'],
+            ['OLTP', 'معالجة معاملات آنية يومية في قواعد البيانات.'],
+            ['ER', 'نموذج كيانات وعلاقات لتصميم قواعد البيانات.'],
+            ['SQL', 'لغة استعلامات للبيانات المنظمة.'],
+            ['Python', 'لغة برمجة عالية المستوى سهلة القراءة.'],
+            ['IDE', 'بيئة تطوير متكاملة لكتابة وتشغيل الكود.'],
+            ['Boolean', 'نوع منطقي: True أو False.'],
+            ['XOR', 'عملية منطقية صحيحة عند اختلاف المدخلات.'],
+            ['Phishing', 'خداع المستخدم لسرقة بيانات حساسة.']
+        ];
+        function buildGlossary() {
+            const list = document.getElementById('glossary-list');
+            const q = (document.getElementById('glossary-filter') || {}).value || '';
+            const ql = q.trim().toLowerCase();
+            list.innerHTML = GLOSSARY_TERMS.filter(([term, def]) => !ql || term.toLowerCase().includes(ql) || def.toLowerCase().includes(ql))
+                .map(([t, d]) => '<div class="glossary-item"><strong>' + t + '</strong><div>' + d + '</div></div>').join('');
+        }
+        function filterGlossary() { buildGlossary(); }
+        function showSummaryTab(id) { document.querySelectorAll('.summary-tab').forEach(el => { el.style.display = el.id === id ? 'block' : 'none'; }); }
+        function refreshStatsModal() {
+            let h = '';
+            ['sub1', 'sub2', 'sub3', 'sub4', 'sub5'].forEach(k => {
+                const t = allSubjects[k].title;
+                const sc = localStorage.getItem('highScore_' + k) || 0;
+                h += '<p><strong>' + t + '</strong>: أفضل جاهزية ' + sc + '%</p>';
+            });
+            h += '<p><strong>بقاء</strong>: أفضل عدد صحيح ' + (localStorage.getItem('devAhmedSurvivalHigh') || 0) + '</p>';
+            h += '<p><strong>أسبوع حالي</strong>: ' + getWeeklyCount() + ' سؤالاً تمت الإجابة عليه</p>';
+            document.getElementById('stats-body').innerHTML = h;
+        }
+        function exportAllData() {
+            const obj = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (!k) continue;
+                if (/devAhmed|highScore|weeklyStats|badgesUnlocked|focusMode|fontScale|studyPlan|suggestedQuestions|fcStats|roomSeed|quizResume/i.test(k))
+                    obj[k] = localStorage.getItem(k);
+            }
+            const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'platform-backup.json';
+            a.click();
+        }
+        function importAllData() {
+            const txt = document.getElementById('import-json-area').value.trim();
+            if (!txt) return alert('الصق ملف JSON أولاً');
+            try {
+                const o = JSON.parse(txt);
+                Object.keys(o).forEach(k => localStorage.setItem(k, o[k]));
+                location.reload();
+            } catch (e) { alert('ملف غير صالح'); }
+        }
+        function computeStudyPlan() {
+            const dateStr = document.getElementById('plan-exam-date').value;
+            const sub = document.getElementById('plan-subject').value;
+            if (!dateStr) return alert('اختر التاريخ');
+            const exam = new Date(dateStr);
+            const now = new Date();
+            const days = Math.max(1, Math.ceil((exam - now) / 86400000));
+            const total = allSubjects[sub].questions.length;
+            const perDay = Math.ceil(total / days);
+            document.getElementById('plan-output').innerHTML = 'المادة: <b>' + allSubjects[sub].title + '</b><br>متبقي تقريباً <b>' + days + '</b> يوماً<br>إجمالي الأسئلة في البنك: <b>' + total + '</b><br>اقتراح: حلّ <b>' + perDay + '</b> سؤالاً يومياً على الأقل (مع مراجعة الأخطاء).';
+            localStorage.setItem('studyPlan_v1', JSON.stringify({ dateStr, sub, days, perDay }));
+        }
+        function requestPlanNotification() {
+            if (!('Notification' in window)) return alert('المتصفح لا يدعم الإشعارات');
+            Notification.requestPermission().then(p => {
+                if (p !== 'granted') return alert('لم يُمنح الإذن');
+                new Notification('منصة المراجعة', { body: 'تذكير: راجع خطة المذاكرة والأسئلة اليومية.' });
+            });
+        }
+        function buildTopicBuckets(text) {
+            const rules = [
+                ['شبكات / OSI / IP', /شبكة|OSI|TCP|IP|IPv|MAC|UDP|NAT|DHCP|راوتر|سويتش|حزم|بث|Subnet|Firewall/i],
+                ['برمجة / بايثون', /بايثون|متغير|كود|برمج|Python|int|float|str|print|input|PEP|قائمة|سلسلة/i],
+                ['قواعد بيانات', /قاعدة|ER|كيان|جدول|SQL|OLTP|مفتاح|علاقة/i],
+                ['رياضيات / منطق', /منطق|جبر|مصفوفة|ثنائي|ست عشري|XOR|AND|OR|قضية/i],
+                ['إنجليزي تقني', /^What |Choose the|Identify the|Cyber|malware|password/i]
+            ];
+            for (const [label, re] of rules) if (re.test(text)) return label;
+            return 'عام / متفرق';
+        }
+        function buildTopicReportHtml(items) {
+            const map = {};
+            items.forEach(it => { const b = buildTopicBuckets(it.q); map[b] = (map[b] || 0) + 1; });
+            return Object.keys(map).map(k => '<li><strong>' + k + '</strong>: ' + map[k] + ' خطأ</li>').join('');
+        }
+        function printResultReport() {
+            window.print();
+        }
+        function openFlashcardScreen() {
+            document.getElementById('main-ui').style.display = 'none';
+            document.getElementById('flashcard-screen').style.display = 'block';
+            nextFcCard();
+        }
+        function closeFlashcardScreen() {
+            document.getElementById('flashcard-screen').style.display = 'none';
+            document.getElementById('main-ui').style.display = 'block';
+        }
+        function randomFcQuestion() {
+            const keys = Object.keys(allSubjects);
+            const sk = keys[Math.floor(Math.random() * keys.length)];
+            const qs = allSubjects[sk].questions;
+            const q = qs[Math.floor(Math.random() * qs.length)];
+            return { sk, q };
+        }
+        function nextFcCard() {
+            fcCurrent = randomFcQuestion();
+            document.getElementById('fc-card').classList.remove('flipped');
+            document.getElementById('fc-front').textContent = fcCurrent.q.q;
+            document.getElementById('fc-back').textContent = '✅ ' + fcCurrent.q.options[fcCurrent.q.correct];
+            let st = JSON.parse(localStorage.getItem('fcStats_v1') || '{}');
+            st.count = (st.count || 0) + 1;
+            localStorage.setItem('fcStats_v1', JSON.stringify(st));
+            if (st.count >= 10) unlockBadge('flash10');
+        }
+        function flipFcCard() { document.getElementById('fc-card').classList.toggle('flipped'); }
+        function fcMark(easy) {
+            if (easy) {
+                let st = JSON.parse(localStorage.getItem('fcStats_v1') || '{}');
+                st.easy = (st.easy || 0) + 1;
+                localStorage.setItem('fcStats_v1', JSON.stringify(st));
+            }
+            nextFcCard();
+        }
+        function refreshProgressMap() {
+            const root = document.getElementById('progress-map-root');
+            if (!root) return;
+            let html = '';
+            ['sub1', 'sub2', 'sub3', 'sub4', 'sub5'].forEach(k => {
+                const hi = parseInt(localStorage.getItem('highScore_' + k) || '0', 10);
+                const title = allSubjects[k].title;
+                let cells = '';
+                for (let i = 0; i < 5; i++) cells += '<div class="pm-cell' + (hi >= (i + 1) * 20 ? ' on' : '') + '"></div>';
+                html += '<div class="pm-subject"><div class="pm-label">' + title + '</div><div class="pm-cells">' + cells + '</div></div>';
+            });
+            root.innerHTML = html;
+        }
+        function submitSuggestedQuestion() {
+            const text = document.getElementById('sq-text').value.trim();
+            const opts = document.getElementById('sq-opts').value.trim();
+            const c = document.getElementById('sq-correct').value.trim();
+            if (!text) return alert('أدخل نص السؤال');
+            const arr = JSON.parse(localStorage.getItem('suggestedQuestions_v1') || '[]');
+            arr.push({ text, opts, c, t: new Date().toISOString() });
+            localStorage.setItem('suggestedQuestions_v1', JSON.stringify(arr));
+            document.getElementById('sq-text').value = '';
+            renderSuggestList();
+            alert('تم الحفظ محلياً — انسخ القائمة للمشرف إن رغبت.');
+        }
+        function renderSuggestList() {
+            const arr = JSON.parse(localStorage.getItem('suggestedQuestions_v1') || '[]');
+            document.getElementById('sq-saved-list').innerHTML = arr.length ? arr.map((x, i) => '<div class="glossary-item">' + (i + 1) + '. ' + x.text + '</div>').join('') : '<p style="color:var(--text-muted)">لا اقتراحات بعد</p>';
         }
 
         // --- 4. البارتيكلز ---
         const canvas = document.getElementById('canvas'); const ctx = canvas.getContext('2d'); canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        let particlesArray = []; let globalSpeed = 1; let particleColor = '#3b82f6';
+        let particlesArray = []; let globalSpeed = 1; let particleColor = '#3b82f6'; let particlesPaused = false;
         class Particle { constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 1; this.speedX = (Math.random() * 1 - 0.5); this.speedY = (Math.random() * 1 - 0.5); } update() { this.x += this.speedX * globalSpeed; this.y += this.speedY * globalSpeed; if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX; if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY; } draw() { ctx.fillStyle = particleColor; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); } }
         for (let i = 0; i < 70; i++) particlesArray.push(new Particle());
-        function animateParticles() { ctx.clearRect(0, 0, canvas.width, canvas.height); particlesArray.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animateParticles); }
+        function animateParticles() {
+            if (!particlesPaused) { ctx.clearRect(0, 0, canvas.width, canvas.height); particlesArray.forEach(p => { p.update(); p.draw(); }); }
+            requestAnimationFrame(animateParticles);
+        }
         animateParticles();
+        document.addEventListener('visibilitychange', () => { particlesPaused = document.hidden; });
 
         function triggerBgReaction(isCorrect) {
             const c1 = document.getElementById('bg-circle-1'); const c2 = document.getElementById('bg-circle-2');
@@ -644,7 +1452,7 @@
                     { q: "الجهاز الذي يفصل بين نطاقات التصادم (Collision Domains) ويحسن أداء الشبكة هو:", options: ["Hub", "Switch", "Repeater", "Cable"], correct: 1 },
                     { q: "التأخير الذي يحدث بسبب معالجة الراوتر للحزمة (Processing Delay) يُقاس عادة بـ:", options: ["الجيجابايت", "الميكروثانية", "الساعات", "الكيلومتر"], correct: 1 },
                     { q: "عندما تنتظر الحزمة دورها في طابور الراوتر، يُعرف هذا التأخير بـ:", options: ["Processing Delay", "Transmission Delay", "Queuing Delay", "Propagation Delay"], correct: 2 },
-                    { q: "كم عدد الطبقات في نموذج OSI (Open Systems Interconnection)؟", options: ["4 طبقات", "5 طبقات", "7 طبقات", "9 طبقات"], correct: 2 },
+                    { q: "كم عدد الطبقات في نموذج OSI (Open Systems Interconnection)؟", options: ["4 طبقات", "5 طبقات", "7 طبقات", "9 طبقات"], correct: 2, video: "https://www.youtube.com/watch?v=LANW3m7UgWs" },
                     { q: "كم عدد الطبقات في نموذج TCP/IP المذكور في المنهج (المستخدم في الإنترنت)؟", options: ["3 طبقات", "5 طبقات", "7 طبقات", "8 طبقات"], correct: 1 },
                     { q: "أي طبقة في نموذج OSI مسؤولة عن توجيه الحزم (Routing) بين الشبكات المختلفة؟", options: ["Physical Layer", "Data Link Layer", "Network Layer", "Application Layer"], correct: 2 },
                     { q: "عنوان MAC الفيزيائي يُستخدم في أي طبقة من نموذج OSI؟", options: ["Network Layer", "Data Link Layer", "Transport Layer", "Session Layer"], correct: 1 },
@@ -698,6 +1506,10 @@
             });
         }
         updateReadinessMeters();
+        loadSettingsUI();
+        refreshHubChips();
+        refreshProgressMap();
+        tryShowResumeBanner();
 
         function showSubjects() {
             document.getElementById('welcome-screen').style.display = 'none';
@@ -705,41 +1517,70 @@
             document.getElementById('result-screen').style.display = 'none';
             document.getElementById('subjects-screen').style.display = 'block';
             updateReadinessMeters();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+            refreshProgressMap();
+            tryShowResumeBanner();
+            refreshHubChips();
+            const ctx = getAudioContext();
+            if (ctx && ctx.state === 'suspended') ctx.resume();
         }
-        function goBackToSubjects() { showSubjects(); }
+        function goBackToSubjects() {
+            if (document.getElementById('quiz-screen').style.display === 'block' && currentSubjectData && currentSubjectData.length)
+                saveResumeSnapshot();
+            clearQuizTimers();
+            quizMode = 'normal';
+            updateQuizChrome();
+            showSubjects();
+        }
+
+        function shuffleInPlace(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function countSurvivalCorrect() {
+            return answers.reduce((acc, ans, i) => acc + (ans === currentSubjectData[i].correct ? 1 : 0), 0);
+        }
 
         function startSurvivalMode() {
+            clearQuizTimers();
+            quizMode = 'normal';
             isSurvival = true; currentSubjectId = "survival";
             let mixedQuestions = [];
             for (let key in allSubjects) mixedQuestions = mixedQuestions.concat(allSubjects[key].questions);
-            mixedQuestions.sort(() => Math.random() - 0.5);
-            
+            shuffleInPlace(mixedQuestions);
+
             currentSubjectData = mixedQuestions;
             document.getElementById('subject-title').textContent = "☠️ وضع البقاء (Survival)";
             answers = new Array(currentSubjectData.length).fill(null);
             hintsUsed = new Array(currentSubjectData.length).fill(false);
             wrongAnswersReview = []; sessionBookmarks = []; sessionXP = 0; currentQ = 0;
-            
+            streak = 0; shieldActive = false;
+            clearResumeSnapshot();
             document.getElementById('subjects-screen').style.display = 'none';
             document.getElementById('quiz-screen').style.display = 'block';
             document.getElementById('quiz-screen').classList.add('fade-in');
-            
+            updateQuizChrome();
             renderQuestion();
         }
 
         function startSubject(subKey) {
+            clearQuizTimers();
+            quizMode = 'normal';
             isSurvival = false; currentSubjectId = subKey;
             currentSubjectData = allSubjects[subKey].questions;
             document.getElementById('subject-title').textContent = allSubjects[subKey].title;
             answers = new Array(currentSubjectData.length).fill(null);
             hintsUsed = new Array(currentSubjectData.length).fill(false);
             wrongAnswersReview = []; sessionBookmarks = []; sessionXP = 0; currentQ = 0;
-            
+            streak = 0; shieldActive = false;
+            clearResumeSnapshot();
             document.getElementById('subjects-screen').style.display = 'none';
             document.getElementById('quiz-screen').style.display = 'block';
             document.getElementById('quiz-screen').classList.add('fade-in');
-            
+            updateQuizChrome();
             renderQuestion();
         }
 
@@ -777,10 +1618,10 @@
             qText.classList.remove('fade-in'); void qText.offsetWidth; qText.classList.add('fade-in');
             expBox.style.display = 'none'; qText.textContent = q.q; container.innerHTML = '';
             
-            document.getElementById('question-tracker').textContent = isSurvival ? `الصمود: ${currentQ}` : `${currentQ + 1} / ${currentSubjectData.length}`;
+            document.getElementById('question-tracker').textContent = `${currentQ + 1} / ${currentSubjectData.length}`;
             document.getElementById('progress').style.width = isSurvival ? '100%' : `${((currentQ) / currentSubjectData.length) * 100}%`;
             
-            document.getElementById('prev-btn').style.display = (currentQ > 0 && !isSurvival) ? 'block' : 'none';
+            document.getElementById('prev-btn').style.display = (currentQ > 0 && !isSurvival && quizMode !== 'mock') ? 'block' : 'none';
             document.getElementById('next-btn').style.display = 'none';
 
             let isAnswered = answers[currentQ] !== null;
@@ -805,7 +1646,8 @@
             });
 
             if (isAnswered) {
-                showExplanation();
+                if (quizMode !== 'mock') showExplanation();
+                else document.getElementById('explanation-box').style.display = 'none';
                 document.getElementById('next-btn').style.display = 'block';
                 document.getElementById('next-btn').textContent = (currentQ === currentSubjectData.length - 1 || isSurvival) ? 'إظهار النتيجة 📊' : 'السؤال التالي ➔';
             }
@@ -825,14 +1667,16 @@
             shieldActive = false; document.getElementById('inv-shield').classList.remove('shield-active-glow');
             answers[currentQ] = idx; 
             
+            bumpWeeklyQuestions(1);
             if (isCorrect) {
-                streak++; playSound('correct'); addXP(15, event); triggerBgReaction(true);
+                streak++; playSound('correct'); addXP(getXPPerCorrect(), event); triggerBgReaction(true);
             } else {
                 streak = 0; playSound('wrong'); updateProfileUI(); triggerBgReaction(false);
                 wrongAnswersReview.push({ q: q.q, wrongOpt: q.options[idx], correctOpt: q.options[q.correct] });
                 if(isSurvival) { setTimeout(() => showResult(), 1500); }
             }
-            renderQuestion(); 
+            renderQuestion();
+            saveResumeSnapshot();
         }
 
         function showExplanation() {
@@ -840,19 +1684,26 @@
             const expBox = document.getElementById('explanation-box');
             let customExplanation = q.explanation ? q.explanation : (isCorrect ? `إجابة دقيقة! المفهوم الأكاديمي الصحيح هو "${q.options[q.correct]}".` : `المفهوم الصحيح هو: "${q.options[q.correct]}". يرجى التركيز عليها.`);
 
-            if (isCorrect) { expBox.className = 'explanation-box correct fade-in'; expBox.innerHTML = `<div class="explanation-title">✅ ${streak >= 3 ? 'حماس 🔥' : 'ممتاز'}</div>${customExplanation}`; } 
-            else { expBox.className = 'explanation-box wrong fade-in'; expBox.innerHTML = `<div class="explanation-title">❌ ${isSurvival ? 'GAME OVER!' : 'إجابة غير دقيقة'}</div>${customExplanation}`; }
+            let vidHtml = '';
+            if (q.video) vidHtml = '<p style="margin-top:12px;"><a href="' + q.video + '" target="_blank" rel="noopener" style="color:#7dd3fc;font-weight:700;">📎 فيديو تعليمي مقترح (يُفتح في تبويب جديد)</a></p>';
+            if (isCorrect) { expBox.className = 'explanation-box correct fade-in'; expBox.innerHTML = '<div class="explanation-title">✅ ' + (streak >= 3 ? 'حماس 🔥' : 'ممتاز') + '</div>' + customExplanation + vidHtml; }
+            else { expBox.className = 'explanation-box wrong fade-in'; expBox.innerHTML = '<div class="explanation-title">❌ ' + (isSurvival ? 'GAME OVER!' : 'إجابة غير دقيقة') + '</div>' + customExplanation + vidHtml; }
             expBox.style.display = 'block';
         }
         
         function nextQuestion() { 
             if(isSurvival && answers[currentQ] !== currentSubjectData[currentQ].correct) { showResult(); return; }
-            if (currentQ < currentSubjectData.length - 1) { currentQ++; renderQuestion(); } 
+            if (currentQ < currentSubjectData.length - 1) { currentQ++; renderQuestion(); saveResumeSnapshot(); } 
             else { showResult(); } 
         }
-        function prevQuestion() { if (currentQ > 0) { currentQ--; renderQuestion(); } }
+        function prevQuestion() { if (currentQ > 0) { currentQ--; renderQuestion(); saveResumeSnapshot(); } }
 
         function showResult() {
+            const endedMode = quizMode;
+            const wasSurvivalEnd = isSurvival;
+            clearQuizTimers();
+            clearResumeSnapshot();
+            document.getElementById('quiz-timer-display').style.display = 'none';
             document.getElementById('quiz-screen').style.display = 'none';
             document.getElementById('result-screen').style.display = 'block';
             shieldActive = false; document.getElementById('inv-shield').classList.remove('shield-active-glow');
@@ -860,16 +1711,20 @@
             let rankText = ""; let emoji = "";
             
             if(isSurvival) {
-                document.getElementById('final-rank').textContent = "انتهى وضع البقاء ☠️";
-                document.getElementById('final-score').textContent = `صمدت لـ ${currentQ} سؤال!`;
-                let oldSurvHigh = localStorage.getItem('devAhmedSurvivalHigh') || 0;
-                if(currentQ > oldSurvHigh) localStorage.setItem('devAhmedSurvivalHigh', currentQ);
-                emoji = "🔥"; playSound('wrong');
+                const survivalCorrect = countSurvivalCorrect();
+                const totalQ = currentSubjectData.length;
+                const hadFailure = wrongAnswersReview.length > 0;
+                document.getElementById('final-rank').textContent = hadFailure ? "انتهى وضع البقاء ☠️" : "إكمال أسطوري لوضع البقاء! 🏆";
+                document.getElementById('final-score').textContent = `إجابات صحيحة: ${survivalCorrect} من ${totalQ}`;
+                let oldSurvHigh = parseInt(localStorage.getItem('devAhmedSurvivalHigh'), 10) || 0;
+                if (survivalCorrect > oldSurvHigh) localStorage.setItem('devAhmedSurvivalHigh', String(survivalCorrect));
+                if (hadFailure) { emoji = "🔥"; playSound('wrong'); }
+                else { emoji = "🏆"; playSound('levelUp'); }
             } else {
                 let score = answers.reduce((acc, ans, i) => acc + (ans === currentSubjectData[i].correct ? 1 : 0), 0);
                 let percentage = Math.round((score / currentSubjectData.length) * 100);
                 let oldHigh = localStorage.getItem('highScore_' + currentSubjectId) || 0;
-                if (percentage > oldHigh) localStorage.setItem('highScore_' + currentSubjectId, percentage);
+                if (endedMode !== 'mock' && percentage > oldHigh) localStorage.setItem('highScore_' + currentSubjectId, percentage);
 
                 if (percentage === 100) { rankText = "أداء مثالي!"; emoji = "🏆"; playSound('levelUp'); }
                 else if (percentage >= 80) { rankText = "مستوى متقدم جداً"; emoji = "🌟"; }
@@ -899,16 +1754,41 @@
                     bmList.innerHTML += `<div class="review-item"><div class="review-q">⭐ ${idx + 1}. ${qObj.q}</div><div style="color:var(--accent-color); font-weight:bold;">✔️ الإجابة: ${correctAns}</div></div>`;
                 });
             } else { bmSection.style.display = 'none'; }
+
+            const tr = document.getElementById('topic-report-box');
+            const tc = document.getElementById('topic-report-content');
+            if (wrongAnswersReview.length && tr) {
+                tr.style.display = 'block';
+                tc.innerHTML = '<ul style="padding-right:1.2rem; margin:0;">' + buildTopicReportHtml(wrongAnswersReview) + '</ul>';
+            } else if (tr) { tr.style.display = 'none'; }
+
+            if (!wasSurvivalEnd) {
+                let scoreB = answers.reduce((acc, ans, i) => acc + (ans === currentSubjectData[i].correct ? 1 : 0), 0);
+                let pctB = Math.round((scoreB / currentSubjectData.length) * 100);
+                if (pctB === 100) unlockBadge('perfect100');
+            } else {
+                let scB = countSurvivalCorrect();
+                if (scB >= 20) unlockBadge('survival20');
+            }
+            if (endedMode === 'mock') unlockBadge('mockhero');
+
+            quizMode = 'normal';
+            updateQuizChrome();
+            refreshHubChips();
         }
 
         function shareResult() {
             let text = "";
             if(isSurvival) {
-                text = `لعبت (وضع البقاء ☠️) في منصة المراجعة الشاملة وصمدت لـ ${currentQ} سؤال متتالي بدون ولا غلطة! من يقدر يكسر رقمي؟ 🔥`;
-            } else {
+                const n = countSurvivalCorrect();
+                const total = currentSubjectData.length;
+                text = `وضع البقاء ☠️ في منصة المراجعة: حققت ${n} إجابة صحيحة (من أصل ${total} سؤالاً في الجولة). تطوير: أحمد مطمي — جرّب تكسر الرقم! 🔥`;
+            } else if (currentSubjectId && allSubjects[currentSubjectId]) {
                 let percentage = document.getElementById('final-score').textContent;
                 let subName = allSubjects[currentSubjectId].title;
                 text = `أنهيت مراجعة مادة [ ${subName} ] بنسبة ${percentage} 🌟 في منصة مراجعة الاختبارات (تطوير: أحمد مطمي). من يتحداي؟ 🚀`;
+            } else {
+                text = document.getElementById('final-score').textContent + ' — منصة مراجعة الاختبارات (أحمد مطمي)';
             }
             navigator.clipboard.writeText(text).then(() => {
                 const btn = document.querySelector('.share-btn');
