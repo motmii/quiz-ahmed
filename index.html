@@ -674,39 +674,43 @@
           </ul>
           <p class="note"><strong>💡 ملاحظة:</strong> الرمز (PK) يرمز للمفتاح الأساسي، والرمز (FK) يرمز للمفتاح الأجنبي. وتُستخدم لربط الكيانات (Entities) ببعضها.</p>
 
-          <h3 style="color: #fca5a5;">🔢 2. النظام الست عشري (Hexadecimal)</h3>
-          <p>مثال حسابي للتحويل أكد عليه الدكتور: <strong>تحويل الرقم 2F<sub>16</sub> إلى النظام العشري</strong></p>
-          <ol style="padding-right: 1.5rem;">
-              <li>تفكيك الرقم إلى خاناته: (2 و F).</li>
-              <li>تحديد قيمة كل خانة (الأساس 16):<br>
-                  - الخانة الأولى: 16<sup>0</sup> (تساوي 1)<br>
-                  - الخانة الثانية: 16<sup>1</sup> (تساوي 16)
-              </li>
-              <li>تحويل الحرف F إلى قيمته الرقمية: <strong>F = 15</strong>.</li>
-              <li>إجراء عملية الضرب:<br>
-                  - 2 × 16 = <strong>32</strong><br>
-                  - 15 × 1 = <strong>15</strong>
-              </li>
-              <li>جمع الناتج: 32 + 15 = <strong>47</strong></li>
-          </ol>
-          <p class="note" style="text-align: center; font-size: 1.1rem;"><strong>النتيجة النهائية: 2F<sub>16</sub> = 47<sub>10</sub></strong></p>
+<h4 style="margin-top: 20px;">🔗 مثال تطبيقي على المفاتيح والكيانات:</h4>
+                <p><strong>مثال توضيحي:</strong> لنفترض أن لدينا قاعدة بيانات شاملة لإدارة الطلاب والمقررات، ونحتاج إلى تنظيم البيانات داخل جداول مترابطة (كيانات).</p>
+                
+                <p style="text-align: center; font-weight: bold; color: var(--primary-color); margin-bottom: 5px;">جدول الطلاب Students (كيان)</p>
+                <table class="schedule-table" style="margin-top: 0; margin-bottom: 20px;">
+                    <thead>
+                        <tr>
+                            <th style="color: var(--danger-color);">StudentID (PK)</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td style="color: var(--danger-color); font-weight: bold;">101</td><td>أحمد</td><td>20</td><td>A</td></tr>
+                        <tr><td style="color: var(--danger-color); font-weight: bold;">102</td><td>سارة</td><td>21</td><td>B</td></tr>
+                        <tr><td style="color: var(--danger-color); font-weight: bold;">103</td><td>خالد</td><td>19</td><td>A</td></tr>
+                    </tbody>
+                </table>
 
-          <h4>📑 جدول المقارنة السريع (أرقام الحروف):</h4>
-          <table style="width: 100%; border-collapse: collapse; margin-top: 10px; text-align: center; border: 1px solid var(--c-border);">
-              <thead style="background: rgba(56,189,248,0.1);">
-                  <tr>
-                      <th style="padding: 10px; border-bottom: 1px solid var(--c-border);">العشري (Decimal)</th>
-                      <th style="padding: 10px; border-bottom: 1px solid var(--c-border);">الثنائي (Binary)</th>
-                      <th style="padding: 10px; border-bottom: 1px solid var(--c-border);">الست عشري (Hexadecimal)</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr><td style="padding: 8px;">10</td><td style="padding: 8px;">1010</td><td style="padding: 8px; color:var(--c-amber);"><strong>A</strong></td></tr>
-                  <tr><td style="padding: 8px;">11</td><td style="padding: 8px;">1011</td><td style="padding: 8px; color:var(--c-amber);"><strong>B</strong></td></tr>
-                  <tr><td style="padding: 8px;">12</td><td style="padding: 8px;">1100</td><td style="padding: 8px; color:var(--c-amber);"><strong>C</strong></td></tr>
-                  <tr><td style="padding: 8px;">13</td><td style="padding: 8px;">1101</td><td style="padding: 8px; color:var(--c-amber);"><strong>D</strong></td></tr>
-                  <tr><td style="padding: 8px;">14</td><td style="padding: 8px;">1110</td><td style="padding: 8px; color:var(--c-amber);"><strong>E</strong></td></tr>
-                  <tr><td style="padding: 8px;">15</td><td style="padding: 8px;">1111</td><td style="padding: 8px; color:var(--c-amber);"><strong>F</strong></td></tr>
+                <p style="text-align: center; font-weight: bold; color: var(--primary-color); margin-bottom: 5px;">جدول المقررات Courses (كيان)</p>
+                <table class="schedule-table" style="margin-top: 0;">
+                    <thead>
+                        <tr>
+                            <th style="color: var(--danger-color);">CourseID (PK)</th>
+                            <th>CourseName</th>
+                            <th style="color: var(--accent-color);">StudentID (FK)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>201</td><td>قواعد البيانات</td><td style="color: var(--accent-color); font-weight: bold;">101</td></tr>
+                        <tr><td>202</td><td>شبكات الحاسب</td><td style="color: var(--accent-color); font-weight: bold;">102</td></tr>
+                        <tr><td>203</td><td>تطوير الويب</td><td style="color: var(--accent-color); font-weight: bold;">101</td></tr>
+                    </tbody>
+                </table>
+                <p class="note"><strong>💡 توضيح من الصورة:</strong> <strong>StudentID</strong> هو مفتاح أساسي (PK) في جدول الطلاب، وتم استخدامه كمفتاح أجنبي (FK) في جدول المقررات لربط الكيانين ببعضهما.</p>
+          
               </tbody>
           </table>
       </div>
