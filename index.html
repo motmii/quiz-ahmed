@@ -800,7 +800,64 @@
     </div>
   </div>
 </div>
+<div class="modal-overlay-ui" id="python-review-modal" style="display:none;">
+  <div class="modal-box wide">
+    <button class="modal-close" onclick="closeModal('python-review-modal')">✕</button>
+    <div class="modal-title" style="color:var(--c-blue)">📑 مراجعة شاملة: أساسيات البرمجة (Python)</div>
+    <p class="modal-sub">مراجعة ما بعد الاختبار للمفاهيم الهامة</p>
+    
+    <div class="summary-prose" style="max-height: 60vh; overflow-y: auto; padding-left: 6px;">
+        <h4>1. المفاهيم الأساسية والبيئة</h4>
+        <ul>
+            <li><strong>IDLE:</strong> هو البيئة اللي نكتب فيها الكود، واختصاره (Integrated Development and Learning Environment).</li>
+            <li><strong>اللغة:</strong> بايثون لغة Scripting (نصية) وتدعم الـ OOP (البرمجة الكائنية).</li>
+            <li><strong>الشعبية:</strong> بايثون تتصدر مؤشر TIOBE كأكثر لغة شعبية عالمياً.</li>
+            <li><strong>حساسية الحروف:</strong> بايثون Case-Sensitive، يعني Variable غير variable.</li>
+        </ul>
 
+        <h4>2. أنواع البيانات (Data Types)</h4>
+        <ul>
+            <li><strong>Integer (int):</strong> الأعداد الصحيحة بدون فواصل (مثل: x = 25).</li>
+            <li><strong>Float:</strong> الأعداد العشرية (التي تحتوي على فاصلة).</li>
+            <li><strong>Boolean (bool):</strong> القيم المنطقية وهي اثنتان فقط: True و False.</li>
+            <li><strong>String (str):</strong> النصوص، وتوضع بين علامات اقتباس " ".</li>
+            <li><strong>الخاصية الديناميكية:</strong> بايثون لغة Dynamic؛ يعني المبرمج لا يحتاج لتحديد نوع المتغير، البرنامج يفهمه تلقائياً.</li>
+        </ul>
+
+        <h4>3. العمليات الحسابية والمنطقية</h4>
+        <ul>
+            <li><strong>الأس (Exponent):</strong> نستخدم النجمتين **. مثال: 2**3 تُكتب 2 ** 3 والناتج 8.</li>
+            <li><strong>القسمة الصحيحة (Floor Division):</strong> نستخدم // وتعطينا العدد الصحيح بدون كسر. مثال: 11 // 3 الناتج 3.</li>
+            <li><strong>باقي القسمة (Modulus):</strong> نستخدم %. مثال: 10 % 3 الباقي 1.</li>
+            <li><strong>المعامل and:</strong> لا يعطي True إلا إذا كانت كل الأطراف صحيحة.</li>
+            <li><strong>تكرار النص:</strong> عند ضرب نص في رقم "Hi" * 3 النتيجة تكون تكرار النص HiHiHi.</li>
+        </ul>
+
+        <h4>4. أولويات العمليات (Order of Operations)</h4>
+        <p>الترتيب مهم جداً في بايثون ويتبع قاعدة PEMDAS:</p>
+        <ol>
+            <li><strong>الأقواس ():</strong> لها الأولوية القصوى دائماً.</li>
+            <li><strong>الأسس **:</strong> تأتي في المرتبة الثانية.</li>
+            <li><strong>الضرب والقسمة *, /, //, %:</strong> لها نفس الأولوية وتنفذ من اليسار لليمين.</li>
+            <li><strong>الجمع والطرح +, -:</strong> آخر الأولويات.</li>
+        </ol>
+
+        <h4>5. الجمل الشرطية (Control Flow)</h4>
+        <ul>
+            <li><strong>if / elif / else:</strong> if تبدأ الشرط. elif تستخدم لإضافة شروط إضافية. else هي الخيار الأخير إذا لم يتحقق أي شرط سابق.</li>
+            <li><strong>المسافة البادئة (Indentation):</strong> هي الفراغ في بداية السطر بعد if؛ وبدونها يعطي البرنامج خطأ (Indentation Error).</li>
+            <li><strong>القرارات المتداخلة (Nested If):</strong> تعني وضع جملة if داخل جملة if أخرى.</li>
+        </ul>
+
+        <h4>6. معالجة الأخطاء والتنسيق</h4>
+        <ul>
+            <li><strong>Try / Except:</strong> نضع الكود اللي خايفين يسبب مشكلة في كتلة try. إذا حدث خطأ، يهرب البرنامج فوراً لكتلة except وينفذها.</li>
+            <li><strong>قواعد التسمية (PEP 8):</strong> الموصى به للمتغيرات هو نظام الـ snake_case (كلمات صغيرة بينها شرطة سفلية).</li>
+            <li><strong>تجزئة المشكلة (Decomposition):</strong> هي عملية تقسيم المشكلة الكبيرة لأجزاء صغيرة ليسهل حلها برمجياً.</li>
+        </ul>
+    </div>
+  </div>
+</div>
 
 <div class="main-container" id="main-ui">
 
@@ -845,9 +902,12 @@
         <span class="sch-col">المقرر</span>
         <span class="sch-col">الوقت</span>
       </div>
-      <div class="schedule-row">
+     <div class="schedule-row">
         <div><div class="sch-day">done!</div><div class="sch-date">done!</div></div>
-        <div class="sch-subject">أساسيات البرمجة</div>
+        <div class="sch-subject" style="display: flex; align-items: center; gap: 10px;">
+          أساسيات البرمجة
+          <button class="btn btn-blue" style="padding: 4px 10px; font-size: 0.75rem;" onclick="openModal('python-review-modal')">📑 مراجعة الاختبار</button>
+        </div>
         <div class="sch-time">done!</div>
       </div>
       <div class="schedule-row">
