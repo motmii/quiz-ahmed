@@ -859,7 +859,59 @@
   </div>
 </div>
 
+
+<div class="modal-overlay-ui" id="network-exam-review-modal" style="display:none;">
+  <div class="modal-box wide">
+    <button class="modal-close" onclick="closeModal('network-exam-review-modal')">✕</button>
+    <div class="modal-title" style="color:var(--c-blue)">📑 مراجعة شاملة: أساسيات الشبكات</div>
+    <p class="modal-sub">مراجعة ما بعد الاختبار للمفاهيم الهامة</p>
+    
+    <div class="summary-prose" style="max-height: 60vh; overflow-y: auto; padding-left: 6px;">
+        <h4>1. أنواع الشبكات ومدى التغطية</h4>
+        <ul>
+            <li><strong>PAN:</strong> شبكة شخصية صغيرة جداً (مثل البلوتوث).</li>
+            <li><strong>LAN:</strong> مخصصة للمباني والمكاتب، وهي الأنسب لربط أجهزة شركة داخل مبنى واحد.</li>
+            <li><strong>MAN:</strong> تغطي نطاق مدينة (من 5 إلى 50 كيلومتراً).</li>
+            <li><strong>WAN:</strong> شبكة عالمية تربط بين الدول، وأكبر مثال عليها هو الإنترنت.</li>
+        </ul>
+
+        <h4>2. نماذج الشبكات والبروتوكولات</h4>
+        <ul>
+            <li><strong>الخادم والعميل:</strong> الخادم (Server) يقدم الخدمة، والعميل (Client) يطلبها.</li>
+            <li><strong>البروتوكولات:</strong> القواعد التي تنظم تبادل البيانات وتضمن توافق الأجهزة.</li>
+            <li><strong>التغليف (Encapsulation):</strong> إضافة رأس معلومات (Header) في كل طبقة أثناء الإرسال.</li>
+            <li><strong>OSI مقابل TCP/IP:</strong> الأول مرجع تعليمي (7 طبقات)، والثاني تطبيق عملي للإنترنت.</li>
+        </ul>
+
+        <h4>3. طبقات OSI ووظائفها (جوهر الشبكات)</h4>
+        <div class="note">
+            <strong>Layer 1 (الفيزيائية):</strong> نقل البتات (Bits) عبر الأسلاك.<br>
+            <strong>Layer 2 (وصلة البيانات):</strong> استخدام عناوين MAC لتوصيل الإطارات (Frames).<br>
+            <strong>Layer 3 (الشبكة):</strong> استخدام عناوين IP وتوجيه الحزم (Packets).<br>
+            <strong>Layer 4 (النقل):</strong> إدارة الجلسات وضمان وصول البيانات (Segments).
+        </div>
+
+        <h4>4. وسائط النقل</h4>
+        <ul>
+            <li><strong>الوسائط الموجهة (Guided):</strong> الكابلات المادية (نحاسية أو بصرية).</li>
+            <li><strong>الوسائط غير الموجهة (Unguided):</strong> اللاسلكي مثل الواي فاي.</li>
+            <li><strong>الألياف البصرية:</strong> الأفضل لأنها لا تتأثر بالتداخل الكهرومغناطيسي كونها تنقل ضوءاً.</li>
+            <li><strong>الكابل المجدول (Twisted Pair):</strong> الأكثر استخداماً في شبكات الإيثرنت حالياً.</li>
+        </ul>
+
+        <h4>5. العنونة وبروتوكول DHCP</h4>
+        <ul>
+            <li><strong>عملية DORA:</strong> تبدأ دائماً بخطوة البحث (Discover).</li>
+            <li><strong>تقنية VLSM:</strong> تقسيم الشبكة لأحجام مختلفة لتقليل هدر العناوين.</li>
+            <li><strong>CIDR /24:</strong> تعني أن أول 24 بت مخصصة لعنوان الشبكة.</li>
+            <li><strong>Class D:</strong> الفئة المخصصة للبث المتعدد (Multicast).</li>
+        </ul>
+    </div>
+  </div>
+</div>  
 <div class="main-container" id="main-ui">
+
+
 
   <div class="topbar fade-in-ui">
     <div class="player-card">
@@ -910,10 +962,13 @@
         </div>
         <div class="sch-time">done!</div>
       </div>
-      <div class="schedule-row">
-        <div><div class="sch-day">الإثنين</div><div class="sch-date">13/4/2026</div></div>
-        <div class="sch-subject">أساسيات الشبكات</div>
-        <div class="sch-time">12:00–12:00 PM</div>
+     <div class="schedule-row">
+        <div><div class="sch-day">done!</div><div class="sch-date">done!</div></div>
+        <div class="sch-subject" style="display: flex; align-items: center; gap: 10px;">
+          أساسيات الشبكات
+          <button class="btn btn-blue" style="padding: 4px 10px; font-size: 0.75rem;" onclick="openModal('network-exam-review-modal')">📑 مراجعة الاختبار</button>
+        </div>
+        <div class="sch-time">done!</div>
       </div>
       <div class="schedule-row">
         <div><div class="sch-day">الثلاثاء</div><div class="sch-date">14/4/2026</div></div>
