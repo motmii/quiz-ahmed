@@ -4,66 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080c14">
-<title>منصة مراجعة الاختبار | أساسيات الشبكات</title>
+<title>منصة مراجعة الاختبار | أساسيات قواعد البيانات</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-
-/* تنسيق قائمة المتصدرين */
-.leaderboard-card {
-    background: var(--c-card);
-    border: 1px solid var(--c-border);
-    border-radius: 16px;
-    padding: 20px;
-    width: 280px;
-    font-family: 'Tajawal', sans-serif;
-    color: white;
-    position: fixed; 
-    top: 100px;
-    right: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    z-index: 1000;
-}
-
-.leaderboard-card h3 {
-    text-align: center;
-    color: var(--c-blue);
-    margin-top: 0;
-    font-size: 1.2em;
-}
-
-.leaderboard-card h4 {
-    text-align: center;
-    color: var(--c-white);
-    margin-top: 0;
-    font-size: 1.0em;
-}
-
-.leaderboard-list {
-    list-style: none;
-    padding: 0;
-    margin: 15px 0 0 0;
-}
-
-.leaderboard-list li {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--c-border);
-    font-size: 1em;
-}
-
-.leaderboard-list li:last-child {
-    border-bottom: none;
-}
-
-@media (max-width: 900px) {
-    .leaderboard-card {
-        display: none;
-    }
-}
-  /* ============================================================
-     DESIGN TOKENS & RESET
-  ============================================================ */
   :root {
     --c-bg: #080c14; --c-surface: #0d1220; --c-card: #111827; --c-card2: #161f30;
     --c-border: rgba(56,189,248,0.12); --c-border2: rgba(56,189,248,0.22);
@@ -73,27 +16,26 @@
     --font: 'Tajawal', sans-serif;
     --radius-sm: 8px; --radius-md: 14px; --radius-lg: 20px; --radius-xl: 28px;
     --shadow-blue: 0 0 0 1px rgba(56,189,248,0.15), 0 4px 24px rgba(14,165,233,0.12);
-    --glow-blue: 0 0 20px rgba(56,189,248,0.25);
     --fs-scale: 1;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { font-size: calc(15px * var(--fs-scale, 1)); }
   body { font-family: var(--font); background: var(--c-bg); color: var(--c-text); min-height: 100vh; overflow-x: hidden; }
 
-  /* ============================================================
-     BACKGROUND EFFECTS
-  ============================================================ */
   body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px); background-size: 48px 48px; pointer-events: none; z-index: 0; }
-  body::after { content: ''; position: fixed; top: -200px; left: -200px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(56,189,248,0.06) 0%, transparent 70%); pointer-events: none; z-index: 0; }
-  .glow-spot-2 { position: fixed; bottom: -150px; right: -150px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(167,139,250,0.07) 0%, transparent 70%); pointer-events: none; z-index: 0; }
   .bg-circles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden; opacity: 0.5; }
   .bg-circles div { position: absolute; border-radius: 50%; filter: blur(60px); transition: background 0.5s ease; }
   .circle-1 { width: 400px; height: 400px; top: -100px; right: -100px; background: rgba(59, 130, 246, 0.15); }
   .circle-2 { width: 300px; height: 300px; bottom: -50px; left: -50px; background: rgba(245, 158, 11, 0.1); }
 
-  /* ============================================================
-     LAYOUT & UI COMPONENTS
-  ============================================================ */
+  .leaderboard-card { background: var(--c-card); border: 1px solid var(--c-border); border-radius: 16px; padding: 20px; width: 280px; font-family: var(--font); color: white; position: fixed; top: 100px; right: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 1000; }
+  .leaderboard-card h3 { text-align: center; color: var(--c-blue); margin-top: 0; font-size: 1.2em; }
+  .leaderboard-card h4 { text-align: center; color: var(--c-white); margin-top: 0; font-size: 1.0em; font-weight: normal; }
+  .leaderboard-list { list-style: none; padding: 0; margin: 15px 0 0 0; }
+  .leaderboard-list li { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--c-border); font-size: 1em; }
+  .leaderboard-list li:last-child { border-bottom: none; }
+  @media (max-width: 900px) { .leaderboard-card { display: none; } }
+
   .main-container { position: relative; z-index: 1; width: 94%; max-width: 940px; margin: 0 auto; padding: 24px 0 60px; }
   .topbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; padding: 14px 20px; background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius-xl); margin-bottom: 28px; box-shadow: var(--shadow-blue); }
   .player-card { display: flex; align-items: center; gap: 14px; }
@@ -105,6 +47,7 @@
   .player-xp { font-size: 1.1rem; font-weight: 900; color: var(--c-amber); }
   .streak-pill { display: flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.18); border-radius: 999px; font-size: 0.88rem; font-weight: 700; color: #fca5a5; }
   .topbar-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  
   .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: var(--radius-md); font-family: var(--font); font-size: 0.88rem; font-weight: 700; cursor: pointer; border: 1px solid transparent; transition: all 0.25s; text-decoration: none; }
   .btn-ghost { background: var(--c-card); border-color: var(--c-border); color: var(--c-muted); }
   .btn-ghost:hover { background: var(--c-card2); color: var(--c-text); }
@@ -113,17 +56,11 @@
   .btn-primary { background: linear-gradient(135deg, var(--c-blue2), #0369a1); color: #fff; box-shadow: 0 4px 16px rgba(14,165,233,0.3); }
   .btn-lg { padding: 14px 36px; font-size: 1.1rem; border-radius: var(--radius-lg); }
 
-  /* ============================================================
-     WELCOME SCREEN
-  ============================================================ */
   .welcome-header { text-align: center; padding: 40px 0; }
   .platform-tag { display: inline-block; font-size: 0.75rem; font-weight: 700; color: var(--c-blue); background: rgba(56,189,248,0.08); padding: 5px 16px; border-radius: 999px; margin-bottom: 20px; }
   .platform-title { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; margin-bottom: 12px; color: var(--c-text); }
   .platform-sub { color: var(--c-muted); font-size: 1.05rem; margin-bottom: 40px; }
 
-  /* ============================================================
-     QUIZ SCREEN
-  ============================================================ */
   .quiz-topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
   .inv-bar { display: flex; gap: 6px; background: var(--c-card); padding: 6px 12px; border-radius: var(--radius-md); }
   .inv-btn { position: relative; background: transparent; border: none; font-size: 1.1rem; cursor: pointer; color: var(--c-text); font-weight: bold; }
@@ -142,16 +79,11 @@
   .explanation-ui.correct { background: rgba(52,211,153,0.05); border-color: var(--c-green); color: #a7f3d0; }
   .explanation-ui.wrong { background: rgba(248,113,113,0.05); border-color: var(--c-red); color: #fecaca; }
 
-  /* ============================================================
-     MODALS & ANIMATIONS
-  ============================================================ */
   .modal-overlay-ui { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
   .modal-box { background: var(--c-surface); border: 1px solid var(--c-border2); border-radius: var(--radius-xl); padding: 32px; width: 100%; max-width: 520px; position: relative; }
   .modal-close { position: absolute; top: 16px; right: 20px; background: var(--c-card); border: 1px solid var(--c-border); color: var(--c-muted); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-weight: bold; }
   .fade-in-ui { animation: fade-up 0.35s ease both; }
   @keyframes fade-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-  .xp-popup { position: absolute; color: var(--c-amber); font-weight: 900; font-size: 1.5rem; pointer-events: none; animation: floatUp 1s ease forwards; z-index: 1000; }
-  @keyframes floatUp { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-50px); } }
 </style>
 </head>
 <body>
@@ -161,14 +93,14 @@
 
 <div class="modal-overlay-ui" id="shop-modal">
   <div class="modal-box">
-    <button class="modal-close" onclick="closeModal('shop-modal')">✕</button>
+    <button class="modal-close" onclick="closeModal('shop-modal')">X</button>
     <h2 style="color:var(--c-amber); margin-bottom: 20px;">متجر الأدوات</h2>
     <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-      <span>أداة 50/50 (100 XP)</span>
+      <span>أداة 50/50 (100 نقطة)</span>
       <button class="btn btn-amber" onclick="buyItem('fifty',100)">شراء</button>
     </div>
     <div style="display:flex; justify-content:space-between;">
-      <span>الدرع الواقي (300 XP)</span>
+      <span>الدرع الواقي (300 نقطة)</span>
       <button class="btn btn-blue" onclick="buyItem('shield',300)">شراء</button>
     </div>
   </div>
@@ -181,12 +113,12 @@
       <div class="level-orb"><span id="player-level">1</span></div>
       <div class="player-info">
         <span class="player-label">المستوى</span>
-        <span class="player-xp"><span id="player-xp">0</span> XP</span>
+        <span class="player-xp"><span id="player-xp">0</span> نقطة</span>
       </div>
     </div>
-    <div class="streak-pill" id="streak-box">الستريك: <span id="streak-count">0</span></div>
+    <div class="streak-pill" id="streak-box">التتابع: <span id="streak-count">0</span></div>
     <div class="topbar-btns">
-      <button class="btn btn-amber" onclick="document.getElementById('shop-modal').style.display='flex'">متجر</button>
+      <button class="btn btn-amber" onclick="document.getElementById('shop-modal').style.display='flex'">المتجر</button>
     </div>
   </div>
 
@@ -195,7 +127,7 @@
       <div class="platform-tag">مراجعة شاملة</div>
       <h1 class="platform-title" id="main-title">جاري التحميل...</h1>
       <p class="platform-sub" id="quiz-subtitle">استعد لاختبارك وتدرب على الأسئلة</p>
-      <button class="btn btn-primary btn-lg" onclick="startQuiz()">ابدأ الاختبار</button>
+      <button class="btn btn-primary btn-lg" onclick="startQuiz()">ابدأ الاختبار الآن</button>
     </div>
   </div>
 
@@ -203,8 +135,8 @@
     <div class="quiz-topbar">
       <button class="btn btn-ghost" onclick="location.reload()">خروج</button>
       <div class="inv-bar">
-        <button class="inv-btn" onclick="useFiftyFifty()">50/50<span class="inv-count" id="count-fifty">0</span></button>
-        <button class="inv-btn" onclick="useShield()">درع<span class="inv-count" id="count-shield">0</span></button>
+        <button class="inv-btn" onclick="useFiftyFifty()">50/50 <span class="inv-count" id="count-fifty">0</span></button>
+        <button class="inv-btn" onclick="useShield()">درع <span class="inv-count" id="count-shield">0</span></button>
       </div>
     </div>
     <div style="margin-bottom: 10px; font-weight:bold; color:var(--c-blue);" id="question-tracker">1 / 100</div>
@@ -215,16 +147,16 @@
     <div class="explanation-ui" id="explanation-box"></div>
 
     <div style="margin-top: 24px; text-align: left;">
-      <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" style="display:none;">التالي ➔</button>
+      <button class="btn btn-primary" id="next-btn" onclick="nextQuestion()" style="display:none;">السؤال التالي</button>
     </div>
   </div>
 
   <div id="result-screen" style="display:none;" class="fade-in-ui text-center">
     <div style="text-align: center; padding: 40px 0;">
       <div style="font-size: 2rem; font-weight: bold; color: var(--c-blue);">النتيجة النهائية</div>
-      <h2 style="font-size: 2rem; margin: 10px 0;">اكتمل الاختبار!</h2>
+      <h2 style="font-size: 2rem; margin: 10px 0;">اكتمل الاختبار</h2>
       <div style="font-size: 3rem; color: var(--c-green); font-weight: bold;" id="final-score">0%</div>
-      <p style="color: var(--c-amber); font-size: 1.2rem; margin-top: 10px;">مكتسب: <span id="earned-xp">0</span> XP</p>
+      <p style="color: var(--c-amber); font-size: 1.2rem; margin-top: 10px;">النقاط المكتسبة: <span id="earned-xp">0</span> نقطة</p>
       <br>
       <button onclick="goToMainMenu()" class="btn btn-ghost">العودة للقائمة الرئيسية</button>
     </div>
@@ -234,129 +166,138 @@
 
 <div class="leaderboard-card">
     <h3>لوحة المتصدرين</h3>
-    <h4>في حال جبت ستريك اعلى صور في القروب و راح اضيف اسمك</h4>
+    <h4>قم بإرسال نتيجتك ليتم إضافتها هنا</h4>
     <ul class="leaderboard-list">
-        <li><span>Ahmed Mutmi</span> <span>56</span></li>
-        <li><span>anonymous</span> <span>28</span></li>
-        <li><span>anonymous</span> <span>18</span></li>
+        <li><span>&&</span> <span>67</span></li>
+        <li><span>طالب 1</span> <span>65</span></li>
+        <li><span>طالب 2</span> <span>32</span></li>
     </ul>
-    <p style="font-size: 0.8em; text-align: center; color: #888; margin-top: 15px;">أرسل ستريكك ليتم إضافتك!</p>
 </div>
 
 <footer style="text-align: center; padding: 20px; font-family: 'Tajawal', sans-serif; color: #888; font-size: 0.9em;">
-    <p>&copy; <span id="year"></span> تم التطوير بواسطة: <strong>Ahmed Motmi</strong> | جميع الحقوق محفوظة</p>
+    <p>&copy; <span id="year"></span> تم التطوير بواسطة: <strong>Ahmed Mutmi</strong> | جميع الحقوق محفوظة</p>
 </footer>
 
 <script>
 const mySubjectData = {
-    title: "أساسيات الشبكات",
+    title: "أساسيات قواعد البيانات",
     questions: [
-      { q: "ما هي شبكة الحاسوب؟", options: ["نظام تشغيل للاتصالات", "مجموعة أجهزة متصلة لتبادل البيانات والموارد", "لغة برمجة للإنترنت", "كابلات لتوصيل الشاشات"], correct: 1, explanation: "شبكة الحاسوب هي مجموعة من الأجهزة المتصلة معًا بشكل يسمح بتبادل البيانات والموارد بينها[cite: 138]." },
-      { q: "أي من أنواع الشبكات يغطي مساحة جغرافية واسعة تمتد عبر دولة أو قارة؟", options: ["LAN", "PAN", "WAN", "MAN"], correct: 2, explanation: "الشبكة الواسعة (WAN) تمتد عبر دولة أو قارة وتغطي نطاقًا واسعًا، وتُعد الإنترنت أكبر مثال عليها[cite: 204, 224]." },
-      { q: "ما هو الهدف الأساسي من بناء شبكات الحاسوب؟", options: ["تقليل سرعة الأجهزة", "تسهيل التواصل ومشاركة الموارد", "برمجة المواقع الإلكترونية", "تصميم واجهات المستخدم"], correct: 1, explanation: "الهدف الأساسي للشبكات هو تسهيل التواصل بين المستخدمين وتمكينهم من مشاركة الموارد مثل الملفات والطابعات والإنترنت[cite: 140]." },
-      { q: "أي من الكابلات التالية لا يتأثر إطلاقاً بالتداخل الكهرومغناطيسي؟", options: ["الزوج المجدول (UTP)", "الكابل المحوري (Coaxial)", "الألياف البصرية", "كابل الهاتف"], correct: 2, explanation: "تتميز الألياف البصرية بمقاومة كاملة للتداخل الكهرومغناطيسي لأنها تنقل البيانات عبر نبضات ضوئية في ألياف زجاجية[cite: 264, 268]." },
-      { q: "ماذا تعني تقنية 'تبديل الحزم' (Packet Switching)؟", options: ["تقسيم البيانات لحزم صغيرة وإرسالها بشكل مستقل", "حجز مسار ثابت وحصري طوال الاتصال", "إرسال البيانات عبر البلوتوث فقط", "ربط الشبكة بالطابعة مباشرة"], correct: 0, explanation: "المبدأ الأساسي في Packet Switching هو تقسيم الرسالة إلى حزم صغيرة تسمى 'Packets'، حيث تُرسل كل حزمة بشكل مستقل عن الأخرى[cite: 299]." },
-      { q: "ما هي الطريقة التقليدية التي تحجز مساراً مخصصاً طوال مدة الاتصال (مثل الهاتف التقليدي)؟", options: ["Packet Switching", "Circuit Switching", "Ethernet", "Wi-Fi"], correct: 1, explanation: "مبدأ Circuit Switching هو إنشاء مسار مخصص وحصري طوال مدة الاتصال لضمان جودة الخدمة، وهو المستخدم في شبكات الهاتف التقليدية[cite: 312, 317]." },
-      { q: "أي مما يلي يمثل 'تأخير الانتظار' (Queuing Delay) في الشبكات؟", options: ["الوقت اللازم لفحص رأس الحزمة", "الوقت المستغرق لإرسال الحزمة عبر الرابط", "الوقت الذي تقضيه الحزمة في الانتظار داخل الطابور", "الوقت الذي تستغرقه الإشارة للانتقال عبر الوسيط"], correct: 2, explanation: "تأخير الانتظار في الطابور (Queuing Delay) هو الوقت الذي تقضيه الحزمة في الانتظار داخل الطابور قبل معالجتها[cite: 325]." },
-      { q: "ما هو السبب الأساسي لفقدان الحزم (Packet Loss) في الشبكة؟", options: ["انقطاع التيار الكهربائي دائماً", "استخدام الألياف البصرية", "امتلاء قوائم الانتظار في أجهزة التوجيه", "استخدام بروتوكول TCP"], correct: 2, explanation: "السبب الأساسي لفقدان الحزم هو امتلاء قوائم الانتظار في أجهزة التوجيه، مما يؤدي إلى رفض الحزم الجديدة[cite: 329, 331]." },
-      { q: "ما هو تعريف 'الإنتاجية' (Throughput) في الشبكة؟", options: ["الوقت المستغرق للوصول للموقع", "معدل نقل البيانات الفعلي بين المرسل والمستقبل", "طول الكابل بين الجهازين", "سعة التخزين في الخادم"], correct: 1, explanation: "الإنتاجية (Throughput) تُعرف بأنها معدل نقل البيانات الفعلي بين المرسل والمستقبل[cite: 338]." },
-      { q: "في الشبكات التي تتكون من عدة وصلات، ما الذي يحدد الإنتاجية القصوى للمسار؟", options: ["الرابط الأسرع", "الرابط الأبطأ (Bottleneck Link)", "حجم الحزمة", "نوع المتصفح"], correct: 1, explanation: "الرابط الأبطأ (Bottleneck Link) في المسار هو الذي يحدد الإنتاجية الإجمالية لعملية النقل[cite: 342, 344]." },
-      { q: "إلى أي قسم في الشبكة تنتمي 'أجهزة النهاية' (End Systems) مثل الحواسيب والهواتف؟", options: ["نواة الشبكة (Network Core)", "وسائط الاتصال", "حافة الشبكة (Network Edge)", "البروتوكولات"], correct: 2, explanation: "أنظمة النهاية (End Systems) التي تمثل الأجهزة الطرفية تقع ضمن حافة الشبكة (Network Edge)[cite: 183, 184]." },
-      { q: "أي مما يلي يُعد من نماذج الخدمة الشائعة في حافة الشبكة؟", options: ["نموذج OSI", "نموذج العميل-الخادم (Client-Server)", "تقنية OFDM", "حجب المواقع"], correct: 1, explanation: "نماذج الخدمة في حافة الشبكة تشمل نموذج العميل-الخادم (Client-Server) ونموذج النظير للنظير (Peer-to-Peer)[cite: 189]." },
-      { q: "أي نوع من الشبكات يغطي مساحة مبنى أو حرم جامعي وتتميز بسرعات عالية؟", options: ["PAN", "WAN", "LAN", "Internet"], correct: 2, explanation: "الشبكة المحلية (LAN) تغطي مبنى أو حرماً محدداً وتتميز بسرعات عالية[cite: 202]." },
-      { q: "الشبكة التي تغطي مدينة أو منطقة حضرية (MAN) يبلغ نطاقها تقريباً:", options: ["أقل من مترين", "من 5 إلى 50 كيلومتراً", "آلاف الكيلومترات", "عالمي"], correct: 1, explanation: "الشبكة الحضرية (MAN) تغطي مدينة أو منطقة حضرية تمتد من 5 إلى 50 كيلومترًا[cite: 217]." },
-      { q: "أي من الوسائط التالية يُصنف كوسيط غير موجه (Unguided)؟", options: ["كابلات النحاس", "الألياف البصرية", "الموجات اللاسلكية في الهواء", "الكابل المحوري"], correct: 2, explanation: "الوسائط غير الموجهة (Unguided) هي التي تنتقل فيها الإشارة عبر الهواء بشكل لاسلكي[cite: 234, 236]." },
-      { q: "كم يبلغ طول عنوان بروتوكول الإنترنت (IPv4)؟", options: ["16 بت", "32 بت", "64 بت", "128 بت"], correct: 1, explanation: "طول عنوان IPv4 يبلغ 32 بت (4 بايت)[cite: 1668]." },
-      { q: "كيف يتم تمثيل عنوان IPv4 عادةً لتسهيل قراءته من قبل البشر؟", options: ["بالحروف الأبجدية", "بالنظام الست عشري", "بالترقيم العشري المنقط (Dotted Decimal)", "كنص مشفر"], correct: 2, explanation: "لتسهيل القراءة، يتم تمثيل عنوان IPv4 باستخدام الترقيم العشري المنقط (Dotted Decimal Notation)[cite: 1675, 1678]." },
-      { q: "إلى كم فئة (Class) رئيسية قُسمت عناوين IPv4 قديماً لخدمة الشبكات؟", options: ["A, B فقط", "A, B, C فقط", "A, B, C, D, E", "X, Y, Z"], correct: 2, explanation: "تم تقسيم العناوين قديماً إلى فئات ثابتة تسمى Class، وهي تشمل: الصف A, B, C بالإضافة إلى الصفوف D, E[cite: 1708, 1724]." },
-      { q: "ما هو قناع الشبكة (Subnet Mask) الافتراضي للفئة C؟", options: ["255.0.0.0", "255.255.0.0", "255.255.255.0", "0.0.0.0"], correct: 2, explanation: "قناع الشبكة الافتراضي للصف C هو 255.255.255.0 (/24)[cite: 1722]." },
-      { q: "ما هي الفئة (Class) في IPv4 المخصصة للبث المتعدد (Multicast)؟", options: ["الفئة A", "الفئة C", "الفئة D", "الفئة E"], correct: 2, explanation: "الصف D (224.0.0.0 - 239.255.255.255) مخصص للبث المتعدد (Multicast) لإرسال البيانات لمجموعة محددة[cite: 1726, 1727]." },
-      { q: "ما الوظيفة الرئيسية لبروتوكول DHCP؟", options: ["منع الاختراق", "ترجمة الأسماء إلى أرقام", "توزيع عناوين IP وإعدادات الشبكة تلقائياً", "نقل الملفات عبر الإنترنت"], correct: 2, explanation: "وظيفة بروتوكول DHCP الرئيسية هي توزيع عناوين IP والإعدادات تلقائياً للأجهزة عند اتصالها بالشبكة[cite: 1970, 1972]." },
-      { q: "في عملية DORA لبروتوكول DHCP، ماذا تعني خطوة Discover (D)؟", options: ["إرسال رسالة بث (Broadcast) للبحث عن خادم DHCP متاح", "رفض العميل للعنوان المخصص", "إرسال رسالة شكر للخادم", "فصل الجهاز عن الشبكة"], correct: 0, explanation: "في خطوة Discover (الاكتشاف)، يرسل العميل رسالة Broadcast للبحث عن خادم DHCP في الشبكة[cite: 1982, 1983]." },
-      { q: "ما هو الهدف الأساسي من تقنية NAT (Network Address Translation)؟", options: ["حذف الفيروسات", "ترجمة العناوين الخاصة (Private) إلى عامة (Public) للوصول للإنترنت", "تقسيم الشبكة لعدة شبكات فرعية", "توجيه إشارات Wi-Fi"], correct: 1, explanation: "تقنية NAT تقوم بترجمة العنوان الخاص إلى عنوان عام عند الراوتر لتتمكن الأجهزة الداخلية من الاتصال بالإنترنت[cite: 1869, 1871]." },
-      { q: "ما هو نوع الإرسال الذي يوجه رسالة من مصدر واحد إلى جميع الأجهزة في الشبكة؟", options: ["Unicast", "Multicast", "Broadcast", "Anycast"], correct: 2, explanation: "الإرسال من نوع Broadcast (واحد للكل) هو إرسال من مصدر واحد إلى جميع الأجهزة في الشبكة[cite: 1911, 1912]." },
-      { q: "ما هو عنوان Loopback الافتراضي في IPv4 الذي يُستخدم لاختبار كرت الشبكة محلياً؟", options: ["192.168.1.1", "10.0.0.1", "127.0.0.1", "169.254.1.1"], correct: 2, explanation: "عنوان 127.0.0.1 هو عنوان الـ Loopback الأكثر استخداماً لاختبار كرت الشبكة محلياً ولا يخرج من الجهاز[cite: 1895, 1897]." },
-      { q: "متى يقوم نظام تشغيل ويندوز بتعيين عنوان APIPA (169.254.x.x) للجهاز تلقائياً؟", options: ["عند اختراق الجهاز", "عند نجاح الاتصال بالراوتر", "عندما يفشل في الحصول على عنوان من خادم DHCP", "عند تصفح اليوتيوب"], correct: 2, explanation: "يُستخدم عنوان APIPA عندما يفشل خادم DHCP في إعطاء عنوان للجهاز، مما يشير لوجود مشكلة في الـ DHCP[cite: 1900, 1902]." },
-      { q: "كم يبلغ طول عنوان الإصدار السادس من بروتوكول الإنترنت (IPv6)؟", options: ["32 بت", "64 بت", "128 بت", "256 بت"], correct: 2, explanation: "طول عنوان IPv6 يبلغ 128 بت (16 بايت)[cite: 2015, 2021]." },
-      { q: "ما هو التدوين المستخدم لتمثيل عنوان IPv6؟", options: ["عشري منقط", "نظام ست عشري (Hexadecimal)", "ثنائي بحت", "أحرف فقط"], correct: 1, explanation: "تمثيل عناوين IPv6 يعتمد على النظام الست عشري (Hexadecimal) مقسم بنقطتين عموديتين[cite: 2022]." },
-      { q: "ما هي إحدى الفوائد الرئيسية من تقسيم الشبكات (Subnetting)؟", options: ["تقليل حجم مجال البث (Broadcast Domain) وتقليل الازدحام", "جعل الإنترنت مجانياً", "إلغاء الحاجة لجدار الحماية", "تحويل الكابلات النحاسية لألياف ضوئية"], correct: 0, explanation: "من فوائد تقسيم الشبكات تحسين الأداء عبر تقليل حجم مجال البث وتقليل الازدحام بالإضافة لزيادة الأمان[cite: 1783, 1784, 1785]." },
-      { q: "في تقنية NAT، أي نوع يسمح لعدة أجهزة بمشاركة عنوان IP عام واحد باستخدام أرقام المنافذ للتمييز بينها؟", options: ["Static NAT", "Dynamic NAT", "PAT (Port Address Translation)", "No NAT"], correct: 2, explanation: "تقنية PAT تسمح لعدة أجهزة بمشاركة عنوان عام واحد (NAT Overloading) بالاعتماد على أرقام المنافذ، وهي الأكثر شيوعاً بالمنازل[cite: 1889, 1891, 1892]." },
-      { q: "كيف يُعرف 'مجال البث' (Broadcast Domain) في الشبكات؟", options: ["المسافة بين الراوتر والجدار الناري", "المنطقة أو النطاق الذي تصل إليه رسالة البث (Broadcast)", "النطاق الترددي للشبكة", "أقصى طول لكابل النحاس"], correct: 1, explanation: "مجال البث (Broadcast Domain) هو المنطقة التي تصل إليها رسالة البث التي ترسلها أحد الأجهزة[cite: 1921, 1922]." },
-      { q: "أي جهاز من الأجهزة التالية يقوم بإيقاف حزم البث وبالتالي يقسم مجال البث (Broadcast Domain)؟", options: ["الهاب (Hub)", "السويتش (Switch)", "الراوتر (Router)", "نقطة الوصول (AP)"], correct: 2, explanation: "الراوتر (Router) يوقف البث، لذا كل منفذ في الراوتر يعتبر مجال بث مستقل[cite: 1924, 1955]." },
-      { q: "إذا كان لديك جهاز هاب (Hub) مكون من 8 منافذ، كم عدد مجالات التصادم (Collision Domains) فيه؟", options: ["نطاق تصادم واحد فقط يشمل الجميع", "8 نطاقات تصادم", "لا توجد نطاقات تصادم", "16 نطاق تصادم"], correct: 0, explanation: "في الهاب (Hub)، تتشارك جميع المنافذ في نطاق تصادم واحد فقط (Single Collision Domain)[cite: 1936, 1949]." },
-      { q: "في أي طبقة من نموذج OSI يعمل بروتوكول TCP؟", options: ["طبقة التطبيقات", "طبقة النقل (Transport)", "طبقة الشبكة", "طبقة البيانات"], correct: 1, explanation: "بروتوكول التحكم في النقل TCP يعمل في طبقة النقل (Transport Layer)[cite: 2107, 2108]." },
-      { q: "ما هي الميزة الأساسية لبروتوكول TCP؟", options: ["سريع جداً ولكنه يضيع بعض البيانات", "يوفر اتصالاً موثوقاً يضمن وصول جميع البيانات بالترتيب", "يستخدم لترجمة الأسماء فقط", "يعمل بدون إنشاء اتصال مسبق"], correct: 1, explanation: "ميزة بروتوكول TCP الأساسية هي توفير اتصال موثوق يضمن وصول جميع البيانات إلى المستقبل بشكل صحيح وبالترتيب[cite: 2112, 2113, 2116]." },
-      { q: "كم عدد الخطوات المستخدمة لإنشاء اتصال بين الطرفين في بروتوكول TCP (المصافحة)؟", options: ["خطوة واحدة", "خطوتين", "ثلاث خطوات (Three-Way Handshake)", "أربع خطوات"], correct: 2, explanation: "يستخدم TCP عملية من ثلاث خطوات (SYN, SYN-ACK, ACK) لإنشاء الاتصال قبل نقل أي بيانات[cite: 2124, 2125]." },
-      { q: "كم عدد الخطوات المستخدمة لإنهاء اتصال TCP بشكل آمن ومستقل لكلا الطرفين؟", options: ["خطوتان", "ثلاث خطوات", "أربع خطوات (Four-Way Handshake)", "خمس خطوات"], correct: 2, explanation: "يستخدم TCP عملية من أربع خطوات لإنهاء الاتصال بشكل آمن (FIN, ACK, FIN, ACK)[cite: 2153, 2154, 2155]." },
-      { q: "ما هي الميزة الأبرز لبروتوكول UDP مقارنة ببروتوكول TCP؟", options: ["الموثوقية العالية جداً", "إعادة إرسال البيانات المفقودة", "سرعة الإرسال العالية جداً نتيجة بساطته وعدم إنشاء اتصال", "ترتيب الحزم دائماً"], correct: 2, explanation: "الميزة الرئيسية لبروتوكول UDP هي سرعة الإرسال الأعلى بكثير من TCP بسبب بساطته وعدم احتياجه لإنشاء اتصال مسبق[cite: 2213, 2214]." },
-      { q: "كم يبلغ الحجم الثابت لرأس حزمة (Header) بروتوكول UDP؟", options: ["8 بايت فقط", "20 بايت كحد أدنى", "60 بايت", "128 بايت"], correct: 0, explanation: "رأس UDP بسيط للغاية ويبلغ حجمه الثابت 8 بايت فقط، مقابل 20+ بايت للـ TCP[cite: 2225, 2226]." },
-      { q: "أي من التطبيقات التالية يُفضل دائماً استخدام بروتوكول UDP بدلاً من TCP؟", options: ["تصفح المواقع الإلكترونية", "إرسال البريد الإلكتروني", "مكالمات الفيديو والصوت (VoIP) والبث المباشر", "نقل الملفات الحساسة"], correct: 2, explanation: "تفضل تطبيقات البث الحي ومكالمات الصوت (VoIP) والفيديو استخدام UDP لأن الوقت الفعلي والسرعة أهم من ضمان وصول كل حزمة[cite: 2247, 2249, 2250]." },
-      { q: "ما هو البروتوكول الأساسي المسؤول عن نقل النصوص الفائقة وتصفح صفحات الويب؟", options: ["FTP", "SMTP", "DNS", "HTTP"], correct: 3, explanation: "بروتوكول HTTP (نقل النصوص الفائقة) هو البروتوكول الأساسي المستخدم لتصفح الويب[cite: 2263, 2265]." },
-      { q: "ما هو المنفذ الافتراضي لبروتوكول HTTPS الذي يوفر تصفحاً مشفراً وآمناً للمواقع؟", options: ["21", "53", "80", "443"], correct: 3, explanation: "يعمل بروتوكول HTTPS على المنفذ 443 بشكل افتراضي ليوفر اتصالاً آمناً ومشفراً[cite: 2314, 2315]." },
-      { q: "في بروتوكول HTTP، ما وظيفة الطريقة (Method) المُسماة POST؟", options: ["إرسال بيانات إلى الخادم (مثل النماذج والتسجيل)", "جلب بيانات للقراءة فقط", "حذف مورد من الخادم", "معرفة العمليات المدعومة"], correct: 0, explanation: "تُستخدم طريقة POST لإرسال بيانات إلى الخادم، كما في نماذج الإدخال وتسجيل الدخول[cite: 2280, 2281]." },
-      { q: "ماذا يعني رمز الحالة 404 (Not Found) الذي يُرجعه الخادم في بروتوكول HTTP؟", options: ["نجاح الطلب", "خطأ داخلي في الخادم", "المورد أو الصفحة المطلوبة غير موجودة", "الوصول ممنوع"], correct: 2, explanation: "الرمز 404 (Not Found) هو خطأ من فئة 4xx يعني أن المورد المطلوب غير موجود على الخادم[cite: 2302, 2303]." },
-      { q: "ما هو المنفذ الافتراضي المستخدم لبروتوكول DNS؟", options: ["22", "25", "53", "80"], correct: 1, explanation: "المنفذ 53 هو المنفذ الافتراضي والمهم الذي تُجرى عليه استعلامات نظام أسماء النطاقات (DNS)[cite: 2453]." },
-      { q: "ما هي الوظيفة الأساسية لنظام أسماء النطاقات (DNS)؟", options: ["ترجمة أسماء النطاقات البشرية (مثل google.com) إلى عناوين IP رقمية", "توزيع عناوين IP للأجهزة", "حماية الشبكة من الفيروسات", "تشفير البيانات في الويب"], correct: 0, explanation: "دور DNS الأساسي هو العمل كدليل هاتفي للإنترنت حيث يترجم أسماء النطاقات إلى عناوين IP لكي تتواصل الأجهزة[cite: 2345, 2351]." },
-      { q: "ما هو البروتوكول المخصص لنقل الملفات عبر الشبكات ويستخدم منفذين للتحكم والبيانات؟", options: ["DNS", "HTTP", "SMTP", "FTP"], correct: 3, explanation: "بروتوكول FTP (نقل الملفات) صُمم خصيصاً لنقل الملفات ويستخدم منفذ 21 للتحكم ومنفذ 20 للبيانات[cite: 2328, 2338]." },
-      { q: "أي بروتوكول يُستخدم للاتصال الآمن والمشفر بالخوادم عن بُعد كبديل لـ Telnet ويعمل على المنفذ 22؟", options: ["DHCP", "SSH", "POP3", "IMAP"], correct: 1, explanation: "يُتيح بروتوكول SSH الوصول الآمن المشفر للخوادم البعيدة ويعمل على المنفذ 22 ليحل محل Telnet غير الآمن[cite: 2420, 2421, 2422]." },
-      { q: "ماذا يمثل رمز الحالة 500 في استجابات بروتوكول HTTP؟", options: ["إعادة توجيه", "نجاح", "خطأ في الخادم الداخلي (Internal Server Error)", "طلب غير مصرح به"], correct: 2, explanation: "الرمز 500 ينتمي لفئة 5xx ويعني حدوث خطأ داخلي في الخادم (Internal Server Error)[cite: 2306, 2307]." },
-      { q: "ما فائدة تطبيق نظام DNSSEC في بروتوكول DNS؟", options: ["تسريع الاتصال بالإنترنت", "إضافة توقيعات رقمية لسجلات DNS لمنع التلاعب وتزوير الإجابات", "ترجمة العناوين للغة الصينية", "إخفاء عنوان IP للمستخدم"], correct: 1, explanation: "يحل DNSSEC مشكلة تهديدات تزوير DNS بإضافة توقيعات رقمية للسجلات للتحقق من أصالتها ومنع التلاعب بها[cite: 2404, 2405, 2407]." },
-      { q: "في أي طبقة من طبقات نموذج OSI يعمل جهاز الراوتر (Router) بشكل أساسي؟", options: ["الطبقة الأولى (Physical)", "الطبقة الثانية (Data Link)", "الطبقة الثالثة (Network Layer)", "الطبقة الرابعة (Transport)"], correct: 2, explanation: "يعمل الراوتر في الطبقة الثالثة (Network Layer) ويستخدم عناوين IP لاتخاذ قرارات التوجيه[cite: 2673, 2674]." },
-      { q: "ما الذي يعتمد عليه الراوتر لاتخاذ قرارات توجيه الحزم بين الشبكات؟", options: ["عناوين MAC", "عناوين IP في جدول التوجيه", "أسماء النطاقات (DNS)", "أرقام المنافذ فقط"], correct: 1, explanation: "الراوتر يبحث في جدول التوجيه ليجد المسار الأفضل بناءً على عناوين IP الخاصة بالوجهة[cite: 2705, 2715]." },
-      { q: "في مكونات الراوتر الداخلية، أين يتم حفظ الإعدادات الاحتياطية (Startup Configuration) التي لا تُمسح عند انقطاع الكهرباء؟", options: ["RAM", "NVRAM", "ROM", "Cache"], correct: 1, explanation: "تُخزن الذاكرة غير المتطايرة (NVRAM) الإعدادات الاحتياطية للراوتر والتي تبقى محفوظة حتى بعد إيقاف تشغيل الجهاز[cite: 2691]." },
-      { q: "ما هي وظيفة قائمة التحكم بالوصول (ACL) في جهاز الراوتر؟", options: ["تسريع الإنترنت", "توزيع عناوين IP", "تحديد ما يُسمح بمروره وما يُحجب من حركة البيانات كحارس بوابة", "ترجمة العناوين من خاصة لعمة"], correct: 2, explanation: "قوائم التحكم بالوصول (ACL) هي قواعد في الراوتر تُحدِّد ما يُسمح بمروره وما يُحجَب لتعزيز الأمان[cite: 2726, 2727]." },
-      { q: "في أي طبقة يعمل السويتش (Switch) لتوجيه الإطارات داخل الشبكة المحلية؟", options: ["الطبقة الأولى", "الطبقة الثانية (Data Link Layer)", "الطبقة الثالثة", "الطبقة الرابعة"], correct: 1, explanation: "بينما يعمل الراوتر في الطبقة الثالثة، يعمل السويتش في الطبقة الثانية ويستخدم عناوين MAC لتوجيه الإطارات[cite: 2675]." },
-      { q: "ما هو الجدول الذي يبنيه السويتش لمعرفة مواقع الأجهزة المتصلة بمنافذه؟", options: ["جدول التوجيه (Routing Table)", "جدول ARP", "جدول MAC (MAC Table)", "جدول NAT"], correct: 2, explanation: "يبني السويتش جدول MAC لحفظ عناوين MAC للأجهزة والمنفذ المتصلة به لكي يرسل الإطار للمنفذ الصحيح فقط[cite: 2770, 2771]." },
-      { q: "ما هو الهدف الأساسي من إنشاء الشبكات المحلية الافتراضية (VLAN) في السويتش؟", options: ["تقسيم السويتش منطقياً إلى شبكات منفصلة لزيادة الأمان والتنظيم دون أجهزة إضافية", "زيادة سرعة الإنترنت المنزلي", "دمج السويتش بالراوتر", "تحويل الإشارات السلكية إلى لاسلكية"], correct: 0, explanation: "تقنية VLAN تُتيح تقسيم السويتش الواحد إلى شبكات منفصلة منطقياً لتحقيق الأمان والتنظيم وتقليل البث[cite: 2786, 2787, 2789]." },
-      { q: "ما هي وظيفة بروتوكول STP (Spanning Tree Protocol) في شبكات السويتشات؟", options: ["زيادة سرعة النقل", "توزيع العناوين", "تشفير البيانات", "اكتشاف الحلقات الناتجة عن المسارات المكررة ومنعها بذكاء"], correct: 3, explanation: "إذا وُجِد طريقان بين سويتشَين ستحدث حلقة (Loop)، دور STP هو اكتشاف هذه الحلقات وإغلاق مسارٍ تلقائياً لمنعها[cite: 2797, 2798]." },
-      { q: "في السويتش، أي نوع من المنافذ يُستخدم للاتصال بين سويتشين بحيث يحمل بيانات شبكات VLAN متعددة في نفس الوقت؟", options: ["Access Port", "Trunk Port", "Console Port", "USB Port"], correct: 1, explanation: "يُستخدَم منفذ Trunk Port بين السويتشات لحمل بيانات VLANs متعددة في نفس الوقت[cite: 2795]." },
-      { q: "ما هو تعريف الجدار الناري (Firewall) في سياق أمن الشبكات؟", options: ["مضاد فيروسات للأجهزة فقط", "جهاز أو برنامج يراقب كل البيانات الداخلة والخارجة ويقرر ما يسمح بمروره لحماية الشبكة", "موزع لاسلكي للإنترنت", "كابل ضوئي محمي"], correct: 1, explanation: "الجدار الناري هو جهاز أو برنامج يُراقب كل البيانات الداخلة والخارجة من الشبكة ويُقرِّر ما يُسمح بمروره وما يُحجَب[cite: 2924]." },
-      { q: "ماذا تعني تقنية PoE المدعومة في السويتشات الحديثة؟", options: ["Point of Entry", "Power over Ethernet (توفير الطاقة للأجهزة عبر كابل الشبكة)", "Protocol of Encryption", "Ping on Error"], correct: 1, explanation: "تقنية PoE (Power over Ethernet) توفر الطاقة الكهربائية لأجهزة مثل الكاميرات ونقاط الوصول عبر كابل الشبكة نفسه دون الحاجة لمقبس كهربائي إضافي[cite: 2849, 2850, 3094, 3095]." },
-      { q: "ما هي منطقة DMZ في هياكل شبكات الأمان؟", options: ["منطقة لتبادل الملفات بين الموظفين", "منطقة شبكية وسطية توضع فيها الخوادم التي تحتاج للوصول من الإنترنت مع عزلها عن الشبكة الداخلية", "منطقة التخزين السحابي", "شبكة محلية افتراضية"], correct: 1, explanation: "منطقة DMZ (Demilitarized Zone) هي منطقة شبكية وسط بين الإنترنت والشبكة الداخلية تُستضيف الخوادم التي تحتاج للوصول من الإنترنت كخادم الويب[cite: 2998, 2999]." },
-      { q: "بم يتميز الجدار الناري من الجيل الجديد (NGFW) عن الجدران النارية التقليدية (Packet Filtering)؟", options: ["أرخص ثمناً", "يفحص العناوين فقط ولا يهتم بالمحتوى", "أبطأ بكثير", "يفحص المحتوى العميق ويتعرف على التطبيقات وهويات المستخدمين بغض النظر عن المنفذ"], correct: 3, explanation: "عكس التقليدية، جدار NGFW يفحص المحتوى الكامل للبيانات ويتعرف على التطبيقات والمستخدمين ويحتوي على مزايا متقدمة كفحص المحتوى المشفر[cite: 2954, 2955, 2956]." },
-      { q: "في أمن الشبكات، ما الفرق الجوهري بين نظام IDS ونظام IPS؟", options: ["IDS يراقب وينبه عند وجود هجوم فقط، بينما IPS يتدخل في مسار البيانات ويمنع الهجوم فوراً", "IDS يمنع الهجوم وIPS يراقب", "كلاهما نفس النظام بأسماء مختلفة", "يُستخدمان لتوزيع عناوين IP"], correct: 0, explanation: "يُراقب IDS ويُنبِّه عند كشف الاختراق (سلبي)، بينما يعمل IPS في مسار الحركة الفعلي (Inline) ويمنع الهجوم فوراً (نشط)[cite: 2980, 2981, 2986, 2988]." },
-      { q: "أي جهاز يجمع بين وظائف السويتش (في الطبقة الثانية) ووظائف التوجيه (الراوتر) في جهاز واحد عالي السرعة؟", options: ["Hub", "Layer 3 Switch (السويتش متعدد الطبقات)", "Firewall", "Access Point"], correct: 1, explanation: "السويتش متعدد الطبقات (Layer 3 Switch) يجمع وظائف السويتش والراوتر حيث يستطيع التوجيه بين الـ VLANs المختلفة بسرعة عالية[cite: 2803, 2805]." },
-      { q: "ماذا يفعل السويتش إذا وصله إطار وكان عنوان MAC للمستقبل غير موجود في جدول العناوين الخاص به؟", options: ["يرفض الإطار", "يُرسِل الإطار لجميع المنافذ عدا المنفذ الذي أتى منه (Flooding) ليتعلم الموقع", "يعيد توجيهه للراوتر", "يطلب من المرسل إعادته"], correct: 1, explanation: "إذا لم يعرف السويتش المنفذ الخاص بالمستقبِل، فإنه يُرسِل الإطار لجميع المنافذ (Flooding) حتى يتعلم المنفذ الصحيح عندما يرد المستهدف[cite: 2778, 2779]." },
-      { q: "في الشبكات اللاسلكية الكبيرة، ما هي وظيفة جهاز التحكم المركزي (WLC)؟", options: ["بث الإنترنت", "تخزين الملفات المركزية", "إدارة عشرات أو مئات نقاط الوصول (APs) وتحديث سياساتها من نقطة واحدة", "حماية الشبكة من الفيروسات"], correct: 2, explanation: "جهاز التحكم المركزي (WLC) يُدير جميع نقاط الوصول الخفيفة (Thin APs) من نقطة واحدة ويوفر ميزات كالتحديث الموحد والتجوال السلس[cite: 2892, 2893, 2894]." },
-      { q: "ما هو المعيار الدولي الصادر عن منظمة IEEE المخصص للشبكات المحلية اللاسلكية (WLAN)؟", options: ["802.3", "802.1Q", "802.15", "802.11"], correct: 3, explanation: "معيار IEEE 802.11 هو المعيار المخصص للشبكات المحلية اللاسلكية والذي تقوم عليه تكنولوجيا Wi-Fi[cite: 508, 547]." },
-      { q: "أي من معايير Wi-Fi التالية يُعرف تجارياً وجماهيرياً باسم 'Wi-Fi 6'؟", options: ["802.11n", "802.11ac", "802.11ax", "802.11be"], correct: 2, explanation: "المعيار IEEE 802.11ax هو ما يُعرف تجارياً باسم Wi-Fi 6 والذي صدر عام 2019[cite: 628, 2858]." },
-      { q: "ما هو البروتوكول الأمني الأحدث والأقوى لشبكات Wi-Fi والذي ظهر عام 2018 لمعالجة ثغرات الأجيال السابقة؟", options: ["WEP", "WPA", "WPA2", "WPA3"], correct: 3, explanation: "بروتوكول WPA3 هو الجيل الأحدث والأأمن من بروتوكولات حماية Wi-Fi، ويستبدل آلية PSK بـ SAE لمنع هجمات القاموس[cite: 513, 819, 821]." },
-      { q: "ماذا تعني تقنية OFDMA الثورية المستخدمة في معيار Wi-Fi 6؟", options: ["تقوية التشفير لدرجة عسكرية", "تقسيم القناة اللاسلكية لوحدات صغيرة لخدمة أجهزة متعددة في نفس الوقت وبكفاءة", "زيادة مدى البث لمئات الكيلومترات", "إلغاء التداخل مع الرادار"], correct: 1, explanation: "تقنية OFDMA في Wi-Fi 6 تُقسّم القناة إلى وحدات موارد تُخصص لمستخدمين مختلفين آنياً لتحسين الكفاءة في البيئات المزدحمة[cite: 707, 708, 709]." },
-      { q: "تقنية البلوتوث (Bluetooth) تُصنف ضمن أي نوع من الشبكات اللاسلكية؟", options: ["WLAN", "WPAN (الشبكة الشخصية)", "WMAN", "WWAN"], correct: 1, explanation: "تقنية Bluetooth تصنف كشبكة شخصية لاسلكية (WPAN) تغطي مسافة قصيرة لربط الأجهزة الشخصية القريبة[cite: 541, 543]." },
-      { q: "بم تتميز تقنية ZigBee اللاسلكية والتي تجعلها مثالية لأنظمة إنترنت الأشياء (IoT) والمنزل الذكي؟", options: ["سرعة نقل البيانات العالية جداً كالفيديو 4K", "تشفيرها غير القابل للكسر", "استهلاكها المنخفض جداً للطاقة مقارنة بالـ Wi-Fi", "استخدامها في الهواتف الخلوية فقط"], correct: 2, explanation: "صُممت تقنية ZigBee لإنترنت الأشياء (IoT) بميزة استهلاك طاقة منخفض جداً لإرسال بيانات المستشعرات لفترات طويلة[cite: 563, 564]." },
-      { q: "أي هجوم لاسلكي يعتمد على قيام المهاجم بإنشاء نقطة وصول (AP) وهمية تحمل نفس اسم شبكتك لخداعك والاتصال بها؟", options: ["SQL Injection", "Evil Twin", "DDoS", "KRACK Attack"], correct: 1, explanation: "هجوم Evil Twin يعتمد على إنشاء نقطة وصول وهمية تحمل نفس اسم SSID و MAC للشبكة الحقيقية للتنصت على المستخدمين[cite: 864, 865]." },
-      { q: "في الشبكات المؤسسية (للشركات والجامعات)، ما هو وضع المصادقة الذي يفرض استخدام اسم مستخدم وكلمة مرور خاصة لكل فرد بدلاً من كلمة مرور مشتركة؟", options: ["WPA-Personal", "WEP Open", "WPA-Enterprise (802.1X)", "WPS PIN"], correct: 2, explanation: "نظام WPA-Enterprise (باستخدام معيار 802.1X) يوفر مصادقة فردية لكل مستخدم باستخدام حساب وكلمة مرور خاصة به[cite: 801, 882, 883]." },
-      { q: "ما هي الوظيفة الأساسية لخادم RADIUS في بنية أمان الشبكات؟", options: ["منع الفيروسات", "توزيع عناوين IP", "توفير المصادقة المركزية للمستخدمين وتسجيل حركات الدخول", "تسريع التصفح"], correct: 2, explanation: "خادم RADIUS يوفر المصادقة المركزية للمستخدمين ويتكامل مع الأدلة (مثل Active Directory) ويسجل عمليات الدخول[cite: 736, 737, 739]." },
-      { q: "ما الفرق الأساسي والعملي بين تردد 2.4 GHz وتردد 5 GHz في شبكات Wi-Fi؟", options: ["2.4GHz يوفر سرعة أعلى وتداخل أقل", "5GHz يوفر سرعة أعلى وتداخل أقل لكن مداه وقدرته على اختراق الجدران أضعف", "كلاهما متطابقان بالأداء", "5GHz يعمل فقط في الخارج"], correct: 1, explanation: "نطاق 5 GHz يوفر سرعات أعلى وتداخلاً أقل، ولكن مداه أقصر وقدرته على اختراق العوائق أضعف مقارنة بتردد 2.4 GHz[cite: 692, 696, 697]." },
-      { q: "ماذا تفعل تقنية Beamforming الحديثة في نقاط الوصول (Access Points) لتحسين جودة الإشارة؟", options: ["تبث الإشارة كدائرة عشوائية", "تُوجِّه إشارة Wi-Fi مركزة نحو الجهاز المعين المستهدف بدلاً من بثها في جميع الاتجاهات", "توقف الإرسال عند عدم الاستخدام", "تدمج ترددي 2.4 و 5"], correct: 1, explanation: "تقنية Beamforming تقوم بتوجيه الإشارة اللاسلكية بشكل مركز نحو الجهاز المستقبل تحديداً لزيادة قوة الإشارة وتقليل التداخل[cite: 2905, 2906, 2907]." },
-      { q: "أي معيار فرعي من معايير Wi-Fi صُمم خصيصاً لتوفير 'تجوال سلس وسريع' (Fast Roaming) بين نقاط الوصول دون انقطاع الاتصال؟", options: ["802.11a", "802.11n", "802.11r", "802.11ac"], correct: 2, explanation: "معيار IEEE 802.11r (Fast BSS Transition) مصمم لتسريع عملية إعادة المصادقة لتوفير تجوال سريع وسلس (Roaming)[cite: 742, 744]." },
-      { q: "أي ثغرة أمنية شهيرة ومؤثرة اكتشفت عام 2017 واستهدفت آلية الـ 4-Way Handshake في بروتوكول WPA2؟", options: ["Heartbleed", "Dragonblood", "KRACK Attack", "PMKID Attack"], correct: 2, explanation: "هجوم KRACK (اكتشف عام 2017) يستغل ثغرة في مرحلة إعادة التثبيت في آلية 4-Way Handshake الخاصة بـ WPA2[cite: 817, 853, 854]." },
-      { q: "ما هو المعرّف المرئي لشبكة الـ Wi-Fi الذي يبحث عنه المستخدمون للاتصال بالشبكة؟", options: ["BSSID", "SSID", "MAC Address", "IP Address"], correct: 1, explanation: "معرّف SSID هو معرّف الشبكة المرئي (اسم الشبكة) الذي يراه المستخدمون ويبحثون عنه للاتصال[cite: 582, 2845]." },
-      { q: "في نطاق 2.4 GHz اللاسلكي، أي من القنوات التالية تعتبر 'غير متداخلة' ويُنصح باستخدامها لتقليل التشويش في معظم دول العالم؟", options: ["1، 2، 3", "2، 4، 6", "1، 6، 11", "5، 10، 14"], correct: 2, explanation: "القنوات 1 و 6 و 11 في نطاق 2.4 GHz هي قنوات غير متداخلة، حيث تتباعد بما يكفي لتجنب التداخل بينها[cite: 690, 691]." },
-      { q: "ما هي وظيفة بروتوكول CAPWAP في بيئة الشبكات اللاسلكية المدارة مركزياً؟", options: ["تشفير الملفات", "إنشاء نفق آمن لنقل التحكم والبيانات بين المتحكم المركزي (WLC) ونقاط الوصول الخفيفة (Thin APs)", "بث الفيديو", "زيادة النطاق الترددي"], correct: 1, explanation: "بروتوكول CAPWAP هو البروتوكول الذي ينشئ نفقاً لإرسال معلومات التحكم وحزم البيانات بين المتحكم (WLC) والـ APs[cite: 3194, 3195]." },
-      { q: "ما هو التوجيه (Routing) في سياق شبكات بروتوكول الإنترنت (IP)؟", options: ["تشفير الرسائل لضمان أمانها", "العملية الإدارية لحساب وتحديد المسار الأمثل لنقل الحزم من المصدر للوجهة عبر الشبكة", "تقوية إشارة الواي فاي", "برمجة السويتشات فقط"], correct: 1, explanation: "التوجيه (Routing) هو العملية الإدارية التي تُحدد المسار الأمثل لنقل حزم البيانات عبر عقد وسيطة من المصدر للوجهة[cite: 1079]." },
-      { q: "أين تتم عملية إعادة التوجيه (Forwarding) الفعلية والسريعة للحزم في بنية الموجّه (الراوتر) الحديث؟", options: ["في مستوى التحكم (Control Plane)", "في مستوى البيانات (Data Plane) بواسطة دوائر مخصصة", "في شاشة الإعدادات", "خارج الراوتر"], correct: 1, explanation: "عملية إعادة التوجيه (Forwarding) تتم في مستوى البيانات (Data Plane) وتُنفذ غالباً بواسطة دوائر متخصصة (ASIC) لسرعة فائقة[cite: 1097, 1098, 1101]." },
-      { q: "كيف يتخذ الراوتر قرار التوجيه إذا وجد أن عنوان الوجهة يتطابق مع مسارين مختلفين في جدول التوجيه؟", options: ["يختار المسار ذو القناع الأطول، أي الأكثر تحديداً للوجهة (Longest Prefix Match)", "يختار المسار الأقدم", "يرمي الحزمة فوراً", "يختار المسار الأقصر طولاً في النص"], correct: 0, explanation: "عند وجود مسارات متعددة مطابقة، يختار الراوتر التطابق الأطول (Longest Prefix Match) لأنه الأكثر تحديداً وعمقاً للوجهة[cite: 1121, 1231, 1233]." },
-      { q: "ما المقصود بأسلوب التوجيه الثابت (Static Routing)؟", options: ["توجيه يتم تلقائياً بذكاء صناعي", "مسارات يُدخلها مسؤول الشبكة يدوياً في الموجه ولا تتكيف تلقائياً مع أعطال الشبكة", "توجيه يستخدم للبث اللاسلكي", "مسارات يكتشفها الراوتر بنفسه"], correct: 1, explanation: "التوجيه الثابت يعتمد على مسارات يُدخلها المسؤول يدوياً، ولا تتغير تلقائياً في حال تعطل أحد الروابط في الشبكة[cite: 1200, 1201, 1212]." },
-      { q: "أي بروتوكولات التوجيه التالية يُصنف كبروتوكول Distance Vector ويعتمد على 'عدد القفزات' (Hop Count) بحد أقصى 15 قفزة؟", options: ["OSPF", "BGP", "RIP", "IS-IS"], correct: 2, explanation: "بروتوكول RIP هو من نوع Distance Vector ويعتمد على عدد القفزات كمقياس، والحد الأقصى للقفزات فيه هو 15 قفزة[cite: 1290, 1291]." },
-      { q: "ما هو بروتوكول التوجيه الوحيد المُستخدم عملياً لتبادل معلومات التوجيه بين الأنظمة المستقلة (AS) الكبرى في الإنترنت؟", options: ["OSPF", "EIGRP", "RIP", "BGP-4"], correct: 3, explanation: "بروتوكول BGP-4 هو البروتوكول الخارجي (EGP) الوحيد المستخدم لتبادل المسارات بين الأنظمة المستقلة لتشكيل بنية الإنترنت[cite: 1227, 1228, 1364]." },
-      { q: "ما المقصود بقيمة 'المسافة الإدارية' (Administrative Distance - AD) في أجهزة التوجيه؟", options: ["طول الكابل السلكي لشبكة النطاق العريض", "السرعة بوحدة ميجابت", "قيمة رقمية تُحدد مدى موثوقية وأفضلية مصدر معلومة التوجيه", "عدد الراوترات في المسار"], correct: 2, explanation: "المسافة الإدارية (AD) هي قيمة تُحدد مصداقية مصدر التوجيه، وتُستخدم للمفاضلة عند ورود مسارات لنفس الوجهة من مصادر مختلفة[cite: 1155, 1156]." },
-      { q: "إذا توفر للراوتر مساران لنفس الوجهة بالضبط، أحدهما قادم عبر OSPF (AD=110) والآخر عبر EIGRP (AD=90)، أيهما سيُفضل إضافته لجدول التوجيه؟", options: ["مسار OSPF لأن قيمته أعلى", "مسار EIGRP لأن القيمة الأقل تعني أولوية وموثوقية أعلى", "سيجمع بينهما لتوزيع الحمل", "سيرفض كلاهما"], correct: 1, explanation: "المسار ذو المسافة الإدارية (AD) الأصغر يُفضل دائماً، لذا سيُفضل مسار EIGRP (90) على OSPF (110)[cite: 1158]." },
-      { q: "ما هي الخوارزمية الرياضية المعقدة التي يستخدمها بروتوكول OSPF لحساب أقصر مسار لكل وجهة استناداً لجدول حالة الروابط (LSDB)؟", options: ["خوارزمية DUAL", "خوارزمية Bellman-Ford", "خوارزمية Dijkstra (SPF)", "خوارزمية RSA"], correct: 2, explanation: "بروتوكول OSPF يعتمد في عمله على خوارزمية Dijkstra (المعروفة بـ Shortest Path First - SPF) لحساب المسارات[cite: 1307, 1313]." },
-      { q: "في بروتوكول EIGRP، ماذا يُسمى المسار الاحتياطي الجاهز للاستخدام الفوري (خالي من الحلقات) والذي يُلغي الحاجة لإعادة حساب المسار عند تعطل المسار الرئيسي؟", options: ["Successor", "Designated Router", "Feasible Successor (FS)", "Backup Router"], correct: 2, explanation: "الـ Feasible Successor (FS) هو مسار احتياطي جاهز يُحقق شرط الخلو من الحلقات، ويُستخدم فوراً لتحقيق تقارب سريع جداً[cite: 1347]." },
-      { q: "ما هو الهدف والوظيفة من تقنية 'تجميع العناوين' (Route Summarization) في أجهزة التوجيه؟", options: ["تشفير العناوين لاخفائها", "دمج وتلخيص عدة شبكات فرعية متجاورة في إعلان موحد لتقليل حجم جداول التوجيه وتحسين أداء الراوتر", "تجزئة الشبكة لزيادة عدد الإعلانات", "منع رسائل البث"], correct: 1, explanation: "عملية Route Summarization تدمج مسارات متجاورة لتقليل حجم جدول التوجيه وتقليل الرسائل المتبادلة بين الموجهات[cite: 1169, 1171, 1251, 1252]." },
-      { q: "يُصنف بروتوكول الإنترنت BGP ضمن أي نوع من أنواع بروتوكولات التوجيه من حيث الخوارزمية والمقياس؟", options: ["Distance Vector", "Link State", "Hybrid", "Path Vector (مسار الأنظمة المستقلة)"], correct: 3, explanation: "يصنف BGP كبروتوكول Path Vector، حيث يرسل قائمة كاملة بالأنظمة المستقلة (AS Path) التي تمر بها المسارات لمنع الحلقات[cite: 1278, 1366]." },
-      { q: "ما هي التقنية الحديثة التي تعتمد فكرتها على 'فصل' مستوى التحكم المركزي (Control Plane) عن مستوى أجهزة نقل البيانات (Data Plane)؟", options: ["MPLS", "VLAN", "الشبكات المعرفة بالبرمجيات (SDN)", "Subnetting"], correct: 2, explanation: "مفهوم SDN يعتمد على بنية شبكية تفصل Control Plane عن Data Plane ليكون التحكم مركزياً عبر متحكم (SDN Controller)[cite: 1454, 1455, 3112]." },
-      { q: "في تقنية التوجيه عالية الأداء MPLS، بناءً على ماذا يتم توجيه حزم البيانات عبر عقد الشبكة؟", options: ["بناءً على ترويسة TCP", "بناءً على فحص عنوان IP الوجهة في كل موجه بشكل معقد", "بناءً على تسميات قصيرة (Labels) تُضاف للحزمة عند الدخول للشبكة", "بناءً على عناوين MAC فقط"], correct: 2, explanation: "في تقنية MPLS، يُوجه المرور بناءً على تسمية رقمية (Label) تُضاف للحزمة دون الحاجة لفحص عنوان IP كاملاً في كل موجه، لتسريع العملية[cite: 1425, 1426]." },
-      { q: "كيف تُكتب صيغة 'المسار الافتراضي' (Default Route) في شبكات IPv4 والذي يُستخدم كملاذ أخير عندما لا يتوفر مسار صريح للوجهة؟", options: ["255.255.255.255/32", "0.0.0.0/0", "127.0.0.1/8", "192.168.1.1/24"], correct: 1, explanation: "المسار الافتراضي (Default Route) في IPv4 يمثل بالصيغة 0.0.0.0/0، ويتطابق مع أي عنوان إذا غابت المسارات المحددة الأخرى[cite: 1131, 1247]." },
-      { q: "أي من بروتوكولات التوجيه الداخلية التالية يتميز بكونه 'الأسرع في التقارب' (Convergence) عند حدوث عطل بفضل آلية المسارات الاحتياطية الاستباقية؟", options: ["RIP v2", "EIGRP", "OSPF", "BGP"], correct: 1, explanation: "بفضل آلية DUAL ومسار Feasible Successor الجاهز للاستخدام الفوري، يُعتبر EIGRP الأسرع تقارباً (Convergence) بين البروتوكولات[cite: 1281, 1400]." },
-      { q: "ما هي الفائدة الأمنية العظمى من استخدام البنية التحتية RPKI لتعزيز أمان بروتوكول BGP؟", options: ["تشفير كامل لجميع حركة التصفح بالإنترنت", "إيقاف الفيروسات", "إصدار شهادات أمان رقمية للتحقق من أن المُعلن يمتلك فعلياً مجموعة عناوين IP لمنع اختطاف مسارات الإنترنت (BGP Hijacking)", "إلغاء الحاجة لبروتوكول TCP"], correct: 2, explanation: "RPKI يربط كل مسار بشهادة رقمية للمالك ليمنع هجمات BGP Hijacking عبر تقنية Route Origin Validation للتحقق الآلي من الصلاحية[cite: 1419, 1421, 1422]." }
+      // القسم الأول: مقدمة في قواعد البيانات
+      { q: "ما هو التعريف الدقيق للبيانات (data)؟", options: ["معلومات تمت معالجتها", "حقائق مجردة وأرقام غير معالجة", "نتائج التقارير النهائية", "نظام تشغيل الحواسيب"], correct: 1, explanation: "البيانات هي الحقائق والأرقام المجردة التي ليس لها معنى واضح قبل المعالجة." },
+      { q: "ما الفرق الأساسي بين البيانات والمعلومات؟", options: ["لا يوجد فرق", "البيانات هي المعالجة، والمعلومات هي المدخلات", "البيانات هي المادة الخام، والمعلومات هي نتاج معالجة تلك البيانات", "المعلومات تخزن في قواعد البيانات والبيانات في الملفات"], correct: 2, explanation: "المعلومات هي بيانات تمت معالجتها وتفسيرها لتصبح ذات معنى وقيمة." },
+      { q: "ماذا يعني مصطلح dbms؟", options: ["نظام تشغيل البيانات", "نظام إدارة قواعد البيانات", "لغة برمجة الويب", "القرص الصلب"], correct: 1, explanation: "يشير إلى نظام إدارة قواعد البيانات (database management system) وهو البرنامج المسؤول عن إدارة وإنشاء قواعد البيانات." },
+      { q: "أي مما يلي يُعد من عيوب أنظمة الملفات التقليدية؟", options: ["عدم تكرار البيانات", "تكامل البيانات دائمًا", "تكرار البيانات وعدم اتساقها", "سهولة مشاركة البيانات"], correct: 2, explanation: "في أنظمة الملفات التقليدية، يتم حفظ البيانات في ملفات منفصلة مما يؤدي إلى تكرارها واحتمالية تعارضها." },
+      { q: "ما هو النموذج الأكثر شيوعًا واستخدامًا لتنظيم قواعد البيانات اليوم؟", options: ["النموذج الهرمي", "النموذج الشبكي", "النموذج العلائقي", "النموذج النصي"], correct: 2, explanation: "النموذج العلائقي (relational model) الذي يعتمد على الجداول هو الأكثر استخدامًا حاليًا." },
+      { q: "ما هو دور مدير قاعدة البيانات (dba)؟", options: ["إصلاح أعطال الشاشة", "تصميم واجهات المستخدم فقط", "إدارة وتأمين قاعدة البيانات ومنح الصلاحيات", "كتابة تقارير الإدارة المالية"], correct: 2, explanation: "مسؤول قاعدة البيانات (dba) يتولى حماية، صيانة، مراقبة، ومنح الصلاحيات في النظام." },
+      { q: "ما هي البيانات الوصفية (metadata)؟", options: ["البيانات المحذوفة", "بيانات تصف بيانات أخرى كأنواع الحقول وطولها", "البيانات المشفرة", "بيانات النظام التشغيلي"], correct: 1, explanation: "الـ metadata هي بيانات تصف خصائص وهياكل البيانات الموجودة في قاعدة البيانات." },
+      { q: "أي من النماذج التالية يمثل البيانات على شكل شجرة متفرعة (أب وابن)؟", options: ["النموذج العلائقي", "النموذج الهرمي", "نموذج الكائنات", "النموذج الشبكي"], correct: 1, explanation: "النموذج الهرمي ينظم البيانات في هيكل يشبه الشجرة حيث يكون لكل سجل أب واحد فقط." },
+      { q: "كيف ساهمت قواعد البيانات في حل مشكلة 'أمن البيانات' الموجودة في الملفات التقليدية؟", options: ["بإلغاء كلمات المرور", "بوضعها في ملف نصي واحد", "بتوفير نظام صلاحيات وصول مركزي مشفر", "بجعل البيانات متاحة للجميع"], correct: 2, explanation: "الـ dbms يوفر آليات أمنية مركزية لمنع الوصول غير المصرح به للبيانات." },
+      { q: "أي مما يلي يمثل قاعدة بيانات غير علائقية (nosql)؟", options: ["oracle", "mysql", "mongodb", "sql server"], correct: 2, explanation: "تعتبر mongodb من أشهر أنظمة قواعد البيانات غير العلائقية التي لا تعتمد على الجداول التقليدية." },
+      { q: "في قواعد البيانات، ماذا يُقصد بـ 'استقلالية البيانات'؟", options: ["فصل البرامج والتطبيقات عن هيكل تخزين البيانات", "الاعتماد الكلي على البرامج للوصول للبيانات", "حذف البيانات غير المستخدمة", "دمج واجهة المستخدم مع البيانات"], correct: 0, explanation: "استقلالية البيانات تعني إمكانية تغيير هيكل البيانات دون الحاجة لتغيير البرامج والتطبيقات التي تستخدمها." },
+      { q: "لماذا نستخدم لغة sql؟", options: ["لتصميم الصور", "لإدارة واسترجاع البيانات من قواعد البيانات العلائقية", "لكتابة ملفات نصية", "لتشغيل الحاسوب"], correct: 1, explanation: "لغة sql هي اللغة القياسية للتفاعل مع قواعد البيانات العلائقية." },
+      { q: "من هو المستخدم النهائي (end user) لقاعدة البيانات؟", options: ["المبرمج", "مدير النظام", "الشخص الذي يتفاعل مع قاعدة البيانات عبر التطبيقات لاستخراج المعلومات", "مصمم قاعدة البيانات"], correct: 2, explanation: "المستخدم النهائي هو من يستخدم التطبيقات المبنية على قاعدة البيانات لإنجاز عمله اليومي." },
+      { q: "ما هي الفائدة من تقليل 'تكرار البيانات' (data redundancy)؟", options: ["زيادة المساحة التخزينية", "توفير المساحة التخزينية ومنع تعارض المعلومات", "إبطاء النظام", "زيادة تكلفة النظام"], correct: 1, explanation: "تقليل التكرار يحافظ على اتساق البيانات ويوفر مساحات التخزين في الخوادم." },
+      { q: "في أي عقد ظهرت مفاهيم قواعد البيانات العلائقية لأول مرة؟", options: ["الخمسينيات", "السبعينيات", "التسعينيات", "الألفية الجديدة"], correct: 1, explanation: "طرح إدغار كود نموذج قواعد البيانات العلائقية في أوائل السبعينيات." },
+      
+      // القسم الثاني: تصميم قواعد البيانات
+      { q: "ما هي المرحلة الأولى في دورة حياة تطوير قواعد البيانات (sdlc)؟", options: ["التصميم المنطقي", "التصميم المادي", "جمع وتحليل المتطلبات", "الاختبار"], correct: 2, explanation: "فهم احتياجات المؤسسة وجمع المتطلبات هو الخطوة الأساسية الأولى قبل أي تصميم." },
+      { q: "ما هو مخطط الكينونة والعلاقة (erd)؟", options: ["كود برمجي", "أداة لتمثيل التصميم المادي", "رسم تخطيطي يوضح الكينونات وخصائصها والعلاقات بينها", "أداة لإنشاء واجهة المستخدم"], correct: 2, explanation: "مخطط erd يُستخدم في مرحلة التصميم المفاهيمي لرسم العلاقات بين مكونات النظام." },
+      { q: "ماذا يمثل المستطيل في مخطط erd؟", options: ["صفة (attribute)", "علاقة (relationship)", "مفتاح أساسي", "كينونة (entity)"], correct: 3, explanation: "في مخططات erd، يمثل المستطيل الكينونة (الجدول في المستقبل)." },
+      { q: "ما هو المفتاح الأساسي (primary key)؟", options: ["حقل يقبل القيم الفارغة", "حقل يحدد كل سجل في الجدول بشكل فريد ولا يتكرر", "حقل يُستخدم للربط بين جدولين فقط", "صفة متعددة القيم"], correct: 1, explanation: "المفتاح الأساسي هو صفة أو مجموعة صفات تميز كل سجل عن غيره بشكل قاطع." },
+      { q: "ما وظيفة المفتاح الأجنبي (foreign key)؟", options: ["منع إدخال الأرقام", "حذف السجلات المتكررة", "الربط بين جدولين وتكوين علاقة بينهما", "تسريع البحث فقط"], correct: 2, explanation: "المفتاح الأجنبي هو حقل في جدول يمثل مفتاحاً أساسياً في جدول آخر، لإنشاء العلاقات." },
+      { q: "أي نوع من العلاقات يربط بين جدول 'المواطن' وجدول 'جواز السفر'؟", options: ["علاقة واحد إلى واحد (1:1)", "علاقة واحد إلى متعدد (1:n)", "علاقة متعدد إلى متعدد (m:n)", "لا توجد علاقة"], correct: 0, explanation: "كل مواطن له جواز سفر واحد، وكل جواز سفر يعود لمواطن واحد." },
+      { q: "أي نوع من العلاقات يربط بين جدول 'الطالب' وجدول 'المقرر الدراسي'؟", options: ["واحد إلى واحد", "واحد إلى متعدد", "متعدد إلى متعدد (m:n)", "علاقة ذاتية"], correct: 2, explanation: "الطالب يمكن أن يسجل في عدة مقررات، والمقرر يضم عدة طلاب، مما يشكل علاقة m:n." },
+      { q: "كيف يتم تحويل علاقة (متعدد إلى متعدد) عند تحويل التصميم إلى جداول؟", options: ["عبر دمج الجدولين", "عبر إضافة مفتاح أجنبي لأحد الجدولين", "عبر إنشاء جدول وسيط (جدول كسر العلاقة)", "لا يمكن تحويلها"], correct: 2, explanation: "لتحويل علاقة m:n، نقوم بإنشاء جدول ثالث يأخذ المفاتيح الأساسية من الجدولين كمفاتيح أجنبية." },
+      { q: "ما هي الصفة المشتقة (derived attribute)؟", options: ["صفة لا يمكن معرفة قيمتها", "صفة يتم حسابها من صفات أخرى مثل العمر من تاريخ الميلاد", "صفة تتكون من عدة أجزاء", "المفتاح الأساسي"], correct: 1, explanation: "الصفة المشتقة تُحسب برمجياً بناءً على بيانات أخرى، وتمثل بخط متقطع في erd." },
+      { q: "ما الهدف من عملية التطبيع (normalization)؟", options: ["تشفير البيانات", "زيادة التكرار", "تقليل تكرار البيانات وتجنب مشاكل الإضافة والتحديث والحذف", "تصميم الواجهات الرسومية"], correct: 2, explanation: "التطبيع هي عملية تنظيم الجداول لتقليل التكرار وضمان سلامة البيانات." },
+      { q: "متى نعتبر أن الجدول في 'الصيغة الطبيعية الأولى' (1nf)؟", options: ["عندما يحتوي على مفتاح أجنبي", "عندما تكون كل خلية تحتوي على قيمة واحدة غير مجزأة (atomic)", "عندما يحتوي على بيانات متكررة", "عندما يكون الجدول فارغاً"], correct: 1, explanation: "الشرط الأساسي لـ 1nf هو خلو الجدول من الحقول متعددة القيم والمجموعات المتكررة." },
+      { q: "ما هي 'الصيغة الطبيعية الثانية' (2nf)؟", options: ["أن يكون في 1nf مع ارتباط جميع الحقول بالمفتاح الأساسي بالكامل", "تشفير الجدول", "حذف جميع المفاتيح", "دمج كل الجداول"], correct: 0, explanation: "يتحقق 2nf إذا كان في 1nf ولا يوجد اعتماد جزئي على المفتاح الأساسي المركب." },
+      { q: "ماذا يقصد بشذوذ الحذف (deletion anomaly)؟", options: ["عدم القدرة على حفظ البيانات", "حذف بيانات مهمة بالخطأ نتيجة حذف بيانات أخرى مرتبطة بها في نفس السجل", "سرعة عملية الحذف", "منع المستخدم من الحذف"], correct: 1, explanation: "شذوذ الحذف يحدث في الجداول غير المطبعة حيث يؤدي حذف معلومة إلى فقدان معلومات أخرى لا علاقة لها بها." },
+      { q: "ما هي الصفة المركبة (composite attribute)؟", options: ["صفة فريدة للجدول", "صفة رياضية", "صفة يمكن تقسيمها لأجزاء أصغر مثل الاسم (أول، أوسط، أخير)", "صفة فارغة"], correct: 2, explanation: "الصفة المركبة تتكون من عدة مكونات فرعية ذات معنى مستقل." },
+      { q: "أين يتم تحديد أنواع البيانات (int, varchar) للمتغيرات؟", options: ["في مرحلة التصميم المفاهيمي", "في مرحلة جمع المتطلبات", "في مرحلة التصميم المنطقي والمادي", "لا داعي لتحديدها"], correct: 2, explanation: "يتم ترجمة الهياكل وتحديد أنواع البيانات المحددة في التصميم المادي المتوافق مع الـ dbms." },
+      { q: "إذا كان جدول يحتوي على حقل 'رقم الهاتف' الذي قد يحتوي على أكثر من رقم لنفس الشخص، فهذا يكسر قاعدة:", options: ["1nf", "2nf", "3nf", "4nf"], correct: 0, explanation: "حقل متعدد القيم يكسر قاعدة الصيغة الطبيعية الأولى 1nf." },
+      { q: "الاعتماد المتعدي (transitive dependency) يجب إزالته للوصول إلى:", options: ["1nf", "2nf", "الصيغة الطبيعية الثالثة (3nf)", "المفتاح الأساسي"], correct: 2, explanation: "الصيغة الثالثة 3nf تتطلب إزالة أي اعتماد لحقل غير مفتاحي على حقل آخر غير مفتاحي." },
+
+      // القسم الثالث: لغة الاستعلام البنيوية SQL
+      { q: "ما هي فئة أوامر sql المسؤولة عن إنشاء الجداول وتعديل هيكلها؟", options: ["dml", "dcl", "tcl", "ddl"], correct: 3, explanation: "تُستخدم لغة تعريف البيانات (ddl) لإنشاء الكائنات في قاعدة البيانات (create, alter, drop)." },
+      { q: "أي أمر يُستخدم لاسترجاع البيانات وعرضها من الجداول؟", options: ["update", "insert", "select", "delete"], correct: 2, explanation: "الأمر select يُستخدم للبحث واسترجاع البيانات وهو من فئة dml." },
+      { q: "أي من الأوامر التالية يُعد من فئة dml (لغة معالجة البيانات)؟", options: ["create", "grant", "insert", "drop"], correct: 2, explanation: "فئة dml تتضمن أوامر معالجة البيانات مثل insert, update, delete." },
+      { q: "لحذف جدول 'الطلاب' بأكمله من قاعدة البيانات نهائياً، نستخدم:", options: ["delete from students", "drop table students", "remove table students", "truncate students"], correct: 1, explanation: "الأمر drop table يحذف الجدول وهيكله بالكامل من قاعدة البيانات (أمر ddl)." },
+      { q: "لحذف جميع البيانات من جدول دون حذف هيكله الداخلي، نستخدم أمر dml التالي:", options: ["drop", "delete", "remove", "clear"], correct: 1, explanation: "أمر delete يقوم بحذف السجلات مع الإبقاء على هيكل الجدول." },
+      { q: "عند استخدام الأمر select، ما هي الكلمة المفتاحية التي تستخدم لترشيح وتحديد شروط البحث؟", options: ["order by", "where", "group by", "from"], correct: 1, explanation: "تُستخدم جملة where لتطبيق شروط محددة على السجلات المسترجعة." },
+      { q: "لترتيب النتائج المسترجعة تنازلياً، نضيف للعبارة order by الكلمة:", options: ["asc", "desc", "down", "sort"], correct: 1, explanation: "الكلمة desc (descending) تُستخدم للترتيب التنازلي." },
+      { q: "ما هو الرمز الذي يُستخدم في sql للإشارة إلى 'جميع الحقول' في أمر select؟", options: ["%", "#", "*", "@"], correct: 2, explanation: "علامة النجمة (*) في استعلام select تعني جلب كافة أعمدة الجدول." },
+      { q: "لإضافة عمود جديد لجدول موجود، نستخدم الأمر:", options: ["add column", "insert into", "alter table", "update table"], correct: 2, explanation: "أمر alter table يُستخدم لتعديل هيكل الجدول، مثل إضافة أو حذف أعمدة." },
+      { q: "ما وظيفة الدالة count() في sql؟", options: ["جمع القيم", "حساب المتوسط", "إيجاد أعلى قيمة", "عدّ السجلات التي تحقق شرطاً معيناً"], correct: 3, explanation: "الدالة count تقوم بعد الصفوف الناتجة من الاستعلام." },
+      { q: "أي معامل يُستخدم للبحث عن نمط نصي معين (مثل الأسماء التي تبدأ بحرف 'أ')؟", options: ["in", "between", "like", "match"], correct: 2, explanation: "المعامل like يُستخدم للبحث عن أنماط نصية معينة باستخدام علامة %." },
+      { q: "كيف يتم ربط جدولين لاسترجاع بيانات مشتركة بينهما بناءً على حقل متطابق؟", options: ["باستخدام union", "باستخدام أمر join", "لا يمكن الربط", "باستخدام order by"], correct: 1, explanation: "جملة join تُستخدم للربط بين الجداول بناءً على الحقول المشتركة (المفاتيح)." },
+      { q: "ماذا يفعل الأمر update في قاعدة البيانات؟", options: ["إنشاء جدول جديد", "تعديل وتحديث بيانات السجلات الموجودة مسبقاً", "حذف قاعدة البيانات", "منح الصلاحيات للمستخدمين"], correct: 1, explanation: "أمر update يستخدم لتغيير قيم حقول معينة داخل سجلات موجودة بناءً على شرط." },
+      { q: "إذا أردت استرجاع الأسماء الفريدة فقط دون تكرار من عمود 'المدينة'، تستخدم الكلمة:", options: ["unique", "distinct", "single", "only"], correct: 1, explanation: "الكلمة distinct تُستخدم بعد select لمنع تكرار القيم في نتائج الاستعلام." },
+      { q: "ما هي أوامر التحكم بالبيانات (dcl)؟", options: ["select, insert", "create, drop", "grant, revoke", "commit, rollback"], correct: 2, explanation: "أوامر dcl مسؤولة عن الصلاحيات وتتضمن منح (grant) وسحب (revoke) الصلاحيات." },
+      { q: "لإدخال سجل جديد في جدول نستخدم العبارة:", options: ["add to", "insert into", "put in", "create row"], correct: 1, explanation: "العبارة القياسية لإضافة بيانات جديدة هي insert into متبوعة باسم الجدول." },
+      { q: "أي دالة تستخدم لحساب مجموع القيم الرقمية في عمود معين؟", options: ["max()", "avg()", "sum()", "count()"], correct: 2, explanation: "الدالة sum() تقوم بجمع القيم الرقمية الموجودة في العمود المحدد." },
+      { q: "المعامل between في sql يُستخدم من أجل:", options: ["البحث عن الكلمات المتشابهة", "الربط بين جدولين", "تحديد نطاق بين قيمتين (مثل من تاريخ إلى تاريخ)", "ترتيب البيانات"], correct: 2, explanation: "يُستخدم between للبحث ضمن نطاق محدد من القيم كالأرقام أو التواريخ." },
+      { q: "عند استخدام update، ماذا يحدث إذا نسينا كتابة جملة where؟", options: ["يفشل الأمر ولا يتنفذ", "يتم تحديث أول سجل فقط", "يتم تحديث جميع السجلات في الجدول", "يتم حذف الجدول"], correct: 2, explanation: "بدون شرط where، سيطبق التحديث على كافة السجلات، وهو خطأ شائع وخطير." },
+      { q: "لجمع البيانات المتشابهة معاً في مجموعات لتطبيق دوال تجميعية عليها، نستخدم:", options: ["order by", "group by", "having", "join"], correct: 1, explanation: "جملة group by تستخدم لتجميع الصفوف التي تملك قيماً متشابهة في عمود معين." },
+
+      // القسم الرابع: إنشاء وإدارة قواعد البيانات
+      { q: "أي من الأنظمة التالية يعتبر نظام إدارة قواعد بيانات علائقي (rdbms)؟", options: ["microsoft word", "oracle", "photoshop", "linux"], correct: 1, explanation: "oracle هو أحد أقوى وأشهر أنظمة إدارة قواعد البيانات العلائقية التجارية." },
+      { q: "في إدارة قواعد البيانات، ما معنى 'النسخ الاحتياطي الكامل' (full backup)؟", options: ["نسخ التعديلات الأخيرة فقط", "نسخ جزء من الجداول", "نسخ قاعدة البيانات بأكملها في وقت محدد", "نقل البيانات للخادم"], correct: 2, explanation: "النسخ الكامل يعني أخذ صورة متكاملة عن قاعدة البيانات بجميع محتوياتها." },
+      { q: "ما هو النسخ الاحتياطي التزايدي (incremental backup)؟", options: ["نسخ كل شيء يومياً", "نسخ البيانات التي تغيرت فقط منذ آخر عملية نسخ احتياطي (سواء كامل أو تزايدي)", "نسخ هيكل الجداول دون البيانات", "تشفير البيانات"], correct: 1, explanation: "النسخ التزايدي يوفر المساحة والوقت بنسخ التعديلات الجديدة فقط." },
+      { q: "لماذا نستخدم 'الفهارس' (indexes) في الجداول؟", options: ["لتشفير الجدول", "لتسريع عمليات البحث واسترجاع البيانات", "لإنقاص مساحة التخزين", "لتلوين البيانات"], correct: 1, explanation: "الفهرس يشبه فهرس الكتاب، يسرع عملية إيجاد السجلات بشكل كبير جداً." },
+      { q: "ما هي العيوب المحتملة للإكثار من وضع الفهارس (indexes) في الجدول؟", options: ["بطء عمليات الإدخال والتعديل (insert, update)", "بطء عملية البحث", "فقدان البيانات", "لا يوجد عيوب"], correct: 0, explanation: "عند كل عملية إضافة أو تعديل، يجب تحديث الفهارس، مما يستهلك موارد ويبطئ العملية." },
+      { q: "في مفاهيم قواعد البيانات، ماذا تمثل المعاملة (transaction)؟", options: ["نقل الأموال للبنك", "مجموعة من العمليات المنطقية التي يجب أن تُنفذ إما كاملةً أو تُرفض كاملةً", "إنشاء جدول جديد", "عملية حذف مستخدم"], correct: 1, explanation: "المعاملة هي وحدة عمل لا تقبل التجزئة، مثل تحويل رصيد من حساب لآخر." },
+      { q: "ماذا يقصد بخاصية 'الذرية' (atomicity) في خصائص acid للمعامَلات؟", options: ["أن البيانات صغيرة الحجم", "أن المعاملة تنفذ كلها بنجاح، أو يتم إلغاؤها بالكامل كأنها لم تكن", "فصل الجداول عن بعضها", "منع المستخدمين من الدخول"], correct: 1, explanation: "الذرية تضمن عدم ترك قاعدة البيانات في حالة غير مكتملة عند حدوث عطل." },
+      { q: "أي أمر يستخدم لتثبيت وحفظ المعاملة (transaction) بشكل دائم في قاعدة البيانات؟", options: ["save", "done", "commit", "rollback"], correct: 2, explanation: "أمر commit يخبر النظام بأن المعاملة نجحت ويجب حفظ التغييرات نهائياً." },
+      { q: "إذا حدث خطأ أثناء المعاملة، ما الأمر المستخدم للتراجع وإلغاء التغييرات؟", options: ["undo", "exit", "rollback", "delete"], correct: 2, explanation: "أمر rollback يلغي كافة التغييرات التي تمت منذ بداية المعاملة." },
+      { q: "ماذا تعني خاصية 'العزل' (isolation) في خصائص acid؟", options: ["تشفير البيانات", "منع التعديلات المتزامنة من التداخل والتأثير على بعضها البعض", "فصل الخوادم في غرف مختلفة", "أخذ نسخة احتياطية"], correct: 1, explanation: "العزل يضمن أن كل معاملة تعمل كأنها المعاملة الوحيدة في النظام دون تشويش من المعاملات الأخرى." },
+      { q: "ما هي 'العروض' (views) في قواعد البيانات؟", options: ["شاشات المستخدم", "جداول افتراضية تُبنى على استعلام sql بغرض التسهيل والأمان", "تطبيقات الهواتف", "ملفات النسخ الاحتياطي"], correct: 1, explanation: "الـ views لا تخزن بيانات بنفسها، بل تستعرض بيانات من جداول أخرى، وتفيد في حجب أعمدة معينة عن بعض المستخدمين." },
+      { q: "أداة الإدارة 'sql server management studio (ssms)' تستخدم لإدارة قاعدة بيانات من شركة:", options: ["oracle", "ibm", "microsoft", "google"], correct: 2, explanation: "أداة ssms هي الأداة الرسمية لإدارة قواعد بيانات microsoft sql server." },
+      { q: "ما وظيفة نظام التحكم بالتزامن (concurrency control)؟", options: ["تحسين ألوان الواجهة", "إدارة وصول عدة مستخدمين للبيانات في نفس اللحظة دون حدوث تعارض", "إنشاء نسخ احتياطية", "إطفاء الخادم ليلاً"], correct: 1, explanation: "يستخدم تقنيات مثل الأقفال (locks) لضمان عدم قيام شخصين بتعديل نفس السجل بتعارض." },
+      { q: "مشكلة 'الجمود' (deadlock) في إدارة قواعد البيانات تحدث عندما:", options: ["ينقطع الإنترنت", "تنتظر معاملتان بعضهما البعض لتحرير مورد (قفل) مما يوقف العمليتين", "تمتلئ الذاكرة العشوائية", "ينسى المستخدم كلمة المرور"], correct: 1, explanation: "الجمود هو حالة انسداد تنتج عن انتظار متبادل بين عمليتين أو أكثر." },
+      { q: "أي مما يلي يُعد من مهام إدارة قاعدة البيانات (db administration)؟", options: ["مراقبة الأداء وضبط الذاكرة", "تطوير تطبيقات الجوال", "تصميم شبكة الإنترنت", "كتابة محتوى المواقع"], correct: 0, explanation: "مدير القاعدة dba يقوم بضبط الأداء، إدارة المساحات، وإجراء النسخ الاحتياطي." },
+      { q: "كيف يتم تطبيق الاسترجاع (restore) في قواعد البيانات؟", options: ["بنقل القاعدة لمكان آخر", "بإعادة البيانات من ملف النسخة الاحتياطية (backup) بعد حدوث تلف", "بحذف جميع الجداول", "بمسح الفهارس"], correct: 1, explanation: "عملية الاسترجاع تعني قراءة ملف الباك أب لإعادة النظام لحالته السليمة." },
+
+      // القسم الخامس: تطبيقات قواعد البيانات في الأرشفة
+      { q: "ما هو مفهوم الأرشفة الإلكترونية؟", options: ["حرق الأوراق", "حفظ الوثائق الورقية والملفات في قواعد بيانات رقمية لتسهيل استرجاعها وإدارتها", "نقل الملفات عبر الفلاش ديسك", "طباعة المستندات"], correct: 1, explanation: "الأرشفة الإلكترونية هي تحويل المستندات الورقية والرقمية لنظام يحفظها بشكل منظم داخل قاعدة بيانات." },
+      { q: "تقنية ocr (التعرف البصري على الحروف) تُستخدم في الأرشفة من أجل:", options: ["تشفير الملفات", "ترجمة اللغات", "تحويل الصور والمستندات الممسوحة ضوئياً إلى نصوص قابلة للبحث والتعديل", "ضغط حجم الفيديو"], correct: 2, explanation: "أداة ocr حيوية في أنظمة الأرشفة لاستخراج النصوص من الصور لتسهيل البحث." },
+      { q: "ما هي أنظمة dms؟", options: ["أنظمة إدارة قواعد البيانات", "أنظمة إدارة الوثائق والمستندات (document management systems)", "أنظمة مراقبة الشبكات", "أنظمة التشغيل"], correct: 1, explanation: "أنظمة dms مبنية على قواعد بيانات وتهدف لأرشفة، تتبع، وإدارة الوثائق الإلكترونية." },
+      { q: "في الأرشفة الإلكترونية، لماذا تعتبر 'البيانات الوصفية' (metadata) بالغة الأهمية؟", options: ["لأنها تضيف ألواناً للوثيقة", "لأنها تصف الوثيقة (المؤلف، التاريخ، الكلمات المفتاحية) مما يسرع البحث بشكل هائل", "لأنها تحذف الوثائق القديمة", "لأنها تحول النص لصوت"], correct: 1, explanation: "أرشفة الوثائق بدون metadata كرميها في صندوق؛ الـ metadata هي الفهرس الذي يسهل العثور عليها." },
+      { q: "ماذا يقصد بـ 'التحكم في الإصدارات' (version control) في أنظمة الأرشفة dms؟", options: ["تسريع الإنترنت", "حفظ تاريخ التعديلات وتوفير نسخ متعددة لنفس الوثيقة لتتبع التغييرات", "تغيير لغة البرنامج", "حذف الوثائق تلقائياً"], correct: 1, explanation: "التحكم في الإصدارات يضمن عدم فقدان النص الأصلي عند التعديل، حيث يحتفظ النظام بإصدارات متتالية (v1, v2)." },
+      { q: "أحد التحديات القانونية للأرشفة الإلكترونية هو:", options: ["سهولة البحث", "حجية الوثيقة الإلكترونية أمام المحاكم وضمان عدم التلاعب بها", "توفير المساحات", "الاستغناء عن الورق"], correct: 1, explanation: "ضمان سلامة الوثيقة وتوقيعها الإلكتروني ضروري لتكون مقبولة قانونياً ورسمياً." },
+      { q: "ما هي 'سياسات الاحتفاظ' (retention policies) في قواعد بيانات الأرشفة؟", options: ["قواعد تحدد متى يجب حجب الإنترنت", "قواعد تحدد المدة القانونية أو التنظيمية لحفظ الوثيقة قبل إتلافها أو نقلها لأرشيف ميت", "قواعد تحديد رواتب الموظفين", "سياسات إنشاء الجداول"], correct: 1, explanation: "بعض الوثائق (كالملفات المالية) يجب حفظها قانونياً لعدة سنوات، تحدد سياسات الاحتفاظ دورة حياتها آلياً." },
+      { q: "كيف تدعم قواعد البيانات العلائقية عملية الأرشفة؟", options: ["عبر تخزين الفهارس والـ metadata المرتبطة بالملفات وتسهيل الاستعلام عنها", "بصناعة أجهزة السكنر", "بطباعة الأوراق", "بتوفير الكهرباء"], correct: 0, explanation: "تُخزن الملفات غالباً في مساحات تخزين، بينما تُخزن البيانات الوصفية في قاعدة البيانات العلائقية للبحث السريع." },
+      { q: "حقل blob (binary large object) في قواعد البيانات يُستخدم في الأرشفة من أجل:", options: ["تخزين النصوص القصيرة", "تخزين الملفات الكبيرة كصور المستندات ومقاطع الفيديو والملفات الصوتية", "إجراء العمليات الحسابية", "حفظ التواريخ"], correct: 1, explanation: "نوع البيانات blob مُصمم خصيصاً لتخزين البيانات الثنائية الضخمة داخل الجداول." },
+      { q: "المسح الضوئي (scanning) هو خطوة في الأرشفة تهدف إلى:", options: ["حذف الملف", "تحويل المستند الورقي المادي إلى شكل رقمي (صورة أو pdf)", "إرسال رسالة", "كتابة كود برمجي"], correct: 1, explanation: "هي نقطة البداية في الأرشفة لتحويل الكيانات الورقية المادية لبيانات رقمية تدخل النظام." },
+      { q: "من فوائد الأرشفة الإلكترونية المعتمدة على قواعد البيانات:", options: ["زيادة استخدام الورق", "تلف الوثائق بمرور الزمن", "سهولة الوصول والمشاركة المركزية وحماية الوثائق من الكوارث الفيزيائية", "إبطاء العمل الإداري"], correct: 2, explanation: "الأرشفة تحمي النسخ وتوفرها للمصرح لهم في أي وقت ومن أي مكان عبر الشبكة." },
+      { q: "ما هو 'التوقيع الإلكتروني' في أنظمة الوثائق؟", options: ["رسم الاسم بالفأرة", "توقيع رياضي مشفر يضمن هوية الموقع وعدم تغيير الوثيقة بعد التوقيع", "استخدام قلم حبر أزرق", "تلوين النص"], correct: 1, explanation: "التوقيع الرقمي/الإلكتروني يعتمد على التشفير ليمنح الوثيقة الموثوقية والمصداقية." },
+      { q: "الفهرسة (indexing) في الأرشفة تُشبه:", options: ["ترتيب الكتب عشوائياً", "كتابة بطاقات بيانات وتصنيفات لكل ملف لتسهيل العثور عليه لاحقاً", "حرق الملفات القديمة", "تصميم واجهة المستخدم"], correct: 1, explanation: "الفهرسة هي عملية إدخال الـ metadata وتصنيف الوثيقة ضمن شجرة التصنيفات الإدارية." },
+      { q: "ماذا يقصد بتتبع التدقيق (audit trail) في نظام الأرشفة؟", options: ["تسجيل كل عملية (من قرأ، عدّل، أو طبع الوثيقة) مع الوقت والتاريخ لأغراض الأمن والمحاسبة", "مسار الكابلات في المبنى", "البحث عن الأخطاء الإملائية", "حساب تكلفة النظام"], correct: 0, explanation: "سجلات التدقيق (audit logs) ضرورية أمنياً لمعرفة من قام بأي إجراء على الوثائق الحساسة." },
+
+      // القسم السادس: الأمن والحماية في قواعد البيانات (ربط بأمن المعلومات)
+      { q: "في أمن قواعد البيانات، ماذا تمثل ثلاثية cia؟", options: ["اسم شركة تقنية", "السرية، السلامة، التوافر (confidentiality, integrity, availability)", "سرعة، تكلفة، دقة", "نوع من أنواع الفيروسات"], correct: 1, explanation: "ثالوث cia هو أساس أمن المعلومات ويمثل السرية للبيانات، سلامتها من التعديل، وتوفرها عند الحاجة." },
+      { q: "السرية (confidentiality) في قواعد البيانات تعني:", options: ["جعل البيانات متاحة للجميع", "ضمان عدم وصول الأشخاص غير المصرح لهم للبيانات الحساسة", "تعديل البيانات باستمرار", "تسريع استعلامات sql"], correct: 1, explanation: "السرية تتحقق بالتشفير والصلاحيات لضمان ألا يرى البيانات إلا من يملك حق الوصول." },
+      { q: "السلامة (integrity) في قواعد البيانات تضمن:", options: ["سرعة الشبكة", "عدم انقطاع الكهرباء", "دقة وصحة البيانات ومنع تعديلها أو تخريبها من جهات غير مخولة", "تشفير كلمات المرور"], correct: 2, explanation: "سلامة البيانات تعني أن البيانات أصلية ولم يتم العبث بها أو تغييرها بشكل غير شرعي." },
+      { q: "ما هو الفرق بين المصادقة (authentication) والتفويض (authorization)؟", options: ["لا يوجد فرق", "المصادقة للشبكة والتفويض للقاعدة", "المصادقة للتحقق من هوية المستخدم، والتفويض لتحديد صلاحياته وما يسمح له بفعله", "المصادقة للحذف والتفويض للإضافة"], correct: 2, explanation: "المصادقة تجيب على 'من أنت؟' (كإدخال كلمة المرور)، والتفويض يجيب على 'ماذا يحق لك أن تفعل؟'." },
+      { q: "ما هو هجوم 'حقن قواعد البيانات' (sql injection)؟", options: ["إبرة لتنظيف الخادم", "إدخال أكواد sql خبيثة عبر حقول الإدخال في التطبيق للتلاعب بقاعدة البيانات", "نسخ البيانات احتياطياً", "زيادة سرعة القاعدة"], correct: 1, explanation: "حقن sql من أخطر الثغرات، حيث يخدع المهاجم التطبيق لتنفيذ أوامر ضارة في قاعدة البيانات مباشرة." },
+      { q: "كيف يمكن الوقاية بشكل أساسي من هجمات sql injection؟", options: ["بإيقاف تشغيل الخادم", "باستخدام الاستعلامات المجهزة (parameterized queries/prepared statements) والتحقق من المدخلات", "بتلوين الواجهة", "بإلغاء كلمات المرور"], correct: 1, explanation: "الاستعلامات المجهزة تمنع النظام من تفسير مدخلات المستخدم ككود برمجي، مما يحبط الهجوم." },
+      { q: "ما المقصود بـ 'مبدأ الامتياز الأقل' (least privilege)؟", options: ["منح الجميع كافة الصلاحيات", "عدم منح أي صلاحيات", "منح المستخدم الحد الأدنى من الصلاحيات التي يحتاجها فقط لأداء عمله", "تقليل رواتب المبرمجين"], correct: 2, explanation: "هو مبدأ أمني أساسي يقلل الضرر المحتمل، فإذا تم اختراق حساب الموظف، لا يمكن للمهاجم تدمير النظام بأكمله." },
+      { q: "في سياق أمن قواعد البيانات، ما هو rbac؟", options: ["نوع من الجداول", "التحكم بالوصول المبني على الأدوار (role-based access control)", "بروتوكول شبكات", "أمر لنسخ البيانات"], correct: 1, explanation: "بدلاً من إعطاء صلاحيات لكل فرد، يتم إنشاء أدوار (مثل: مدير، مدخل بيانات) وإسناد الأفراد لهذه الأدوار." },
+      { q: "التشفير في حالة السكون (encryption at rest) يهدف إلى:", options: ["تشفير البيانات أثناء انتقالها بالشبكة", "تشفير ملفات قاعدة البيانات المخزنة على القرص الصلب لحمايتها في حال سرقة القرص", "تشفير شاشة المستخدم", "إخفاء لوحة المفاتيح"], correct: 1, explanation: "يحمي البيانات المخزنة فعلياً في الخوادم من الوصول المادي غير المصرح به (مثل تقنية tde)." },
+      { q: "التشفير أثناء النقل (encryption in transit) يعتمد غالباً على تقنيات مثل:", options: ["html", "tls/ssl", "css", "usb"], correct: 1, explanation: "يُستخدم tls/ssl لتشفير قناة الاتصال بين التطبيق وقاعدة البيانات لمنع التنصت (eavesdropping)." },
+      { q: "ما فائدة استخدام 'العروض' (views) كأداة أمنية؟", options: ["تسهل النسخ الاحتياطي", "تحجب حقولاً معينة (كالرواتب أو كلمات المرور) عن المستخدمين وتعرض لهم ما يحتاجونه فقط", "تزيد مساحة التخزين", "لا علاقة لها بالأمن"], correct: 1, explanation: "يمكن لمدير القاعدة إنشاء view يخفي الأعمدة الحساسة ومنح المستخدمين صلاحية على الـ view وليس الجدول الأصلي." },
+      { q: "تدقيق قواعد البيانات (database auditing) يعني:", options: ["مراجعة الميزانية المالية", "تسجيل ومراقبة كل الأنشطة التي تحدث في القاعدة (من دخل، متى، ماذا فعل) لاكتشاف الخروقات", "حذف السجلات القديمة", "تحديث النظام"], correct: 1, explanation: "التدقيق الأمني مهم للامتثال القانوني والتحقيقات الجنائية الرقمية عند حدوث اختراق." },
+      { q: "لماذا يُعتبر الإبقاء على 'الحسابات الافتراضية' (default accounts) خطراً أمنياً؟", options: ["لأنها تستهلك ذاكرة كبيرة", "لأن أسماءها وكلمات مرورها الافتراضية معروفة للمخترقين (مثل sa أو root)", "لأنها تبطئ النظام", "ليست خطراً"], correct: 1, explanation: "يجب دائماً تغيير أو تعطيل الحسابات الافتراضية فور تثبيت نظام dbms." },
+      { q: "أي أمر يستخدم في sql لمنح صلاحية القراءة لمستخدم معين؟", options: ["give read", "grant select", "allow view", "permit get"], correct: 1, explanation: "أمر grant select يمنح صلاحية استرجاع البيانات للمستخدم المذكور." },
+      { q: "لسحب صلاحية الإضافة من مستخدم، نستخدم الأمر:", options: ["drop insert", "delete insert", "revoke insert", "cancel insert"], correct: 2, explanation: "أمر revoke يستخدم لسحب أو إلغاء الصلاحيات الممنوحة مسبقاً." },
+      { q: "ما هو 'تشفير البيانات الشفاف' (tde)؟", options: ["تشفير الملفات بحيث تكون شفافة لا ترى", "تقنية تشفر قاعدة البيانات بالكامل على مستوى الملفات دون الحاجة لتغيير كود التطبيقات", "نوع من الفيروسات", "تشفير الشبكات"], correct: 1, explanation: "tde ميزة في أنظمة كـ sql server و oracle تشفر البيانات الاحتياطية وملفات القاعدة أوتوماتيكياً." },
+      { q: "هجوم الحرمان من الخدمة (ddos) على قاعدة البيانات يهدد أي عنصر من عناصر cia؟", options: ["السرية (confidentiality)", "السلامة (integrity)", "التوافر (availability)", "لا يهدد أي منها"], correct: 2, explanation: "يهدف الهجوم لإغراق القاعدة بالطلبات الوهمية حتى تتعطل وتصبح غير متاحة للمستخدمين الشرعيين." },
+      { q: "جدار حماية قواعد البيانات (database firewall) يتميز عن الجدار الناري العادي بأنه:", options: ["أرخص ثمناً", "يفهم أوامر sql ويستطيع حجب الاستعلامات الخبيثة أو المشبوهة المتجهة للقاعدة", "يحمي من انقطاع الكهرباء", "يفحص رسائل الإيميل"], correct: 1, explanation: "صمم خصيصاً لتحليل الحركة المرورية لبروتوكولات قواعد البيانات وفهم سلوك الاستعلامات." },
+      { q: "الترقيع الأمني (patching) لأنظمة dbms يهدف إلى:", options: ["تغيير شكل الواجهة", "إغلاق الثغرات الأمنية المكتشفة حديثاً لمنع المهاجمين من استغلالها", "تسريع الطباعة", "حذف البيانات القديمة"], correct: 1, explanation: "تحديث النظام بالرقع الأمنية هو خط الدفاع الأول ضد الهجمات المعروفة." },
+      { q: "أي من الممارسات التالية تعتبر 'خاطئة' أمنياً في قواعد البيانات؟", options: ["تجزئة الشبكة لعزل القاعدة", "تشفير كلمات المرور", "استخدام حساب مدير النظام (root/sa) من قبل جميع التطبيقات للاتصال بالقاعدة", "تطبيق مبدأ الامتياز الأقل"], correct: 2, explanation: "استخدام حساب ذو صلاحيات مطلقة (root) للتطبيقات العادية كارثة أمنية؛ إذا اخترق التطبيق، سقط الخادم بأكمله." }
     ]
   };
 
-  // ==========================================
-  // النظام والمتغيرات
-  // ==========================================
   let playerXP = parseInt(localStorage.getItem('devAhmedXP')) || 0;
   let inventory = JSON.parse(localStorage.getItem('devAhmedInv')) || { fifty: 0, shield: 0 };
   let currentQ = 0, streak = 0, sessionXP = 0;
@@ -380,10 +321,9 @@ const mySubjectData = {
       playerXP -= price; inventory[item]++;
       localStorage.setItem('devAhmedXP', playerXP); localStorage.setItem('devAhmedInv', JSON.stringify(inventory));
       updateUI();
-    } else alert("رصيد XP غير كافٍ!");
+    } else alert("رصيد النقاط غير كافٍ!");
   }
 
-  // تهيئة الواجهة
   document.getElementById('main-title').textContent = mySubjectData.title;
   document.getElementById('quiz-subtitle').textContent = "استعد لاختبارك وتدرب على الـ " + mySubjectData.questions.length + " سؤالاً";
 
@@ -470,7 +410,7 @@ const mySubjectData = {
     let box = document.getElementById('explanation-box');
     let isCorrect = (answers[currentQ] === q.correct);
     box.className = 'explanation-ui fade-in-ui ' + (isCorrect ? 'correct' : 'wrong');
-    box.innerHTML = `<strong>${isCorrect ? 'ممتاز!' : 'إجابة خاطئة!'}</strong><br>${q.explanation || 'الإجابة الصحيحة هي: ' + q.options[q.correct]}`;
+    box.innerHTML = `<strong>${isCorrect ? 'صحيح' : 'خطأ'}</strong><br>${q.explanation || 'الإجابة الصحيحة هي: ' + q.options[q.correct]}`;
     box.style.display = 'block';
   }
 
@@ -487,7 +427,6 @@ const mySubjectData = {
     }
   }
 
-  // تأثيرات الخلفية البسيطة (Particles)
   const canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth; canvas.height = window.innerHeight;
   let particles = [];
@@ -504,20 +443,12 @@ const mySubjectData = {
   }
   draw();
 
-</script>
-<script>
-    // دالة العودة للقائمة الرئيسية
-    function goToMainMenu() {
-        // إخفاء شاشة النتائج
-        document.getElementById('result-screen').style.display = 'none';
-        // إظهار شاشة القائمة الرئيسية بعد التعديل الصحيح
-        document.getElementById('welcome-screen').style.display = 'block'; 
-    }
-</script>
+  function goToMainMenu() {
+      document.getElementById('result-screen').style.display = 'none';
+      document.getElementById('welcome-screen').style.display = 'block'; 
+  }
 
-<script>
-    // تحديث السنة تلقائياً
-    document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
