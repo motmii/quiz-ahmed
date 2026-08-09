@@ -173,12 +173,125 @@
   
   .pulse-animation { animation: gentle-pulse 2s infinite; }
   @keyframes gentle-pulse { 0% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(14, 165, 233, 0); } 100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0); } }
+
+  /* ====== Enhanced UI ====== */
+  .welcome-stats { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin: 0 auto 40px; max-width: 660px; }
+  .welcome-stat { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 120px; padding: 18px 20px; border-radius: var(--radius-lg); transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s; }
+  .welcome-stat:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(14,165,233,0.12); }
+  .ws-icon { font-size: 1.6rem; }
+  .welcome-stat b { font-size: 1.5rem; font-weight: 900; color: var(--c-text); }
+  .ws-label { font-size: 0.8rem; color: var(--c-muted); font-weight: 700; }
+
+  .howto { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin: 0 auto 44px; max-width: 760px; }
+  .howto-card { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-radius: var(--radius-md); font-size: 0.95rem; color: var(--c-muted); text-align: right; flex: 1; min-width: 220px; }
+  .howto-num { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--c-blue2), #0284c7); color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(14,165,233,0.3); }
+
+  .quiz-stats { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 22px; border-radius: 999px; margin-bottom: 20px; }
+  .mini-stat { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; color: var(--c-muted); font-weight: 700; }
+  .mini-stat b { color: var(--c-text); font-size: 1.05rem; }
+  .mini-label { font-size: 0.78rem; color: var(--c-dim); font-weight: 700; letter-spacing: 0.3px; }
+
+  .inv-btn { transition: transform 0.2s, color 0.2s, opacity 0.2s; }
+  .inv-btn:active:not(.inv-empty) { transform: scale(0.92); }
+  .inv-btn.inv-empty { opacity: 0.4; pointer-events: none; }
+
+  .result-panel { text-align: center; padding: 56px 28px; border-radius: var(--radius-xl); position: relative; overflow: hidden; }
+  .result-badge { font-size: 4rem; margin-bottom: 8px; animation: result-pop 0.5s cubic-bezier(0.16,1,0.3,1); }
+  .result-kicker { color: var(--c-blue); font-weight: 900; letter-spacing: 2px; font-size: 0.9rem; }
+  .result-score { font-size: 4.5rem; font-weight: 900; color: var(--c-green); text-shadow: 0 4px 24px rgba(52,211,153,0.35); margin: 6px 0 20px; }
+  .result-stats { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; margin: 24px 0 8px; }
+  .stat-box { flex: 1; min-width: 110px; max-width: 170px; padding: 16px 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 4px; transition: transform 0.3s; }
+  .stat-box:hover { transform: translateY(-3px); }
+  .stat-value { font-size: 1.9rem; font-weight: 900; }
+  .stat-value.green { color: var(--c-green); }
+  .stat-value.red { color: var(--c-red); }
+  .stat-value.amber { color: var(--c-amber); }
+  .stat-label { font-size: 0.78rem; color: var(--c-muted); font-weight: 700; }
+  .stars { display: flex; justify-content: center; gap: 8px; margin: 22px 0 6px; font-size: 2.2rem; }
+  .star { color: rgba(255,255,255,0.12); }
+  .star.on { color: var(--c-amber); text-shadow: 0 0 18px rgba(251,191,36,0.5); animation: star-pop 0.4s cubic-bezier(0.16,1,0.3,1) backwards; }
+  .result-msg { color: var(--c-muted); font-size: 1.05rem; max-width: 480px; margin: 10px auto 0; line-height: 1.6; }
+  @keyframes star-pop { from { transform: scale(0) rotate(-40deg); opacity: 0; } to { transform: scale(1) rotate(0); opacity: 1; } }
+  @keyframes result-pop { 0% { transform: scale(0.5) translateY(20px); opacity: 0; } 60% { transform: scale(1.08); } 100% { transform: scale(1); opacity: 1; } }
+
+  .leader-me { color: var(--c-blue); border-top: 1px dashed rgba(56,189,248,0.25) !important; }
+
+  #toast-box { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 2000; display: flex; flex-direction: column; align-items: center; gap: 10px; width: min(92vw, 420px); pointer-events: none; }
+  .toast-item { padding: 14px 24px; border-radius: var(--radius-md); font-weight: 700; font-size: 0.98rem; text-align: center; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--c-border); box-shadow: 0 10px 30px rgba(0,0,0,0.45); }
+  .toast-info { background: rgba(13, 18, 32, 0.92); color: var(--c-blue); border-color: rgba(56,189,248,0.35); }
+  .toast-success { background: rgba(6, 30, 25, 0.92); color: var(--c-green); border-color: rgba(52,211,153,0.35); }
+  .toast-error { background: rgba(38, 12, 12, 0.92); color: var(--c-red); border-color: rgba(248,113,113,0.35); }
+
+  :focus-visible { outline: 2px solid var(--c-blue); outline-offset: 3px; border-radius: 6px; }
+
+  @media (max-width: 640px) {
+    .welcome-header { padding: 40px 0; }
+    .platform-sub { font-size: 1.05rem; margin-bottom: 32px; }
+    .welcome-stat { min-width: calc(50% - 10px); }
+    .quiz-topbar { flex-direction: column; align-items: stretch; gap: 12px; }
+    .inv-bar { justify-content: center; }
+    .question-box-ui { font-size: 1.15rem; padding: 20px; }
+    .option-btn { padding: 13px 14px; font-size: 0.95rem; gap: 12px; }
+    .result-score { font-size: 3.2rem; }
+    .result-panel { padding: 36px 16px; }
+    .toast-item { font-size: 0.9rem; }
+  }
+
+  /* ====== WOW Features ====== */
+  #confetti-canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1500; }
+
+  .xp-track { width: 120px; height: 8px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden; }
+  .xp-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--c-amber), #f59e0b); width: 0%; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 0 10px rgba(251,191,36,0.5); }
+  .level-chip { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .level-chip .xp-num { font-size: 0.72rem; color: var(--c-muted); font-weight: 700; }
+
+  .btn-icon { min-width: 46px; padding: 10px 12px; font-size: 1rem; }
+
+  .timer-wrap { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .timer-ico { font-size: 1.15rem; }
+  .timer-track { flex: 1; height: 10px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.3); }
+  .timer-bar { height: 100%; width: 100%; border-radius: 999px; background: var(--c-green); transition: width 1s linear, background 0.4s; box-shadow: 0 0 12px rgba(52,211,153,0.4); }
+  .timer-bar.warn { background: var(--c-amber); box-shadow: 0 0 12px rgba(251,191,36,0.5); }
+  .timer-bar.low { background: var(--c-red); box-shadow: 0 0 12px rgba(248,113,113,0.5); }
+  .timer-num { font-weight: 900; color: var(--c-text); min-width: 28px; text-align: center; font-size: 1.1rem; }
+
+  .float-xp { position: absolute; font-weight: 900; font-size: 1.2rem; color: var(--c-amber); text-shadow: 0 2px 6px rgba(0,0,0,0.5); animation: float-up 1.2s ease-out forwards; pointer-events: none; z-index: 5; }
+  @keyframes float-up { 0% { opacity: 0; transform: translateY(8px) scale(0.8); } 20% { opacity: 1; transform: translateY(0) scale(1.1); } 100% { opacity: 0; transform: translateY(-42px) scale(1); } }
+
+  .option-btn.pop { animation: option-pop 0.4s cubic-bezier(0.16,1,0.3,1); }
+  @keyframes option-pop { 0% { transform: scale(0.97); } 55% { transform: scale(1.03); } 100% { transform: scale(1); } }
+  .option-btn.shake { animation: option-shake 0.4s; }
+  @keyframes option-shake { 0%,100%{ transform: translateX(0); } 25%{ transform: translateX(-6px); } 50%{ transform: translateX(6px); } 75%{ transform: translateX(-4px); } }
+
+  .levelup-overlay { position: fixed; inset: 0; z-index: 1800; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .levelup-card { text-align: center; animation: result-pop 0.6s cubic-bezier(0.16,1,0.3,1); }
+  .levelup-card .lu-icon { font-size: 4rem; }
+  .levelup-card .lu-title { font-size: 2.2rem; font-weight: 900; color: var(--c-amber); text-shadow: 0 0 26px rgba(251,191,36,0.5); }
+  .levelup-card .lu-sub { color: var(--c-text); font-size: 1.35rem; font-weight: 700; margin-top: 8px; }
+
+  .badges-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 20px; }
+  .badge-item { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 10px; border-radius: var(--radius-md); background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); text-align: center; transition: transform 0.3s; }
+  .badge-item.locked { opacity: 0.35; filter: grayscale(70%); }
+  .badge-item.unlocked { border-color: rgba(251,191,36,0.3); box-shadow: 0 6px 18px rgba(251,191,36,0.12); }
+  .badge-item .b-icon { font-size: 2rem; }
+  .badge-item .b-name { font-weight: 900; color: var(--c-text); font-size: 0.92rem; }
+  .badge-item .b-desc { font-size: 0.72rem; color: var(--c-muted); line-height: 1.4; }
+
+  .review-wrap { text-align: right; margin-top: 26px; border-top: 1px dashed var(--c-border); padding-top: 20px; }
+  .review-list { display: flex; flex-direction: column; gap: 14px; max-height: 340px; overflow-y: auto; padding-left: 6px; margin-top: 16px; }
+  .review-item { padding: 16px; border-radius: var(--radius-md); background: rgba(255,255,255,0.03); border: 1px solid var(--c-border); }
+  .review-item .rv-q { font-weight: 700; margin-bottom: 8px; color: var(--c-text); line-height: 1.5; }
+  .review-item .rv-a { font-size: 0.92rem; margin-top: 4px; }
+  .rv-wrong { color: var(--c-red); }
+  .rv-right { color: var(--c-green); font-weight: 700; }
+  .rv-exp { margin-top: 8px; font-size: 0.88rem; color: var(--c-muted); border-right: 2px solid var(--c-blue2); padding-right: 10px; line-height: 1.6; }
 </style>
 </head>
 <body>
 
 <div class="bg-circles"><div class="circle-1" id="bg-circle-1"></div><div class="circle-2" id="bg-circle-2"></div></div>
 <canvas id="canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; opacity:0.15; pointer-events:none;"></canvas>
+<canvas id="confetti-canvas"></canvas>
 
 <div class="modal-overlay-ui fade-in-ui" id="shop-modal">
   <div class="modal-box glass-panel">
@@ -195,6 +308,15 @@
   </div>
 </div>
 
+<div class="modal-overlay-ui fade-in-ui" id="badges-modal">
+  <div class="modal-box glass-panel" style="max-width: 560px;">
+    <button class="modal-close" onclick="closeModal('badges-modal')">✕</button>
+    <h2 style="color:var(--c-amber); margin-bottom: 6px; font-size: 1.7rem; text-align: center;">🏅 الإنجازات</h2>
+    <p style="text-align:center; color:var(--c-muted); margin:0;">اجمع كل الشارات وأثبت أنك الأسطورة!</p>
+    <div class="badges-grid" id="badges-grid"></div>
+  </div>
+</div>
+
 <div class="main-container">
 
   <div class="topbar glass-panel fade-in-ui">
@@ -203,11 +325,18 @@
       <div class="player-info">
         <span class="player-label">مستوى التقدم</span>
         <span class="player-xp"><span id="player-xp">0</span> نقطة</span>
+        <div class="level-chip">
+          <span style="font-size:0.68rem; color:var(--c-dim); font-weight:700;">تقدم المستوى</span>
+          <div class="xp-track"><div class="xp-fill" id="xp-fill"></div></div>
+          <span class="xp-num" id="xp-num">0</span>
+        </div>
       </div>
     </div>
     <div class="streak-pill" id="streak-box">تتابع الإجابات: <span id="streak-count">0</span></div>
-    <div class="topbar-btns">
-      <button class="btn btn-amber pulse-animation" onclick="document.getElementById('shop-modal').style.display='flex'">المتجر</button>
+    <div class="topbar-btns" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+      <button class="btn btn-ghost btn-icon" id="sound-btn" onclick="toggleSound()" title="تشغيل / كتم الصوت">🔊</button>
+      <button class="btn btn-amber btn-icon" id="badges-btn" onclick="openBadges()" title="الإنجازات والشارات"><span id="badge-count">0</span> 🏅</button>
+      <button class="btn btn-amber pulse-animation" onclick="document.getElementById('shop-modal').style.display='flex'">المتجر 🛒</button>
     </div>
   </div>
 
@@ -216,7 +345,37 @@
       <div class="platform-tag">بيئة مراجعة متقدمة</div>
       <h1 class="platform-title" id="main-title">جاري التحميل...</h1>
       <p class="platform-sub" id="quiz-subtitle">استعد لاختبارك وتدرب على الأسئلة</p>
-      <button class="btn btn-primary btn-lg" onclick="startQuiz()">بدء الاختبار الآن</button>
+
+      <div class="welcome-stats">
+        <div class="welcome-stat glass-panel">
+          <span class="ws-icon">⭐</span>
+          <b id="ws-level">1</b>
+          <span class="ws-label">المستوى</span>
+        </div>
+        <div class="welcome-stat glass-panel">
+          <span class="ws-icon">⚡</span>
+          <b id="ws-xp">0</b>
+          <span class="ws-label">نقطة XP</span>
+        </div>
+        <div class="welcome-stat glass-panel">
+          <span class="ws-icon">📚</span>
+          <b id="ws-questions">100</b>
+          <span class="ws-label">سؤالاً</span>
+        </div>
+        <div class="welcome-stat glass-panel">
+          <span class="ws-icon">🏆</span>
+          <b id="ws-best">—</b>
+          <span class="ws-label">أفضل دقة</span>
+        </div>
+      </div>
+
+      <div class="howto">
+        <div class="howto-card glass-panel"><span class="howto-num">1</span><span>أجب عن كل سؤال واختر الإجابة الصحيحة</span></div>
+        <div class="howto-card glass-panel"><span class="howto-num">2</span><span>اجمع النقاط وحافظ على سلسلة الإجابات المتتالية</span></div>
+        <div class="howto-card glass-panel"><span class="howto-num">3</span><span>استخدم النقاط في المتجر لشراء أدوات مساعدة</span></div>
+      </div>
+
+      <button class="btn btn-primary btn-lg pulse-animation" onclick="startQuiz()">بدء الاختبار الآن</button>
     </div>
   </div>
 
@@ -224,12 +383,25 @@
     <div class="quiz-topbar fade-in-ui">
       <button class="btn btn-ghost" onclick="location.reload()">إنهاء ومغادرة</button>
       <div class="inv-bar">
-        <button class="inv-btn" onclick="useFiftyFifty()">50/50 <span class="inv-count" id="count-fifty">0</span></button>
-        <button class="inv-btn" onclick="useShield()">درع <span class="inv-count" id="count-shield">0</span></button>
+        <button class="inv-btn" id="btn-fifty" onclick="useFiftyFifty()" title="تساعدك على حذف إجابتين خاطئتين">🎯 50/50 <span class="inv-count" id="count-fifty">0</span></button>
+        <button class="inv-btn" id="btn-shield" onclick="useShield()" title="تحميك من أول إجابة خاطئة">🛡️ درع <span class="inv-count" id="count-shield">0</span></button>
       </div>
     </div>
     <div style="margin-bottom: 12px; font-weight:bold; color:var(--c-blue); letter-spacing: 1px; font-size: 1.1rem;" id="question-tracker">1 / 100</div>
     <div class="progress-track"><div class="progress-fill-ui" id="progress" style="width:0%"></div></div>
+
+    <div class="timer-wrap fade-in-ui">
+      <span class="timer-ico">⏱️</span>
+      <div class="timer-track"><div class="timer-bar" id="timer-bar"></div></div>
+      <span class="timer-num" id="timer-num">45</span>
+    </div>
+
+    <div class="quiz-stats glass-panel">
+      <div class="mini-stat">🔥 <span class="mini-label">السلسلة</span> <b id="quiz-streak">0</b></div>
+      <div class="mini-stat">⚡ <span class="mini-label">النقاط</span> <b id="quiz-xp">0</b></div>
+      <div class="mini-stat">🎯 <span class="mini-label">الدقة</span> <b id="quiz-accuracy">—</b></div>
+      <div class="mini-stat">📈 <span class="mini-label">التقدم</span> <b id="quiz-percent">0%</b></div>
+    </div>
 
     <div class="question-box-ui glass-panel fade-in-ui" id="question-text">جاري التحميل...</div>
     <div class="options-list" id="options-container"></div>
@@ -240,32 +412,60 @@
     </div>
   </div>
 
-  <div id="result-screen" style="display:none;" class="fade-in-ui text-center">
-    <div class="glass-panel" style="text-align: center; padding: 60px 20px; border-radius: var(--radius-xl);">
-      <div style="font-size: 1.2rem; font-weight: bold; color: var(--c-blue); letter-spacing: 2px;">النتيجة النهائية</div>
-      <h2 style="font-size: 2.5rem; margin: 16px 0; color: var(--c-text);">اكتمل الاختبار بنجاح</h2>
-      <div style="font-size: 4.5rem; color: var(--c-green); font-weight: 900; text-shadow: 0 4px 20px rgba(52,211,153,0.3);" id="final-score">0%</div>
-      <p style="color: var(--c-amber); font-size: 1.4rem; margin-top: 16px; font-weight: bold;">النقاط المكتسبة في الجلسة: <span id="earned-xp">0</span> نقطة</p>
-      <br><br>
-      <button onclick="goToMainMenu()" class="btn btn-ghost btn-lg">العودة للقائمة الرئيسية</button>
+  <div id="result-screen" style="display:none;" class="fade-in-ui">
+    <div class="glass-panel result-panel">
+      <div class="result-badge" id="result-emoji">🏆</div>
+      <div class="result-kicker">النتيجة النهائية</div>
+      <h2 style="font-size: 2rem; margin: 10px 0 0; color: var(--c-text);" id="result-title">أحسنت!</h2>
+      <div class="result-score" id="final-score">0%</div>
+
+      <div class="result-stats">
+        <div class="stat-box"><span class="stat-value green" id="correct-count">0</span><span class="stat-label">إجابات صحيحة</span></div>
+        <div class="stat-box"><span class="stat-value red" id="wrong-count">0</span><span class="stat-label">إجابات خاطئة</span></div>
+        <div class="stat-box"><span class="stat-value amber" id="session-xp">0</span><span class="stat-label">نقاط الجلسة</span></div>
+      </div>
+
+      <div class="stars" id="stars-row"></div>
+      <p class="result-msg" id="result-message"></p>
+
+      <button class="btn btn-ghost" style="margin-top:20px;" onclick="toggleReview()">📋 مراجعة الأخطاء</button>
+      <div class="review-wrap" id="review-wrap" style="display:none;">
+        <div id="review-list" class="review-list"></div>
+      </div>
+
+      <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:28px;">
+        <button onclick="restartQuiz()" class="btn btn-primary btn-lg pulse-animation">إعادة الاختبار</button>
+        <button onclick="goToMainMenu()" class="btn btn-ghost btn-lg">القائمة الرئيسية</button>
+      </div>
     </div>
   </div>
 
 </div>
 
 <div class="leaderboard-card glass-panel fade-in-ui">
-    <h3>لوحة المتصدرين</h3>
+    <h3>🏆 لوحة المتصدرين</h3>
     <h4>أعلى النتائج المسجلة</h4>
     <ul class="leaderboard-list">
-        <li><span>Ahmed Mutmi</span> <span>56</span></li>
+        <li><span>👑 Ahmed Mutmi</span> <span>56</span></li>
         <li><span>طالب 1</span> <span>28</span></li>
         <li><span>طالب 2</span> <span>18</span></li>
+        <li class="leader-me" id="leader-me"><span>أنت</span> <span>—</span></li>
     </ul>
 </div>
 
 <footer style="text-align: center; padding: 30px 20px; font-family: var(--font); color: var(--c-dim); font-size: 0.95em; position: relative; z-index: 1;">
     <p>&copy; <span id="year"></span> تم التطوير بواسطة: <strong>Ahmed Mutmi</strong> | جميع الحقوق محفوظة</p>
 </footer>
+
+<div class="levelup-overlay" id="levelup-overlay">
+  <div class="levelup-card">
+    <div class="lu-icon">⭐</div>
+    <div class="lu-title">مستوى جديد!</div>
+    <div class="lu-sub">بلغت المستوى <span id="lu-level">1</span> 🚀</div>
+  </div>
+</div>
+
+<div id="toast-box"></div>
 
 <script>
 // مصفوفة الأسئلة الـ 100 كاملة دون نقصان
@@ -384,17 +584,203 @@ const mySubjectData = {
 
   let playerXP = parseInt(localStorage.getItem('devAhmedXP')) || 0;
   let inventory = JSON.parse(localStorage.getItem('devAhmedInv')) || { fifty: 0, shield: 0 };
+  let bestScore = parseInt(localStorage.getItem('devAhmedBest')) || 0;
   let currentQ = 0, streak = 0, sessionXP = 0;
   let answers = [], hintsUsed = [];
   let shieldActive = false;
+
+  /* ====== WOW Systems ====== */
+  const QUESTION_TIME = 45;
+  let questionTimer = null, timerLeft = QUESTION_TIME;
+  let audioCtx, soundOn = localStorage.getItem('devAhmedSound') !== 'off';
+  let stats = JSON.parse(localStorage.getItem('devAhmedStats')) || { correctTotal: 0, usesFifty: 0, usesShield: 0 };
+  let unlockedBadges = JSON.parse(localStorage.getItem('devAhmedBadges')) || [];
+  const ACHIEVEMENTS = [
+    { id:'first',      icon:'🎯', name:'أول خطوة',      desc:'أجب عن أول سؤال بشكل صحيح' },
+    { id:'ten',        icon:'💯', name:'عشاري',         desc:'10 إجابات صحيحة في حياتك' },
+    { id:'streak10',   icon:'👑', name:'سلسلة الأساطير', desc:'10 إجابات متتالية في جلسة واحدة' },
+    { id:'perfect',    icon:'💎', name:'الكمال',        desc:'احصل على 100% في اختبار كامل' },
+    { id:'level5',     icon:'🚀', name:'متقدم',         desc:'صل إلى المستوى 5' },
+    { id:'strategist', icon:'🧠', name:'استراتيجي',      desc:'استخدم أداة 50/50' },
+    { id:'guardian',   icon:'🛡️', name:'الحارس',        desc:'استخدم الدرع الواقي' },
+    { id:'rich',       icon:'💰', name:'جامع النقاط',    desc:'اجمع 1000 نقطة XP' },
+    { id:'finished',   icon:'🏁', name:'مثابر',         desc:'أكمل اختباراً كاملاً' }
+  ];
+
+  function saveStats(){ localStorage.setItem('devAhmedStats', JSON.stringify(stats)); }
+
+  function unlockBadge(id){
+    if(unlockedBadges.includes(id)) return false;
+    unlockedBadges.push(id);
+    localStorage.setItem('devAhmedBadges', JSON.stringify(unlockedBadges));
+    let a = ACHIEVEMENTS.find(x=>x.id===id);
+    if(a){ showToast(a.icon+' إنجاز جديد: '+a.name+'!', 'success'); sLevelUp(); burstConfetti(70); }
+    renderBadgeCount();
+    return true;
+  }
+  function awardAchievements(){
+    if(stats.correctTotal >= 1) unlockBadge('first');
+    if(stats.correctTotal >= 10) unlockBadge('ten');
+    if(levelOf(playerXP) >= 5) unlockBadge('level5');
+    if(playerXP >= 1000) unlockBadge('rich');
+    if(stats.usesFifty >= 1) unlockBadge('strategist');
+    if(stats.usesShield >= 1) unlockBadge('guardian');
+  }
+  function renderBadgeCount(){
+    let el = document.getElementById('badge-count'); if(el) el.textContent = unlockedBadges.length;
+  }
+  function openBadges(){
+    let grid = document.getElementById('badges-grid'); if(!grid) return;
+    grid.innerHTML = '';
+    ACHIEVEMENTS.forEach(a=>{
+      let on = unlockedBadges.includes(a.id);
+      let el = document.createElement('div');
+      el.className = 'badge-item ' + (on ? 'unlocked' : 'locked');
+      el.innerHTML = '<span class="b-icon">'+a.icon+'</span><span class="b-name">'+a.name+'</span><span class="b-desc">'+a.desc+'</span>';
+      grid.appendChild(el);
+    });
+    document.getElementById('badges-modal').style.display = 'flex';
+  }
+
+  function ensureAudio(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ audioCtx = null; } } if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); }
+  function beep(f,d,t,v,w){ if(!soundOn) return; ensureAudio(); if(!audioCtx) return; try{ let o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.type=t; o.frequency.value=f; o.connect(g); g.connect(audioCtx.destination); let s=audioCtx.currentTime+(w||0); g.gain.setValueAtTime(0.0001,s); g.gain.exponentialRampToValueAtTime(v||0.1,s+0.02); g.gain.exponentialRampToValueAtTime(0.0001,s+d); o.start(s); o.stop(s+d+0.03); }catch(e){} }
+  function sClick(){ beep(520,0.06,'triangle',0.05); }
+  function sCorrect(){ beep(660,0.12,'sine',0.12); beep(880,0.16,'sine',0.12,0.09); }
+  function sWrong(){ beep(220,0.28,'sawtooth',0.06); }
+  function sWin(){ [523,659,784,1047].forEach((f,i)=>beep(f,0.2,'triangle',0.12,i*0.13)); }
+  function sLevelUp(){ [440,554,659,880,1109].forEach((f,i)=>beep(f,0.18,'square',0.07,i*0.1)); }
+  function toggleSound(){ soundOn = !soundOn; localStorage.setItem('devAhmedSound', soundOn?'on':'off'); renderSound(); if(soundOn) sClick(); }
+  function renderSound(){ let b = document.getElementById('sound-btn'); if(b) b.textContent = soundOn ? '🔊' : '🔇'; }
+
+  let cfCanvas, cfCtx, cfParts = [], cfAnim;
+  function setupConfetti(){
+    cfCanvas = document.getElementById('confetti-canvas'); if(!cfCanvas) return;
+    cfCanvas.width = window.innerWidth; cfCanvas.height = window.innerHeight;
+    cfCtx = cfCanvas.getContext('2d');
+    window.addEventListener('resize', ()=>{ cfCanvas.width = window.innerWidth; cfCanvas.height = window.innerHeight; });
+  }
+  function burstConfetti(n){
+    if(!cfCanvas) setupConfetti(); if(!cfCtx) return;
+    for(let i=0;i<n;i++){
+      cfParts.push({ x:Math.random()*cfCanvas.width, y:-10-Math.random()*60, w:6+Math.random()*7, h:8+Math.random()*10,
+        vx:(Math.random()-0.5)*2.4, vy:2+Math.random()*3.2, rot:Math.random()*Math.PI*2, rv:(Math.random()-0.5)*0.22,
+        c:['#38bdf8','#fbbf24','#34d399','#a78bfa','#f87171','#f0abfc'][Math.floor(Math.random()*6)], circle:Math.random()<0.4 });
+    }
+    if(!cfAnim) cfLoop();
+  }
+  function cfLoop(){
+    if(!cfCtx) return; cfCtx.clearRect(0,0,cfCanvas.width,cfCanvas.height);
+    for(let i=cfParts.length-1;i>=0;i--){
+      let p=cfParts[i]; p.x+=p.vx; p.y+=p.vy; p.rot+=p.rv; p.vy+=0.04; p.vx*=0.99;
+      if(p.y>cfCanvas.height+20){ cfParts.splice(i,1); continue; }
+      cfCtx.save(); cfCtx.translate(p.x,p.y); cfCtx.rotate(p.rot); cfCtx.fillStyle=p.c; cfCtx.globalAlpha=0.95;
+      if(p.circle){ cfCtx.beginPath(); cfCtx.arc(0,0,p.w/2,0,Math.PI*2); cfCtx.fill(); }
+      else cfCtx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      cfCtx.restore();
+    }
+    if(cfParts.length>0) cfAnim=requestAnimationFrame(cfLoop); else { cfAnim=null; cfCtx.clearRect(0,0,cfCanvas.width,cfCanvas.height); }
+  }
+
+  function floatXP(text){
+    let wrap = document.querySelector('.quiz-stats'); if(!wrap) return;
+    let el = document.createElement('span'); el.className='float-xp'; el.style.left='35%'; el.textContent=text;
+    wrap.style.position='relative'; wrap.appendChild(el);
+    setTimeout(()=>el.remove(),1200);
+  }
+  function showLevelUp(lvl){
+    let ov = document.getElementById('levelup-overlay'); if(!ov) return;
+    document.getElementById('lu-level').textContent = lvl;
+    ov.style.display = 'flex';
+    sLevelUp(); burstConfetti(150);
+    setTimeout(()=>{ ov.style.display = 'none'; },2200);
+  }
+
+  function startTimer(){
+    clearInterval(questionTimer);
+    timerLeft = QUESTION_TIME;
+    updateTimerUI();
+    questionTimer = setInterval(()=>{
+      timerLeft--;
+      if(timerLeft >= 1 && timerLeft <= 5) sTick();
+      updateTimerUI();
+      if(timerLeft <= 0){ clearInterval(questionTimer); onTimeUp(); }
+    },1000);
+  }
+  function sTick(){ beep(720,0.045,'square',0.03); }
+  function updateTimerUI(){
+    let bar = document.getElementById('timer-bar'), num = document.getElementById('timer-num');
+    if(num) num.textContent = timerLeft;
+    if(bar){
+      bar.style.width = Math.max(0,(timerLeft/QUESTION_TIME)*100) + '%';
+      bar.classList.toggle('low', timerLeft <= 10);
+      bar.classList.toggle('warn', timerLeft > 10 && timerLeft <= 20);
+    }
+  }
+  function onTimeUp(){
+    if(questionTimer) clearInterval(questionTimer);
+    if(answers[currentQ] !== null) return;
+    answers[currentQ] = -1;
+    streak = 0;
+    sWrong();
+    let q = mySubjectData.questions[currentQ];
+    let box = document.getElementById('explanation-box');
+    box.className = 'explanation-ui fade-in-ui wrong';
+    box.innerHTML = '<strong>⏰ انتهى الوقت! لم تُجب</strong><br><br>الإجابة الصحيحة: <strong style="color:var(--c-green)">'+q.options[q.correct]+'</strong><br><br>'+q.explanation;
+    box.style.display = 'block';
+    let container = document.getElementById('options-container').children;
+    for(let i=0;i<container.length;i++){ container[i].classList.add('disabled'); container[i].onclick = null; }
+    container[q.correct].classList.add('correct');
+    document.getElementById('next-btn').style.display = 'inline-block';
+    updateUI();
+  }
+
+  function toggleReview(){
+    let wrap = document.getElementById('review-wrap');
+    let show = (wrap.style.display === 'none');
+    wrap.style.display = show ? 'block' : 'none';
+    if(show) buildReview();
+  }
+  function buildReview(){
+    let box = document.getElementById('review-list'); box.innerHTML = '';
+    mySubjectData.questions.forEach((q,i)=>{
+      if(answers[i] === q.correct) return;
+      let div = document.createElement('div'); div.className = 'review-item';
+      let yourAnswer = (answers[i]===undefined || answers[i]===null || answers[i]===-1) ? 'لم تُجب' : q.options[answers[i]];
+      div.innerHTML = '<div class="rv-q">'+(i+1)+'. '+q.q+'</div>'
+        +'<div class="rv-a rv-wrong">✖ إجابتك: '+yourAnswer+'</div>'
+        +'<div class="rv-a rv-right">✔ الصحيحة: '+q.options[q.correct]+'</div>'
+        +(q.explanation ? '<div class="rv-exp">'+q.explanation+'</div>' : '');
+      box.appendChild(div);
+    });
+    if(!box.children.length) box.innerHTML = '<div class="rv-exp" style="text-align:center;">🎉 رائع! لا توجد أخطاء للمراجعة</div>';
+  }
   const LETTERS = ['أ','ب','ج','د'];
 
+  function levelOf(xp) { return Math.floor(Math.sqrt(xp / 100)) + 1; }
+
   function updateUI() {
+    let level = levelOf(playerXP);
+    let cur = (level-1)*(level-1)*100, nxt = level*level*100;
+    let xpFill = document.getElementById('xp-fill');
+    if(xpFill) xpFill.style.width = Math.max(0, Math.min(100, ((playerXP-cur)/(nxt-cur))*100)) + '%';
+    let xpNum = document.getElementById('xp-num');
+    if(xpNum) xpNum.textContent = (playerXP >= nxt-1) ? 'MAX' : (nxt - playerXP) + ' ⬅';
     document.getElementById('player-xp').textContent = playerXP;
-    document.getElementById('player-level').textContent = Math.floor(Math.sqrt(playerXP / 100)) + 1;
+    document.getElementById('player-level').textContent = level;
     document.getElementById('streak-count').textContent = streak;
     document.getElementById('count-fifty').textContent = inventory.fifty;
     document.getElementById('count-shield').textContent = inventory.shield;
+    document.getElementById('btn-fifty').classList.toggle('inv-empty', inventory.fifty <= 0);
+    document.getElementById('btn-shield').classList.toggle('inv-empty', inventory.shield <= 0);
+
+    let wsXp = document.getElementById('ws-xp');
+    if(wsXp) wsXp.textContent = playerXP;
+    let wsLv = document.getElementById('ws-level');
+    if(wsLv) wsLv.textContent = levelOf(playerXP);
+    let wsBest = document.getElementById('ws-best');
+    if(wsBest) wsBest.textContent = bestScore > 0 ? bestScore + '%' : '—';
+    let me = document.getElementById('leader-me');
+    if(me) me.querySelector('span:last-child').textContent = bestScore > 0 ? bestScore + '%' : '—';
   }
   updateUI();
 
@@ -406,28 +792,42 @@ const mySubjectData = {
   }
 
   function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+  function showToast(msg, type = 'info') {
+    let box = document.getElementById('toast-box');
+    if(!box) return;
+    box.innerHTML = `<div class="toast-item toast-${type} fade-in-ui" role="status">${msg}</div>`;
+    clearTimeout(box._timer);
+    box._timer = setTimeout(() => { box.innerHTML = ''; }, 2600);
+  }
   
   function buyItem(item, price) {
     if(playerXP >= price) {
       playerXP -= price; inventory[item]++;
       localStorage.setItem('devAhmedXP', playerXP); localStorage.setItem('devAhmedInv', JSON.stringify(inventory));
       updateUI();
-    } else alert("رصيد النقاط غير كافٍ لإتمام الشراء.");
+      showToast(item === 'fifty' ? 'تم شراء أداة 50/50 بنجاح ✅' : 'تم شراء الدرع الواقي بنجاح 🛡️', 'success');
+    } else showToast('رصيد النقاط غير كافٍ لإتمام الشراء.', 'error');
   }
 
   document.getElementById('main-title').textContent = mySubjectData.title;
   document.getElementById('quiz-subtitle').textContent = "استعد لاختبارك وتدرب على الـ " + mySubjectData.questions.length + " سؤالاً عبر بيئة تفاعلية";
+  if(document.getElementById('ws-questions')) document.getElementById('ws-questions').textContent = mySubjectData.questions.length;
 
   function startQuiz() {
+    currentQ = 0; streak = 0; sessionXP = 0; shieldActive = false;
     document.getElementById('welcome-screen').style.display = 'none';
     document.getElementById('quiz-screen').style.display = 'block';
     answers = new Array(mySubjectData.questions.length).fill(null);
     hintsUsed = new Array(mySubjectData.questions.length).fill(false);
+    updateUI();
     renderQuestion();
+    showToast('انطلقت الرحلة! بالتوفيق 🚀', 'info');
   }
 
   function useFiftyFifty() {
-    if(inventory.fifty <= 0 || answers[currentQ] !== null || hintsUsed[currentQ]) return;
+    if(inventory.fifty <= 0) { showToast('لا تملك أداة 50/50 حالياً.', 'error'); return; }
+    if(answers[currentQ] !== null || hintsUsed[currentQ]) return;
     inventory.fifty--; updateUI(); localStorage.setItem('devAhmedInv', JSON.stringify(inventory));
     let q = mySubjectData.questions[currentQ];
     let opts = document.getElementById('options-container').children;
@@ -436,18 +836,37 @@ const mySubjectData = {
     let hide2 = wrong.splice(Math.floor(Math.random()*wrong.length), 1)[0];
     opts[hide1].classList.add('hidden-hint'); opts[hide2].classList.add('hidden-hint');
     hintsUsed[currentQ] = true;
+    stats.usesFifty++; saveStats();
+    sClick();
+    awardAchievements();
+    showToast('تم حذف إجابتين خاطئتين 🎯', 'info');
   }
 
   function useShield() {
-    if(inventory.shield <= 0 || answers[currentQ] !== null || shieldActive) return;
+    if(inventory.shield <= 0) { showToast('لا توجد أدرع متاحة حالياً.', 'error'); return; }
+    if(answers[currentQ] !== null || shieldActive) return;
     inventory.shield--; updateUI(); localStorage.setItem('devAhmedInv', JSON.stringify(inventory));
     shieldActive = true;
+    stats.usesShield++; saveStats();
+    sClick();
+    awardAchievements();
+    showToast('الدرع مفعّل! سيحميك من أول إجابة خاطئة 🛡️', 'info');
   }
 
   function renderQuestion() {
     let q = mySubjectData.questions[currentQ];
-    document.getElementById('question-tracker').textContent = `${currentQ + 1} / ${mySubjectData.questions.length}`;
-    document.getElementById('progress').style.width = `${(currentQ / mySubjectData.questions.length) * 100}%`;
+    let total = mySubjectData.questions.length;
+    if(questionTimer) clearInterval(questionTimer);
+    let answeredCount = 0, correctCount = 0;
+    for(let i = 0; i < total; i++) {
+      if(answers[i] !== null) { answeredCount++; if(answers[i] === mySubjectData.questions[i].correct) correctCount++; }
+    }
+    document.getElementById('question-tracker').textContent = `${currentQ + 1} / ${total}`;
+    document.getElementById('progress').style.width = `${(currentQ / total) * 100}%`;
+    document.getElementById('quiz-percent').textContent = Math.round((currentQ / total) * 100) + '%';
+    document.getElementById('quiz-streak').textContent = streak;
+    document.getElementById('quiz-xp').textContent = playerXP;
+    document.getElementById('quiz-accuracy').textContent = answeredCount ? Math.round((correctCount / answeredCount) * 100) + '%' : '—';
     document.getElementById('question-text').textContent = q.q;
     document.getElementById('explanation-box').style.display = 'none';
     document.getElementById('next-btn').style.display = 'none';
@@ -474,15 +893,24 @@ const mySubjectData = {
     if(answers[currentQ] !== null) {
       document.getElementById('next-btn').style.display = 'inline-block';
       showExp();
+      let tb = document.getElementById('timer-bar');
+      if(tb){ tb.style.width = '100%'; tb.className = 'timer-bar'; }
+      document.getElementById('timer-num').textContent = QUESTION_TIME;
+    } else {
+      startTimer();
     }
   }
 
   function handleAnswer(idx, btn) {
     if(answers[currentQ] !== null && !shieldActive) return;
+    if(questionTimer) clearInterval(questionTimer);
     let q = mySubjectData.questions[currentQ];
     
     if(idx !== q.correct && shieldActive) {
-      shieldActive = false; btn.classList.add('wrong', 'disabled'); btn.onclick = null; return;
+      shieldActive = false; btn.classList.add('wrong', 'disabled', 'shake'); btn.onclick = null;
+      sWrong();
+      showToast('🛡️ الدرع حماك من الإجابة الخاطئة!', 'info');
+      return;
     }
     
     shieldActive = false;
@@ -492,11 +920,28 @@ const mySubjectData = {
       streak++; 
       triggerStreakPulse();
       let gained = (streak >= 3 ? 30 : 15);
+      let speedBonus = (timerLeft > QUESTION_TIME * 0.4) ? 5 : 0;
+      gained += speedBonus;
       playerXP += gained; sessionXP += gained;
       localStorage.setItem('devAhmedXP', playerXP);
-    } else streak = 0;
+      stats.correctTotal++; saveStats();
+      floatXP('+' + gained);
+      sCorrect();
+      if(speedBonus) showToast('⚡ رد سريع! مكافأة سرعة +' + speedBonus, 'success');
+      if(streak === 3) showToast('🔥 سلسلة 3 إجابات متتالية! +30 نقطة', 'success');
+      if(streak === 5) showToast('🏅 سلسلة 5 إجابات متتالية! أداء رائع', 'success');
+      if(streak === 10) { showToast('👑 سلسلة 10 متتالية! أنت الأسطورة', 'success'); unlockBadge('streak10'); }
+      let lvlBefore = levelOf(playerXP - gained);
+      let lvlAfter = levelOf(playerXP);
+      if(lvlAfter > lvlBefore) showLevelUp(lvlAfter);
+    } else {
+      streak = 0;
+      sWrong();
+      showToast('❌ إجابة خاطئة، راجع الشرح', 'error');
+    }
     
     updateUI();
+    awardAchievements();
     renderQuestion();
   }
 
@@ -513,13 +958,52 @@ const mySubjectData = {
     if(currentQ < mySubjectData.questions.length - 1) {
       currentQ++; renderQuestion();
     } else {
-      document.getElementById('quiz-screen').style.display = 'none';
-      document.getElementById('result-screen').style.display = 'block';
-      let score = answers.filter((a, i) => a === mySubjectData.questions[i].correct).length;
-      let pct = Math.round((score / mySubjectData.questions.length) * 100);
-      document.getElementById('final-score').textContent = `${pct}%`;
-      document.getElementById('earned-xp').textContent = sessionXP;
+      showFinalResult();
     }
+  }
+
+  function showFinalResult() {
+    let qs = mySubjectData.questions, total = qs.length;
+    let correctCount = answers.filter((a, i) => a === qs[i].correct).length;
+    let wrongCount = total - correctCount;
+    let pct = Math.round((correctCount / total) * 100);
+    if(pct > bestScore) { bestScore = pct; localStorage.setItem('devAhmedBest', bestScore); }
+    if(questionTimer) clearInterval(questionTimer);
+
+    document.getElementById('quiz-screen').style.display = 'none';
+    document.getElementById('result-screen').style.display = 'block';
+    document.getElementById('progress').style.width = '100%';
+    document.getElementById('final-score').textContent = pct + '%';
+    document.getElementById('correct-count').textContent = correctCount;
+    document.getElementById('wrong-count').textContent = wrongCount;
+    document.getElementById('session-xp').textContent = sessionXP;
+
+    let stars = pct >= 90 ? 5 : pct >= 80 ? 4 : pct >= 65 ? 3 : pct >= 50 ? 2 : pct >= 30 ? 1 : 0;
+    let row = document.getElementById('stars-row');
+    row.innerHTML = '';
+    for(let i = 0; i < 5; i++) row.innerHTML += (i < stars) ? '<span class="star on" style="animation-delay:' + (i * 0.12) + 's">★</span>' : '<span class="star">★</span>';
+
+    let title, emo, msg;
+    if(pct >= 90)      { title = 'ممتاز!';      emo = '🏆'; msg = 'أنت جاهز تماماً للاختبار النهائي. واصل التألق!'; }
+    else if(pct >= 75) { title = 'جيد جداً';    emo = '🎯'; msg = 'مراجعة سريعة لبعض النقاط وستحصل على نتيجة مثالية.'; }
+    else if(pct >= 50) { title = 'لا بأس';      emo = '📖'; msg = 'راجع الأخطاء ثم أعد المحاولة.'; }
+    else               { title = 'تحتاج مراجعة'; emo = '🔁'; msg = 'لا تستسلم! اقرأ مادة الأساسيات جيداً وأعد الاختبار من جديد.'; }
+
+    document.getElementById('result-title').textContent = title;
+    document.getElementById('result-emoji').textContent = emo;
+    document.getElementById('result-message').textContent = msg;
+
+    unlockBadge('finished');
+    if(pct === 100) unlockBadge('perfect');
+    if(pct >= 75) { sWin(); burstConfetti(160); }
+    awardAchievements();
+    renderBadgeCount();
+    updateUI();
+  }
+
+  function restartQuiz() {
+    document.getElementById('result-screen').style.display = 'none';
+    startQuiz();
   }
 
   const canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
@@ -544,6 +1028,9 @@ const mySubjectData = {
       document.getElementById('welcome-screen').style.display = 'block'; 
   }
 
+  setupConfetti();
+  renderSound();
+  renderBadgeCount();
   document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 </body>
