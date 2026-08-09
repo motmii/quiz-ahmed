@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080c14">
-<title>منصة مراجعة الاختبار | أساسيات قواعد البيانات</title>
+<title>بنك الأسئلة الذكي 📚 | أنشئ، تعلّم، وتحدَّ</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -263,7 +263,7 @@
   .option-btn.shake { animation: option-shake 0.4s; }
   @keyframes option-shake { 0%,100%{ transform: translateX(0); } 25%{ transform: translateX(-6px); } 50%{ transform: translateX(6px); } 75%{ transform: translateX(-4px); } }
 
-  .levelup-overlay { position: fixed; inset: 0; z-index: 1800; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .levelup-overlay { position: fixed; inset: 0; z-index: 1800; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.55); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); pointer-events: none; }
   .levelup-card { text-align: center; animation: result-pop 0.6s cubic-bezier(0.16,1,0.3,1); }
   .levelup-card .lu-icon { font-size: 4rem; }
   .levelup-card .lu-title { font-size: 2.2rem; font-weight: 900; color: var(--c-amber); text-shadow: 0 0 26px rgba(251,191,36,0.5); }
@@ -285,6 +285,125 @@
   .rv-wrong { color: var(--c-red); }
   .rv-right { color: var(--c-green); font-weight: 700; }
   .rv-exp { margin-top: 8px; font-size: 0.88rem; color: var(--c-muted); border-right: 2px solid var(--c-blue2); padding-right: 10px; line-height: 1.6; }
+
+  /* ====== Question Bank Lab ====== */
+  .mode-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin: 0 auto 40px; }
+  .mode-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 195px; padding: 18px 22px; border-radius: var(--radius-lg); font-weight: 900; cursor: pointer; transition: transform 0.25s, box-shadow 0.25s; border: 1px solid var(--c-border); }
+  .mode-btn small { font-weight: 500; color: var(--c-muted); font-size: 0.8rem; }
+  .mode-btn:hover { transform: translateY(-4px); box-shadow: var(--shadow-blue); }
+  .mode-btn.primary { background: linear-gradient(135deg, var(--c-blue2), #0284c7); color: #fff; }
+  .mode-btn.primary small { color: rgba(255,255,255,0.85); }
+
+  .bank-search { width: 100%; padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--c-border); background: rgba(255,255,255,0.04); color: var(--c-text); font-family: var(--font); font-size: 0.98rem; outline: none; }
+  .bank-search:focus { border-color: var(--c-blue2); box-shadow: 0 0 0 3px rgba(14,165,233,0.15); }
+  .bank-search::placeholder { color: var(--c-dim); }
+  .manage-actions { display: flex; gap: 10px; margin: 22px 0 14px; flex-wrap: wrap; }
+  .manage-actions .bank-search { flex: 1; min-width: 200px; }
+  .bank-stats { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .bank-stat { flex: 1; min-width: 120px; text-align: center; padding: 12px 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: var(--radius-md); }
+  .bank-stat b { display: block; font-size: 1.4rem; color: var(--c-blue); font-weight: 900; }
+  .bank-stat span { font-size: 0.75rem; color: var(--c-muted); font-weight: 700; }
+  .bank-list { display: flex; flex-direction: column; gap: 12px; max-height: 440px; overflow-y: auto; padding-left: 6px; }
+  .bank-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: var(--radius-md); transition: transform 0.25s; }
+  .bank-item:hover { transform: translateX(-3px); }
+  .bank-idx { flex: 0 0 auto; width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--c-blue2), #0284c7); color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+  .bank-body { flex: 1; min-width: 0; }
+  .bank-q { font-weight: 700; line-height: 1.5; margin-bottom: 6px; }
+  .bank-meta { display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.78rem; color: var(--c-muted); }
+  .bank-meta span { display: flex; align-items: center; gap: 4px; }
+  .bank-actions { display: flex; gap: 6px; }
+  .empty-state { text-align: center; padding: 34px 12px; color: var(--c-dim); font-weight: 700; line-height: 1.7; }
+
+  .qf-row { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+  .qf-radio { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  .qf-radio input { accent-color: var(--c-blue2); width: 17px; height: 17px; }
+  .qf-letter { width: 34px; height: 34px; border-radius: 10px; background: rgba(255,255,255,0.07); border: 1px solid var(--c-border); display: inline-flex; align-items: center; justify-content: center; font-weight: 900; color: var(--c-blue); }
+  .qf-opt { flex: 1; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--c-border); background: rgba(255,255,255,0.04); color: var(--c-text); font-family: var(--font); }
+  .qf-opt:focus { border-color: var(--c-blue2); outline: none; }
+  #qf-question, #qf-explanation, #import-text { margin: 12px 0; }
+  #import-text { min-height: 140px; resize: vertical; }
+  .import-example { background: rgba(0,0,0,0.35); border: 1px solid var(--c-border); border-radius: var(--radius-sm); padding: 10px 12px; font-family: Consolas, monospace; font-size: 0.8rem; color: var(--c-blue); margin: 10px 0 4px; direction: ltr; text-align: left; white-space: pre-wrap; }
+
+  /* ====== WOW Pack 2 ====== */
+  :root[data-theme="blue"] { --c-blue:#38bdf8; --c-blue2:#0ea5e9; --c-border:rgba(56,189,248,0.18); --c-border2:rgba(56,189,248,0.3); }
+  :root[data-theme="emerald"] { --c-blue:#34d399; --c-blue2:#10b981; --c-border:rgba(52,211,153,0.18); --c-border2:rgba(52,211,153,0.3); }
+  :root[data-theme="violet"] { --c-blue:#a78bfa; --c-blue2:#8b5cf6; --c-border:rgba(167,139,250,0.22); --c-border2:rgba(167,139,250,0.38); }
+  :root[data-theme="gold"] { --c-blue:#fbbf24; --c-blue2:#f59e0b; --c-border:rgba(251,191,36,0.22); --c-border2:rgba(251,191,36,0.38); }
+
+  .profile-chip { display:flex; align-items:center; gap:8px; padding:6px 12px 6px 6px; border-radius:999px; cursor:pointer; transition:transform .2s; }
+  .profile-chip:hover { transform:scale(1.05); }
+  .pf-avatar { font-size:1.3rem; width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg, var(--c-blue2), #0284c7); display:inline-flex; align-items:center; justify-content:center; }
+  .pf-name { font-weight:700; color:var(--c-text); max-width:110px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .pf-avatar-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin:14px 0; }
+  .avatar-opt { font-size:1.6rem; padding:8px; border-radius:12px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); cursor:pointer; text-align:center; transition:transform .15s; }
+  .avatar-opt:hover { transform:scale(1.12); }
+  .avatar-opt.sel { border-color:var(--c-blue2); background:rgba(14,165,233,.15); box-shadow:0 0 12px rgba(14,165,233,.3); }
+  .pf-goal-row, .pf-theme-row { margin:12px 0; }
+  .pf-goal-row label, .pf-theme-row label { display:block; font-weight:700; color:var(--c-muted); margin-bottom:6px; }
+  .pf-theme-btns { display:flex; gap:10px; }
+  .theme-btn { flex:1; font-size:1.4rem; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); cursor:pointer; transition:all .2s; }
+  .theme-btn.active { border-color:var(--c-blue2); box-shadow:0 0 14px rgba(14,165,233,.4); transform:scale(1.06); }
+  #pf-name-input { margin-top:6px; }
+
+  .daily-row { display:flex; gap:14px; justify-content:center; align-items:stretch; flex-wrap:wrap; margin:0 auto 26px; max-width:820px; }
+  .daily-box { display:flex; align-items:center; gap:14px; padding:16px 20px; border-radius:var(--radius-lg); flex:1; min-width:280px; }
+  .daily-ico { font-size:2.2rem; animation:gentle-pulse 2s infinite; }
+  .daily-info { flex:1; }
+  .daily-info b { display:block; color:var(--c-text); font-size:1.05rem; }
+  .daily-info span { color:var(--c-muted); font-size:0.86rem; line-height:1.5; }
+  .daily-btn.done { pointer-events:none; opacity:.5; }
+  .goal-ring { width:108px; height:108px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:conic-gradient(var(--c-blue) 0%, rgba(255,255,255,.06) 0); position:relative; flex:0 0 auto; }
+  .goal-ring::before { content:''; position:absolute; inset:10px; border-radius:50%; background:var(--c-bg); }
+  .goal-ring-in { position:relative; z-index:1; text-align:center; }
+  .goal-ring-in b { display:block; font-size:1.2rem; color:var(--c-blue); }
+  .goal-ring-in span { font-size:0.66rem; color:var(--c-muted); font-weight:700; }
+  .cal-wrap { max-width:820px; margin:0 auto 28px; padding:16px 20px; border-radius:var(--radius-lg); }
+  .cal-title { display:flex; justify-content:space-between; align-items:center; color:var(--c-muted); font-size:0.9rem; font-weight:700; margin-bottom:10px; gap:10px; flex-wrap:wrap; }
+  .cal-grid { display:grid; grid-template-columns:repeat(10,1fr); gap:4px; }
+  .cal-cell { aspect-ratio:1/1; border-radius:5px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.03); transition:transform .15s; }
+  .cal-cell.on { background:var(--c-blue2); box-shadow:0 0 8px rgba(14,165,233,.45); }
+  .cal-cell:hover { transform:scale(1.25); cursor:default; }
+
+  .combo-chip { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:999px; font-weight:900; font-size:0.9rem; animation:combo-pop .35s cubic-bezier(.16,1,.3,1); }
+  @keyframes combo-pop { 0%{ transform:scale(.5);} 60%{ transform:scale(1.15);} 100%{ transform:scale(1);} }
+  .combo-chip.tier-2 { background:rgba(52,211,153,.15); color:var(--c-green); border:1px solid rgba(52,211,153,.4); }
+  .combo-chip.tier-3 { background:rgba(251,191,36,.15); color:var(--c-amber); border:1px solid rgba(251,191,36,.4); }
+  .combo-chip.tier-4 { background:rgba(248,113,113,.15); color:var(--c-red); border:1px solid rgba(248,113,113,.4); text-shadow:0 0 10px rgba(248,113,113,.5); }
+
+  .timer-wrap.frozen .timer-bar { background:#67e8f9; box-shadow:0 0 14px rgba(103,232,249,.6); animation:freeze-glow 1s linear infinite alternate; }
+  @keyframes freeze-glow { from{opacity:.7;} to{opacity:1;} }
+  .freeze-tag { color:#67e8f9; font-weight:900; }
+
+  .mast { display:inline-flex; align-items:center; gap:3px; padding:3px 9px; border-radius:999px; font-size:0.72rem; font-weight:700; }
+  .mast.new { background:rgba(148,163,184,.15); color:var(--c-muted); }
+  .mast.weak { background:rgba(248,113,113,.15); color:var(--c-red); }
+  .mast.review { background:rgba(251,191,36,.15); color:var(--c-amber); }
+  .mast.mastered { background:rgba(52,211,153,.15); color:var(--c-green); }
+
+  .mastery-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+  .mastery-tab { padding:8px 14px; border-radius:999px; border:1px solid var(--c-border); background:rgba(255,255,255,.03); color:var(--c-muted); font-weight:700; cursor:pointer; transition:all .2s; }
+  .mastery-tab.active { background:var(--c-blue2); color:#fff; border-color:var(--c-blue2); box-shadow:0 0 14px rgba(14,165,233,.35); }
+  .weak-panel { padding:14px 18px; border-radius:var(--radius-md); margin-bottom:14px; border:1px dashed rgba(248,113,113,.35); display:none; }
+  .weak-panel h4 { color:var(--c-red); margin-bottom:8px; font-size:1rem; }
+  .weak-item { display:flex; align-items:center; gap:10px; font-size:0.86rem; color:var(--c-muted); padding:5px 0; border-bottom:1px dashed rgba(255,255,255,.05); }
+  .weak-item:last-child { border-bottom:none; }
+  .weak-item i { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .weak-none { color:var(--c-green); font-size:0.92rem; }
+
+  .medal-tag { display:inline-flex; align-items:center; gap:8px; padding:8px 18px; border-radius:999px; font-weight:900; font-size:1.05rem; margin-top:8px; border:1px solid var(--c-border); }
+  .medal-gold { background:linear-gradient(135deg, rgba(251,191,36,.2), rgba(251,191,36,.05)); color:#fcd34d; }
+  .medal-silver { background:rgba(203,213,225,.12); color:#cbd5e1; }
+  .medal-bronze { background:rgba(217,119,6,.16); color:#f59e0b; }
+  .medal-legend { background:rgba(56,189,248,.14); color:var(--c-blue); }
+  .medal-trained { background:rgba(52,211,153,.12); color:var(--c-green); }
+
+  .chart-box { max-width:820px; margin:0 auto 28px; padding:16px 20px; border-radius:var(--radius-lg); }
+  .chart-box canvas { width:100%; height:130px; display:block; }
+  .sess-list { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .sess-item { font-size:0.75rem; padding:4px 10px; border-radius:999px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06); color:var(--c-muted); }
+
+  .keys-hint { font-size:0.78rem; color:var(--c-dim); text-align:center; margin-top:10px; }
+  .key-kbd { display:inline-block; padding:2px 7px; border-radius:6px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); font-family:Consolas,monospace; font-size:0.72rem; margin:0 2px; color:var(--c-text); }
 </style>
 </head>
 <body>
@@ -305,6 +424,10 @@
       <span style="font-size: 1.1rem; font-weight: bold;">الدرع الواقي <span style="color:var(--c-muted); font-weight: normal; font-size: 0.9rem; display:block;">تكلفة: 300 نقطة</span></span>
       <button class="btn btn-blue" onclick="buyItem('shield',300)">شراء الأداة</button>
     </div>
+    <div style="display:flex; justify-content:space-between; align-items: center; padding: 16px; background: rgba(0,0,0,0.3); border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.05); margin-top: 16px;">
+      <span style="font-size: 1.1rem; font-weight: bold;">تجميد الزمن ❄️ <span style="color:var(--c-muted); font-weight: normal; font-size: 0.9rem; display:block;">تكلفة: 150 نقطة</span></span>
+      <button class="btn btn-blue" onclick="buyItem('freeze',150)">شراء الأداة</button>
+    </div>
   </div>
 </div>
 
@@ -314,6 +437,54 @@
     <h2 style="color:var(--c-amber); margin-bottom: 6px; font-size: 1.7rem; text-align: center;">🏅 الإنجازات</h2>
     <p style="text-align:center; color:var(--c-muted); margin:0;">اجمع كل الشارات وأثبت أنك الأسطورة!</p>
     <div class="badges-grid" id="badges-grid"></div>
+  </div>
+</div>
+
+<div class="modal-overlay-ui fade-in-ui" id="qform-modal">
+  <div class="modal-box glass-panel" style="max-width: 540px;">
+    <button class="modal-close" onclick="closeModal('qform-modal')">✕</button>
+    <h3 id="qf-title" style="color:var(--c-blue); margin-bottom: 8px;">➕ أضف سؤالاً جديداً</h3>
+    <input id="qf-question" class="bank-search" placeholder="نص السؤال...">
+    <div id="qf-options"></div>
+    <textarea id="qf-explanation" class="bank-search" placeholder="الشرح / ملاحظة (اختياري)" rows="2"></textarea>
+    <button class="btn btn-primary btn-lg" style="width:100%; margin-top:8px;" onclick="saveQuestionForm()">💾 حفظ السؤال</button>
+  </div>
+</div>
+
+<div class="modal-overlay-ui fade-in-ui" id="import-modal">
+  <div class="modal-box glass-panel" style="max-width: 560px;">
+    <button class="modal-close" onclick="closeModal('import-modal')">✕</button>
+    <h3 style="color:var(--c-blue); margin-bottom: 8px;">📥 استيراد جماعي للأسئلة</h3>
+    <p style="color:var(--c-muted); font-size:0.88rem;">افصل بين الأسئلة بسطر فارغ. الصيغة لكل سؤال:</p>
+    <pre class="import-example">نص السؤال
+الخيار الأول|الخيار الثاني|الخيار الثالث|الخيار الرابع
+رقم الإجابة الصحيحة (1-4)
+شرح اختياري</pre>
+    <textarea id="import-text" class="bank-search" placeholder="الصق أسئلتك هنا..."></textarea>
+    <button class="btn btn-primary btn-lg" style="width:100%; margin-top:8px;" onclick="doImport()">📥 استيراد الآن</button>
+  </div>
+</div>
+
+<div class="modal-overlay-ui fade-in-ui" id="profile-modal">
+  <div class="modal-box glass-panel" style="max-width: 460px;">
+    <button class="modal-close" onclick="closeModal('profile-modal')">✕</button>
+    <h3 style="color:var(--c-blue); margin-bottom: 4px;">👤 ملفك الشخصي</h3>
+    <div id="pf-avatar-grid" class="pf-avatar-grid"></div>
+    <input id="pf-name-input" class="bank-search" placeholder="اكتب اسمك هنا...">
+    <div class="pf-goal-row">
+      <label>🎯 هدف نقاطك الأسبوعي</label>
+      <input id="pf-goal-input" type="number" class="bank-search" min="50" step="50" value="500">
+    </div>
+    <div class="pf-theme-row">
+      <label>🎨 لون المنصة</label>
+      <div id="pf-theme-btns" class="pf-theme-btns">
+        <button class="theme-btn" data-t="blue" onclick="setTheme('blue')">🔵</button>
+        <button class="theme-btn" data-t="emerald" onclick="setTheme('emerald')">🟢</button>
+        <button class="theme-btn" data-t="violet" onclick="setTheme('violet')">🟣</button>
+        <button class="theme-btn" data-t="gold" onclick="setTheme('gold')">🟡</button>
+      </div>
+    </div>
+    <button class="btn btn-primary btn-lg" style="width:100%; margin-top:10px;" onclick="saveProfile()">✔ حفظ الملف</button>
   </div>
 </div>
 
@@ -332,9 +503,15 @@
         </div>
       </div>
     </div>
+    <button class="profile-chip glass-panel" onclick="openProfile()" title="ملفك الشخصي">
+      <span class="pf-avatar" id="pf-avatar">🦊</span>
+      <span class="pf-name" id="pf-name">تعلّم!</span>
+    </button>
     <div class="streak-pill" id="streak-box">تتابع الإجابات: <span id="streak-count">0</span></div>
     <div class="topbar-btns" style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+      <button class="btn btn-ghost btn-icon" onclick="openManager()" title="بنك الأسئلة">📚</button>
       <button class="btn btn-ghost btn-icon" id="sound-btn" onclick="toggleSound()" title="تشغيل / كتم الصوت">🔊</button>
+      <button class="btn btn-ghost btn-icon" id="music-btn" onclick="toggleMusic()" title="الموسيقى الهادئة">🎵</button>
       <button class="btn btn-amber btn-icon" id="badges-btn" onclick="openBadges()" title="الإنجازات والشارات"><span id="badge-count">0</span> 🏅</button>
       <button class="btn btn-amber pulse-animation" onclick="document.getElementById('shop-modal').style.display='flex'">المتجر 🛒</button>
     </div>
@@ -345,6 +522,33 @@
       <div class="platform-tag">بيئة مراجعة متقدمة</div>
       <h1 class="platform-title" id="main-title">جاري التحميل...</h1>
       <p class="platform-sub" id="quiz-subtitle">استعد لاختبارك وتدرب على الأسئلة</p>
+
+      <div class="daily-row">
+        <div class="glass-panel daily-box">
+          <div class="daily-ico">💎</div>
+          <div class="daily-info">
+            <b>المكافأة اليومية</b>
+            <span id="daily-status">استلم 50 نقطة كل يوم!</span>
+          </div>
+          <button class="btn btn-amber daily-btn" id="daily-btn" onclick="claimDaily()">استلم</button>
+        </div>
+        <div class="glass-panel daily-box" style="justify-content:center;">
+          <div class="goal-ring" id="goal-ring">
+            <div class="goal-ring-in"><b id="goal-pct">0%</b><span>هدفك الأسبوعي</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cal-wrap glass-panel">
+        <div class="cal-title"><span>📅 نشاط آخر 30 يوماً</span><span id="cal-streak" style="color:var(--c-amber);">سلسلة الأيام: 0 🔥</span></div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+
+      <div class="chart-box glass-panel" id="chart-box" style="display:none;">
+        <div class="cal-title"><span>📈 تطور أدائك 🚀</span><span style="color:var(--c-blue);">آخر 10 جلسات</span></div>
+        <canvas id="chart-canvas"></canvas>
+        <div class="sess-list" id="sess-list"></div>
+      </div>
 
       <div class="welcome-stats">
         <div class="welcome-stat glass-panel">
@@ -375,7 +579,43 @@
         <div class="howto-card glass-panel"><span class="howto-num">3</span><span>استخدم النقاط في المتجر لشراء أدوات مساعدة</span></div>
       </div>
 
-      <button class="btn btn-primary btn-lg pulse-animation" onclick="startQuiz()">بدء الاختبار الآن</button>
+      <div class="mode-buttons">
+        <button class="mode-btn glass-panel primary" onclick="startQuiz('smart')">🧠 الوضع الذكي ⚡<small>10 أسئلة تركّز على نقاط ضعفك</small></button>
+        <button class="mode-btn glass-panel" onclick="startQuiz('ten')">🎲 تحدٍ سريع<small>10 أسئلة عشوائية</small></button>
+        <button class="mode-btn glass-panel" onclick="startQuiz('full')">🏟️ التحدي الكامل<small>كل أسئلة البنك</small></button>
+      </div>
+      <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+        <button class="btn btn-ghost btn-lg" onclick="openManager()">📚 بنك الأسئلة</button>
+        <button class="btn btn-ghost btn-lg" onclick="openBadges()">🏅 الإنجازات</button>
+        <button class="btn btn-ghost btn-lg" onclick="openProfile()">👤 ملفي</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="manage-screen" class="fade-in-ui" style="display:none;">
+    <div class="glass-panel" style="padding: 26px; border-radius: var(--radius-xl); max-width: 760px; margin: 0 auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h2 style="color:var(--c-blue); font-size:1.6rem;">📚 بنك الأسئلة الذكي</h2>
+          <p style="color:var(--c-muted); margin:4px 0 0; font-size:0.9rem;">أضف، عدّل، واحذف أسئلتك — كل شيء يُحفظ تلقائياً في متصفحك</p>
+        </div>
+        <button class="btn btn-ghost" onclick="goToMainMenu()">← الرجوع</button>
+      </div>
+      <div class="manage-actions">
+        <input id="bank-search" class="bank-search" placeholder="🔍 ابحث في الأسئلة..." oninput="renderBankList(this.value)">
+        <button class="btn btn-ghost" onclick="openImportModal()">📥 استيراد</button>
+        <button class="btn btn-primary btn-lg" onclick="openQuestionForm()">+ أضف سؤالاً</button>
+      </div>
+      <div id="weak-panel" class="weak-panel"></div>
+      <div class="mastery-tabs" id="mastery-tabs">
+        <button class="mastery-tab active" onclick="setTab('all')">الكل</button>
+        <button class="mastery-tab" onclick="setTab('new')">🆕 جديد</button>
+        <button class="mastery-tab" onclick="setTab('weak')">💀 ضعيف</button>
+        <button class="mastery-tab" onclick="setTab('review')">📖 مراجعة</button>
+        <button class="mastery-tab" onclick="setTab('mastered')">✅ متقن</button>
+      </div>
+      <div class="bank-stats" id="bank-stats"></div>
+      <div class="bank-list" id="bank-list"></div>
     </div>
   </div>
 
@@ -385,6 +625,7 @@
       <div class="inv-bar">
         <button class="inv-btn" id="btn-fifty" onclick="useFiftyFifty()" title="تساعدك على حذف إجابتين خاطئتين">🎯 50/50 <span class="inv-count" id="count-fifty">0</span></button>
         <button class="inv-btn" id="btn-shield" onclick="useShield()" title="تحميك من أول إجابة خاطئة">🛡️ درع <span class="inv-count" id="count-shield">0</span></button>
+        <button class="inv-btn" id="btn-freeze" onclick="useFreeze()" title="جمّد المؤقت 10 ثوانٍ">❄️ تجميد <span class="inv-count" id="count-freeze">0</span></button>
       </div>
     </div>
     <div style="margin-bottom: 12px; font-weight:bold; color:var(--c-blue); letter-spacing: 1px; font-size: 1.1rem;" id="question-tracker">1 / 100</div>
@@ -401,6 +642,7 @@
       <div class="mini-stat">⚡ <span class="mini-label">النقاط</span> <b id="quiz-xp">0</b></div>
       <div class="mini-stat">🎯 <span class="mini-label">الدقة</span> <b id="quiz-accuracy">—</b></div>
       <div class="mini-stat">📈 <span class="mini-label">التقدم</span> <b id="quiz-percent">0%</b></div>
+      <div class="mini-stat" style="min-width:120px; justify-content:center;"><span class="combo-chip" id="combo-chip" style="display:none;"></span></div>
     </div>
 
     <div class="question-box-ui glass-panel fade-in-ui" id="question-text">جاري التحميل...</div>
@@ -410,6 +652,7 @@
     <div style="margin-top: 32px; text-align: left;">
       <button class="btn btn-primary btn-lg fade-in-ui" id="next-btn" onclick="nextQuestion()" style="display:none; padding: 12px 32px;">السؤال التالي</button>
     </div>
+    <p class="keys-hint">⌨️ <span class="key-kbd">1</span><span class="key-kbd">2</span><span class="key-kbd">3</span><span class="key-kbd">4</span> للإجابة • <span class="key-kbd">Enter</span> للسؤال • <span class="key-kbd">F</span> تجميد • <span class="key-kbd">S</span> الصوت</p>
   </div>
 
   <div id="result-screen" style="display:none;" class="fade-in-ui">
@@ -417,6 +660,7 @@
       <div class="result-badge" id="result-emoji">🏆</div>
       <div class="result-kicker">النتيجة النهائية</div>
       <h2 style="font-size: 2rem; margin: 10px 0 0; color: var(--c-text);" id="result-title">أحسنت!</h2>
+      <div class="medal-tag medal-gold" id="result-medal">🏆 ميدالية ذهبية</div>
       <div class="result-score" id="final-score">0%</div>
 
       <div class="result-stats">
@@ -435,6 +679,7 @@
 
       <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:28px;">
         <button onclick="restartQuiz()" class="btn btn-primary btn-lg pulse-animation">إعادة الاختبار</button>
+        <button onclick="shareResult()" class="btn btn-ghost btn-lg">📤 مشاركة</button>
         <button onclick="goToMainMenu()" class="btn btn-ghost btn-lg">القائمة الرئيسية</button>
       </div>
     </div>
@@ -468,126 +713,105 @@
 <div id="toast-box"></div>
 
 <script>
-// مصفوفة الأسئلة الـ 100 كاملة دون نقصان
-const mySubjectData = {
-    title: "أساسيات قواعد البيانات",
-    questions: [
-      { q: "ما هو التعريف الدقيق للبيانات (data)؟", options: ["معلومات تمت معالجتها", "حقائق مجردة وأرقام غير معالجة", "نتائج التقارير النهائية", "نظام تشغيل الحواسيب"], correct: 1, explanation: "البيانات هي الحقائق والأرقام المجردة التي ليس لها معنى واضح قبل المعالجة." },
-      { q: "ما الفرق الأساسي بين البيانات والمعلومات؟", options: ["لا يوجد فرق", "البيانات هي المعالجة، والمعلومات هي المدخلات", "البيانات هي المادة الخام، والمعلومات هي نتاج معالجة تلك البيانات", "المعلومات تخزن في قواعد البيانات والبيانات في الملفات"], correct: 2, explanation: "المعلومات هي بيانات تمت معالجتها وتفسيرها لتصبح ذات معنى وقيمة." },
-      { q: "ماذا يعني مصطلح dbms؟", options: ["نظام تشغيل البيانات", "نظام إدارة قواعد البيانات", "لغة برمجة الويب", "القرص الصلب"], correct: 1, explanation: "يشير إلى نظام إدارة قواعد البيانات (database management system) وهو البرنامج المسؤول عن إدارة وإنشاء قواعد البيانات." },
-      { q: "أي مما يلي يُعد من عيوب أنظمة الملفات التقليدية؟", options: ["عدم تكرار البيانات", "تكامل البيانات دائمًا", "تكرار البيانات وعدم اتساقها", "سهولة مشاركة البيانات"], correct: 2, explanation: "في أنظمة الملفات التقليدية، يتم حفظ البيانات في ملفات منفصلة مما يؤدي إلى تكرارها واحتمالية تعارضها." },
-      { q: "ما هو النموذج الأكثر شيوعًا واستخدامًا لتنظيم قواعد البيانات اليوم؟", options: ["النموذج الهرمي", "النموذج الشبكي", "النموذج العلائقي", "النموذج النصي"], correct: 2, explanation: "النموذج العلائقي (relational model) الذي يعتمد على الجداول هو الأكثر استخدامًا حاليًا." },
-      { q: "ما هو دور مدير قاعدة البيانات (dba)؟", options: ["إصلاح أعطال الشاشة", "تصميم واجهات المستخدم فقط", "إدارة وتأمين قاعدة البيانات ومنح الصلاحيات", "كتابة تقارير الإدارة المالية"], correct: 2, explanation: "مسؤول قاعدة البيانات (dba) يتولى حماية، صيانة، مراقبة، ومنح الصلاحيات في النظام." },
-      { q: "ما هي البيانات الوصفية (metadata)؟", options: ["البيانات المحذوفة", "بيانات تصف بيانات أخرى كأنواع الحقول وطولها", "البيانات المشفرة", "بيانات النظام التشغيلي"], correct: 1, explanation: "الـ metadata هي بيانات تصف خصائص وهياكل البيانات الموجودة في قاعدة البيانات." },
-      { q: "أي من النماذج التالية يمثل البيانات على شكل شجرة متفرعة (أب وابن)؟", options: ["النموذج العلائقي", "النموذج الهرمي", "نموذج الكائنات", "النموذج الشبكي"], correct: 1, explanation: "النموذج الهرمي ينظم البيانات في هيكل يشبه الشجرة حيث يكون لكل سجل أب واحد فقط." },
-      { q: "كيف ساهمت قواعد البيانات في حل مشكلة 'أمن البيانات' الموجودة في الملفات التقليدية؟", options: ["بإلغاء كلمات المرور", "بوضعها في ملف نصي واحد", "بتوفير نظام صلاحيات وصول مركزي مشفر", "بجعل البيانات متاحة للجميع"], correct: 2, explanation: "الـ dbms يوفر آليات أمنية مركزية لمنع الوصول غير المصرح به للبيانات." },
-      { q: "أي مما يلي يمثل قاعدة بيانات غير علائقية (nosql)؟", options: ["oracle", "mysql", "mongodb", "sql server"], correct: 2, explanation: "تعتبر mongodb من أشهر أنظمة قواعد البيانات غير العلائقية التي لا تعتمد على الجداول التقليدية." },
-      { q: "في قواعد البيانات، ماذا يُقصد بـ 'استقلالية البيانات'؟", options: ["فصل البرامج والتطبيقات عن هيكل تخزين البيانات", "الاعتماد الكلي على البرامج للوصول للبيانات", "حذف البيانات غير المستخدمة", "دمج واجهة المستخدم مع البيانات"], correct: 0, explanation: "استقلالية البيانات تعني إمكانية تغيير هيكل البيانات دون الحاجة لتغيير البرامج والتطبيقات التي تستخدمها." },
-      { q: "لماذا نستخدم لغة sql؟", options: ["لتصميم الصور", "لإدارة واسترجاع البيانات من قواعد البيانات العلائقية", "لكتابة ملفات نصية", "لتشغيل الحاسوب"], correct: 1, explanation: "لغة sql هي اللغة القياسية للتفاعل مع قواعد البيانات العلائقية." },
-      { q: "من هو المستخدم النهائي (end user) لقاعدة البيانات؟", options: ["المبرمج", "مدير النظام", "الشخص الذي يتفاعل مع قاعدة البيانات عبر التطبيقات لاستخراج المعلومات", "مصمم قاعدة البيانات"], correct: 2, explanation: "المستخدم النهائي هو من يستخدم التطبيقات المبنية على قاعدة البيانات لإنجاز عمله اليومي." },
-      { q: "ما هي الفائدة من تقليل 'تكرار البيانات' (data redundancy)؟", options: ["زيادة المساحة التخزينية", "توفير المساحة التخزينية ومنع تعارض المعلومات", "إبطاء النظام", "زيادة تكلفة النظام"], correct: 1, explanation: "تقليل التكرار يحافظ على اتساق البيانات ويوفر مساحات التخزين في الخوادم." },
-      { q: "في أي عقد ظهرت مفاهيم قواعد البيانات العلائقية لأول مرة؟", options: ["الخمسينيات", "السبعينيات", "التسعينيات", "الألفية الجديدة"], correct: 1, explanation: "طرح إدغار كود نموذج قواعد البيانات العلائقية في أوائل السبعينيات." },
+/* ====== بنك الأسئلة الذكي ====== */
+const SEED_QUESTIONS = [
+  { q: "ما هي عاصمة المملكة العربية السعودية؟", options: ["جدة","مكة المكرمة","الرياض","الدمام"], correct: 2, explanation: "الرياض هي العاصمة وأكبر مدن المملكة." },
+  { q: "كم عدد كواكب المجموعة الشمسية؟", options: ["7","8","9","10"], correct: 1, explanation: "المجموعة الشمسية تضم 8 كواكب معروفة." },
+  { q: "ما هو رمز عنصر الأكسجين الكيميائي؟", options: ["H","O","N","C"], correct: 1, explanation: "الأكسجين رمزه O من الكلمة اللاتينية Oxygen." },
+  { q: "ما هي أكبر قارات العالم من حيث المساحة؟", options: ["أفريقيا","أوروبا","آسيا","أمريكا الشمالية"], correct: 2, explanation: "آسيا هي أكبر قارات العالم مساحةً وسكاناً." },
+  { q: "ما هو أكبر كواكب المجموعة الشمسية؟", options: ["الأرض","زحل","المشتري","المريخ"], correct: 2, explanation: "المشتري (Jupiter) هو الكوكب الأكبر حجماً." },
+  { q: "كم عدد ألوان قوس قزح الرئيسية؟", options: ["5","6","7","8"], correct: 2, explanation: "ألوان قوس قزح الرئيسية سبعة ألوان." },
+  { q: "ما اللغة المستخدمة لبناء هيكل صفحات الويب؟", options: ["CSS","HTML","JavaScript","Python"], correct: 1, explanation: "لغة HTML مسؤولة عن هيكلة محتوى صفحات الويب." },
+  { q: "ما هو ناتج 12 × 8؟", options: ["86","96","104","112"], correct: 1, explanation: "12 × 8 = 96." }
+];
+let activeQuiz = [];
+
+let bank = null;
+function getBank(){
+  if(bank) return bank;
+  let stored = null;
+  try{ stored = localStorage.getItem('devAhmedBank'); }catch(e){}
+  let b = null;
+  if(stored === null || stored === undefined){
+    b = JSON.parse(JSON.stringify(SEED_QUESTIONS));
+  } else {
+    try{ b = JSON.parse(stored); }catch(e){ b = null; }
+    if(!Array.isArray(b)) b = JSON.parse(JSON.stringify(SEED_QUESTIONS));
+  }
+  b.forEach((q,i)=>{ q.id = (q.id !== undefined) ? q.id : (i + 1); q.wrongs = q.wrongs || 0; q.attempts = q.attempts || 0; if(!q.explanation) q.explanation = ''; if(q.options.length < 4){ while(q.options.length < 4) q.options.push('———'); } });
+  bank = b;
+  return bank;
+}
+function saveBank(){ localStorage.setItem('devAhmedBank', JSON.stringify(getBank())); }
+function shuffleArray(a){ for(let i=a.length-1;i>0;i--){ let j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function randomizeOptions(q){
+  let order = q.options.map((t,i)=>({ t:t, i:i }));
+  shuffleArray(order);
+  return { id: q.id, q: q.q, options: order.map(o=>o.t), correct: order.findIndex(o=>o.i===q.correct), explanation: q.explanation || '' };
+}
+function pickSmart(bank, n){
+  let arr = bank.map(q=>({ q: q, score: 0.2 + ((q.attempts ? q.wrongs / q.attempts : 0.5) * 1.8) }));
+  let out = [];
+  while(out.length < n && arr.length){
+    let total = arr.reduce((s,x)=>s+x.score,0);
+    let r = Math.random()*total, acc = 0, pick = 0;
+    for(let i=0;i<arr.length;i++){ acc += arr[i].score; if(r <= acc){ pick = i; break; } }
+    out.push(arr[pick].q); arr.splice(pick,1);
+  }
+  return out;
+}
+function trackAttempt(correct){
+  let bq = getBank().find(x=>x.id === activeQuiz[currentQ].id);
+  if(!bq) return;
+  bq.attempts = (bq.attempts || 0) + 1;
+  if(!correct) bq.wrongs = (bq.wrongs || 0) + 1;
+  saveBank();
+  let mc = getBank().filter(q => masteryState(q).code === 'mastered').length;
+  if(mc >= 10) unlockBadge('master10');
+}
       
-      { q: "ما هي المرحلة الأولى في دورة حياة تطوير قواعد البيانات (sdlc)؟", options: ["التصميم المنطقي", "التصميم المادي", "جمع وتحليل المتطلبات", "الاختبار"], correct: 2, explanation: "فهم احتياجات المؤسسة وجمع المتطلبات هو الخطوة الأساسية الأولى قبل أي تصميم." },
-      { q: "ما هو مخطط الكينونة والعلاقة (erd)؟", options: ["كود برمجي", "أداة لتمثيل التصميم المادي", "رسم تخطيطي يوضح الكينونات وخصائصها والعلاقات بينها", "أداة لإنشاء واجهة المستخدم"], correct: 2, explanation: "مخطط erd يُستخدم في مرحلة التصميم المفاهيمي لرسم العلاقات بين مكونات النظام." },
-      { q: "ماذا يمثل المستطيل في مخطط erd؟", options: ["صفة (attribute)", "علاقة (relationship)", "مفتاح أساسي", "كينونة (entity)"], correct: 3, explanation: "في مخططات erd، يمثل المستطيل الكينونة (الجدول في المستقبل)." },
-      { q: "ما هو المفتاح الأساسي (primary key)؟", options: ["حقل يقبل القيم الفارغة", "حقل يحدد كل سجل في الجدول بشكل فريد ولا يتكرر", "حقل يُستخدم للربط بين جدولين فقط", "صفة متعددة القيم"], correct: 1, explanation: "المفتاح الأساسي هو صفة أو مجموعة صفات تميز كل سجل عن غيره بشكل قاطع." },
-      { q: "ما وظيفة المفتاح الأجنبي (foreign key)؟", options: ["منع إدخال الأرقام", "حذف السجلات المتكررة", "الربط بين جدولين وتكوين علاقة بينهما", "تسريع البحث فقط"], correct: 2, explanation: "المفتاح الأجنبي هو حقل في جدول يمثل مفتاحاً أساسياً في جدول آخر، لإنشاء العلاقات." },
-      { q: "أي نوع من العلاقات يربط بين جدول 'المواطن' وجدول 'جواز السفر'؟", options: ["علاقة واحد إلى واحد (1:1)", "علاقة واحد إلى متعدد (1:n)", "علاقة متعدد إلى متعدد (m:n)", "لا توجد علاقة"], correct: 0, explanation: "كل مواطن له جواز سفر واحد، وكل جواز سفر يعود لمواطن واحد." },
-      { q: "أي نوع من العلاقات يربط بين جدول 'الطالب' وجدول 'المقرر الدراسي'؟", options: ["واحد إلى واحد", "واحد إلى متعدد", "متعدد إلى متعدد (m:n)", "علاقة ذاتية"], correct: 2, explanation: "الطالب يمكن أن يسجل في عدة مقررات، والمقرر يضم عدة طلاب، مما يشكل علاقة m:n." },
-      { q: "كيف يتم تحويل علاقة (متعدد إلى متعدد) عند تحويل التصميم إلى جداول؟", options: ["عبر دمج الجدولين", "عبر إضافة مفتاح أجنبي لأحد الجدولين", "عبر إنشاء جدول وسيط (جدول كسر العلاقة)", "لا يمكن تحويلها"], correct: 2, explanation: "لتحويل علاقة m:n، نقوم بإنشاء جدول ثالث يأخذ المفاتيح الأساسية من الجدولين كمفاتيح أجنبية." },
-      { q: "ما هي الصفة المشتقة (derived attribute)؟", options: ["صفة لا يمكن معرفة قيمتها", "صفة يتم حسابها من صفات أخرى مثل العمر من تاريخ الميلاد", "صفة تتكون من عدة أجزاء", "المفتاح الأساسي"], correct: 1, explanation: "الصفة المشتقة تُحسب برمجياً بناءً على بيانات أخرى، وتمثل بخط متقطع في erd." },
-      { q: "ما الهدف من عملية التطبيع (normalization)؟", options: ["تشفير البيانات", "زيادة التكرار", "تقليل تكرار البيانات وتجنب مشاكل الإضافة والتحديث والحذف", "تصميم الواجهات الرسومية"], correct: 2, explanation: "التطبيع هي عملية تنظيم الجداول لتقليل التكرار وضمان سلامة البيانات." },
-      { q: "متى نعتبر أن الجدول في 'الصيغة الطبيعية الأولى' (1nf)؟", options: ["عندما يحتوي على مفتاح أجنبي", "عندما تكون كل خلية تحتوي على قيمة واحدة غير مجزأة (atomic)", "عندما يحتوي على بيانات متكررة", "عندما يكون الجدول فارغاً"], correct: 1, explanation: "الشرط الأساسي لـ 1nf هو خلو الجدول من الحقول متعددة القيم والمجموعات المتكررة." },
-      { q: "ما هي 'الصيغة الطبيعية الثانية' (2nf)؟", options: ["أن يكون في 1nf مع ارتباط جميع الحقول بالمفتاح الأساسي بالكامل", "تشفير الجدول", "حذف جميع المفاتيح", "دمج كل الجداول"], correct: 0, explanation: "يتحقق 2nf إذا كان في 1nf ولا يوجد اعتماد جزئي على المفتاح الأساسي المركب." },
-      { q: "ماذا يقصد بشذوذ الحذف (deletion anomaly)؟", options: ["عدم القدرة على حفظ البيانات", "حذف بيانات مهمة بالخطأ نتيجة حذف بيانات أخرى مرتبطة بها في نفس السجل", "سرعة عملية الحذف", "منع المستخدم من الحذف"], correct: 1, explanation: "شذوذ الحذف يحدث في الجداول غير المطبعة حيث يؤدي حذف معلومة إلى فقدان معلومات أخرى لا علاقة لها بها." },
-      { q: "ما هي الصفة المركبة (composite attribute)؟", options: ["صفة فريدة للجدول", "صفة رياضية", "صفة يمكن تقسيمها لأجزاء أصغر مثل الاسم (أول، أوسط، أخير)", "صفة فارغة"], correct: 2, explanation: "الصفة المركبة تتكون من عدة مكونات فرعية ذات معنى مستقل." },
-      { q: "أين يتم تحديد أنواع البيانات (int, varchar) للمتغيرات؟", options: ["في مرحلة التصميم المفاهيمي", "في مرحلة جمع المتطلبات", "في مرحلة التصميم المنطقي والمادي", "لا داعي لتحديدها"], correct: 2, explanation: "يتم ترجمة الهياكل وتحديد أنواع البيانات المحددة في التصميم المادي المتوافق مع الـ dbms." },
-      { q: "إذا كان جدول يحتوي على حقل 'رقم الهاتف' الذي قد يحتوي على أكثر من رقم لنفس الشخص، فهذا يكسر قاعدة:", options: ["1nf", "2nf", "3nf", "4nf"], correct: 0, explanation: "حقل متعدد القيم يكسر قاعدة الصيغة الطبيعية الأولى 1nf." },
-      { q: "الاعتماد المتعدي (transitive dependency) يجب إزالته للوصول إلى:", options: ["1nf", "2nf", "الصيغة الطبيعية الثالثة (3nf)", "المفتاح الأساسي"], correct: 2, explanation: "الصيغة الثالثة 3nf تتطلب إزالة أي اعتماد لحقل غير مفتاحي على حقل آخر غير مفتاحي." },
+      
 
-      { q: "ما هي فئة أوامر sql المسؤولة عن إنشاء الجداول وتعديل هيكلها؟", options: ["dml", "dcl", "tcl", "ddl"], correct: 3, explanation: "تُستخدم لغة تعريف البيانات (ddl) لإنشاء الكائنات في قاعدة البيانات (create, alter, drop)." },
-      { q: "أي أمر يُستخدم لاسترجاع البيانات وعرضها من الجداول؟", options: ["update", "insert", "select", "delete"], correct: 2, explanation: "الأمر select يُستخدم للبحث واسترجاع البيانات وهو من فئة dml." },
-      { q: "أي من الأوامر التالية يُعد من فئة dml (لغة معالجة البيانات)؟", options: ["create", "grant", "insert", "drop"], correct: 2, explanation: "فئة dml تتضمن أوامر معالجة البيانات مثل insert, update, delete." },
-      { q: "لحذف جدول 'الطلاب' بأكمله من قاعدة البيانات نهائياً، نستخدم:", options: ["delete from students", "drop table students", "remove table students", "truncate students"], correct: 1, explanation: "الأمر drop table يحذف الجدول وهيكله بالكامل من قاعدة البيانات (أمر ddl)." },
-      { q: "لحذف جميع البيانات من جدول دون حذف هيكله الداخلي، نستخدم أمر dml التالي:", options: ["drop", "delete", "remove", "clear"], correct: 1, explanation: "أمر delete يقوم بحذف السجلات مع الإبقاء على هيكل الجدول." },
-      { q: "عند استخدام الأمر select، ما هي الكلمة المفتاحية التي تستخدم لترشيح وتحديد شروط البحث؟", options: ["order by", "where", "group by", "from"], correct: 1, explanation: "تُستخدم جملة where لتطبيق شروط محددة على السجلات المسترجعة." },
-      { q: "لترتيب النتائج المسترجعة تنازلياً، نضيف للعبارة order by الكلمة:", options: ["asc", "desc", "down", "sort"], correct: 1, explanation: "الكلمة desc (descending) تُستخدم للترتيب التنازلي." },
-      { q: "ما هو الرمز الذي يُستخدم في sql للإشارة إلى 'جميع الحقول' في أمر select؟", options: ["%", "#", "*", "@"], correct: 2, explanation: "علامة النجمة (*) في استعلام select تعني جلب كافة أعمدة الجدول." },
-      { q: "لإضافة عمود جديد لجدول موجود، نستخدم الأمر:", options: ["add column", "insert into", "alter table", "update table"], correct: 2, explanation: "أمر alter table يُستخدم لتعديل هيكل الجدول، مثل إضافة أو حذف أعمدة." },
-      { q: "ما وظيفة الدالة count() في sql؟", options: ["جمع القيم", "حساب المتوسط", "إيجاد أعلى قيمة", "عدّ السجلات التي تحقق شرطاً معيناً"], correct: 3, explanation: "الدالة count تقوم بعد الصفوف الناتجة من الاستعلام." },
-      { q: "أي معامل يُستخدم للبحث عن نمط نصي معين (مثل الأسماء التي تبدأ بحرف 'أ')؟", options: ["in", "between", "like", "match"], correct: 2, explanation: "المعامل like يُستخدم للبحث عن أنماط نصية معينة باستخدام علامة %." },
-      { q: "كيف يتم ربط جدولين لاسترجاع بيانات مشتركة بينهما بناءً على حقل متطابق؟", options: ["باستخدام union", "باستخدام أمر join", "لا يمكن الربط", "باستخدام order by"], correct: 1, explanation: "جملة join تُستخدم للربط بين الجداول بناءً على الحقول المشتركة (المفاتيح)." },
-      { q: "ماذا يفعل الأمر update في قاعدة البيانات؟", options: ["إنشاء جدول جديد", "تعديل وتحديث بيانات السجلات الموجودة مسبقاً", "حذف قاعدة البيانات", "منح الصلاحيات للمستخدمين"], correct: 1, explanation: "أمر update يستخدم لتغيير قيم حقول معينة داخل سجلات موجودة بناءً على شرط." },
-      { q: "إذا أردت استرجاع الأسماء الفريدة فقط دون تكرار من عمود 'المدينة'، تستخدم الكلمة:", options: ["unique", "distinct", "single", "only"], correct: 1, explanation: "الكلمة distinct تُستخدم بعد select لمنع تكرار القيم في نتائج الاستعلام." },
-      { q: "ما هي أوامر التحكم بالبيانات (dcl)؟", options: ["select, insert", "create, drop", "grant, revoke", "commit, rollback"], correct: 2, explanation: "أوامر dcl مسؤولة عن الصلاحيات وتتضمن منح (grant) وسحب (revoke) الصلاحيات." },
-      { q: "لإدخال سجل جديد في جدول نستخدم العبارة:", options: ["add to", "insert into", "put in", "create row"], correct: 1, explanation: "العبارة القياسية لإضافة بيانات جديدة هي insert into متبوعة باسم الجدول." },
-      { q: "أي دالة تستخدم لحساب مجموع القيم الرقمية في عمود معين؟", options: ["max()", "avg()", "sum()", "count()"], correct: 2, explanation: "الدالة sum() تقوم بجمع القيم الرقمية الموجودة في العمود المحدد." },
-      { q: "المعامل between في sql يُستخدم من أجل:", options: ["البحث عن الكلمات المتشابهة", "الربط بين جدولين", "تحديد نطاق بين قيمتين (مثل من تاريخ إلى تاريخ)", "ترتيب البيانات"], correct: 2, explanation: "يُستخدم between للبحث ضمن نطاق محدد من القيم كالأرقام أو التواريخ." },
-      { q: "عند استخدام update، ماذا يحدث إذا نسينا كتابة جملة where؟", options: ["يفشل الأمر ولا يتنفذ", "يتم تحديث أول سجل فقط", "يتم تحديث جميع السجلات في الجدول", "يتم حذف الجدول"], correct: 2, explanation: "بدون شرط where، سيطبق التحديث على كافة السجلات، وهو خطأ شائع وخطير." },
-      { q: "لجمع البيانات المتشابهة معاً في مجموعات لتطبيق دوال تجميعية عليها، نستخدم:", options: ["order by", "group by", "having", "join"], correct: 1, explanation: "جملة group by تستخدم لتجميع الصفوف التي تملك قيماً متشابهة في عمود معين." },
+      
 
-      { q: "أي من الأنظمة التالية يعتبر نظام إدارة قواعد بيانات علائقي (rdbms)؟", options: ["microsoft word", "oracle", "photoshop", "linux"], correct: 1, explanation: "oracle هو أحد أقوى وأشهر أنظمة إدارة قواعد البيانات العلائقية التجارية." },
-      { q: "في إدارة قواعد البيانات، ما معنى 'النسخ الاحتياطي الكامل' (full backup)؟", options: ["نسخ التعديلات الأخيرة فقط", "نسخ جزء من الجداول", "نسخ قاعدة البيانات بأكملها في وقت محدد", "نقل البيانات للخادم"], correct: 2, explanation: "النسخ الكامل يعني أخذ صورة متكاملة عن قاعدة البيانات بجميع محتوياتها." },
-      { q: "ما هو النسخ الاحتياطي التزايدي (incremental backup)؟", options: ["نسخ كل شيء يومياً", "نسخ البيانات التي تغيرت فقط منذ آخر عملية نسخ احتياطي (سواء كامل أو تزايدي)", "نسخ هيكل الجداول دون البيانات", "تشفير البيانات"], correct: 1, explanation: "النسخ التزايدي يوفر المساحة والوقت بنسخ التعديلات الجديدة فقط." },
-      { q: "لماذا نستخدم 'الفهارس' (indexes) في الجداول؟", options: ["لتشفير الجدول", "لتسريع عمليات البحث واسترجاع البيانات", "لإنقاص مساحة التخزين", "لتلوين البيانات"], correct: 1, explanation: "الفهرس يشبه فهرس الكتاب، يسرع عملية إيجاد السجلات بشكل كبير جداً." },
-      { q: "ما هي العيوب المحتملة للإكثار من وضع الفهارس (indexes) في الجدول؟", options: ["بطء عمليات الإدخال والتعديل (insert, update)", "بطء عملية البحث", "فقدان البيانات", "لا يوجد عيوب"], correct: 0, explanation: "عند كل عملية إضافة أو تعديل، يجب تحديث الفهارس، مما يستهلك موارد ويبطئ العملية." },
-      { q: "في مفاهيم قواعد البيانات، ماذا تمثل المعاملة (transaction)؟", options: ["نقل الأموال للبنك", "مجموعة من العمليات المنطقية التي يجب أن تُنفذ إما كاملةً أو تُرفض كاملةً", "إنشاء جدول جديد", "عملية حذف مستخدم"], correct: 1, explanation: "المعاملة هي وحدة عمل لا تقبل التجزئة، مثل تحويل رصيد من حساب لآخر." },
-      { q: "ماذا يقصد بخاصية 'الذرية' (atomicity) في خصائص acid للمعامَلات؟", options: ["أن البيانات صغيرة الحجم", "أن المعاملة تنفذ كلها بنجاح، أو يتم إلغاؤها بالكامل كأنها لم تكن", "فصل الجداول عن بعضها", "منع المستخدمين من الدخول"], correct: 1, explanation: "الذرية تضمن عدم ترك قاعدة البيانات في حالة غير مكتملة عند حدوث عطل." },
-      { q: "أي أمر يستخدم لتثبيت وحفظ المعاملة (transaction) بشكل دائم في قاعدة البيانات؟", options: ["save", "done", "commit", "rollback"], correct: 2, explanation: "أمر commit يخبر النظام بأن المعاملة نجحت ويجب حفظ التغييرات نهائياً." },
-      { q: "إذا حدث خطأ أثناء المعاملة، ما الأمر المستخدم للتراجع وإلغاء التغييرات؟", options: ["undo", "exit", "rollback", "delete"], correct: 2, explanation: "أمر rollback يلغي كافة التغييرات التي تمت منذ بداية المعاملة." },
-      { q: "ماذا تعني خاصية 'العزل' (isolation) في خصائص acid؟", options: ["تشفير البيانات", "منع التعديلات المتزامنة من التداخل والتأثير على بعضها البعض", "فصل الخوادم في غرف مختلفة", "أخذ نسخة احتياطية"], correct: 1, explanation: "العزل يضمن أن كل معاملة تعمل كأنها المعاملة الوحيدة في النظام دون تشويش من المعاملات الأخرى." },
-      { q: "ما هي 'العروض' (views) في قواعد البيانات؟", options: ["شاشات المستخدم", "جداول افتراضية تُبنى على استعلام sql بغرض التسهيل والأمان", "تطبيقات الهواتف", "ملفات النسخ الاحتياطي"], correct: 1, explanation: "الـ views لا تخزن بيانات بنفسها، بل تستعرض بيانات من جداول أخرى، وتفيد في حجب أعمدة معينة عن بعض المستخدمين." },
-      { q: "أداة الإدارة 'sql server management studio (ssms)' تستخدم لإدارة قاعدة بيانات من شركة:", options: ["oracle", "ibm", "microsoft", "google"], correct: 2, explanation: "أداة ssms هي الأداة الرسمية لإدارة قواعد بيانات microsoft sql server." },
-      { q: "ما وظيفة نظام التحكم بالتزامن (concurrency control)؟", options: ["تحسين ألوان الواجهة", "إدارة وصول عدة مستخدمين للبيانات في نفس اللحظة دون حدوث تعارض", "إنشاء نسخ احتياطية", "إطفاء الخادم ليلاً"], correct: 1, explanation: "يستخدم تقنيات مثل الأقفال (locks) لضمان عدم قيام شخصين بتعديل نفس السجل بتعارض." },
-      { q: "مشكلة 'الجمود' (deadlock) في إدارة قواعد البيانات تحدث عندما:", options: ["ينقطع الإنترنت", "تنتظر معاملتان بعضهما البعض لتحرير مورد (قفل) مما يوقف العمليتين", "تمتلئ الذاكرة العشوائية", "ينسى المستخدم كلمة المرور"], correct: 1, explanation: "الجمود هو حالة انسداد تنتج عن انتظار متبادل بين عمليتين أو أكثر." },
-      { q: "أي مما يلي يُعد من مهام إدارة قاعدة البيانات (db administration)؟", options: ["مراقبة الأداء وضبط الذاكرة", "تطوير تطبيقات الجوال", "تصميم شبكة الإنترنت", "كتابة محتوى المواقع"], correct: 0, explanation: "مدير القاعدة dba يقوم بضبط الأداء، إدارة المساحات، وإجراء النسخ الاحتياطي." },
-      { q: "كيف يتم تطبيق الاسترجاع (restore) في قواعد البيانات؟", options: ["بنقل القاعدة لمكان آخر", "بإعادة البيانات من ملف النسخة الاحتياطية (backup) بعد حدوث تلف", "بحذف جميع الجداول", "بمسح الفهارس"], correct: 1, explanation: "عملية الاسترجاع تعني قراءة ملف الباك أب لإعادة النظام لحالته السليمة." },
+      
 
-      { q: "ما هو مفهوم الأرشفة الإلكترونية؟", options: ["حرق الأوراق", "حفظ الوثائق الورقية والملفات في قواعد بيانات رقمية لتسهيل استرجاعها وإدارتها", "نقل الملفات عبر الفلاش ديسك", "طباعة المستندات"], correct: 1, explanation: "الأرشفة الإلكترونية هي تحويل المستندات الورقية والرقمية لنظام يحفظها بشكل منظم داخل قاعدة بيانات." },
-      { q: "تقنية ocr (التعرف البصري على الحروف) تُستخدم في الأرشفة من أجل:", options: ["تشفير الملفات", "ترجمة اللغات", "تحويل الصور والمستندات الممسوحة ضوئياً إلى نصوص قابلة للبحث والتعديل", "ضغط حجم الفيديو"], correct: 2, explanation: "أداة ocr حيوية في أنظمة الأرشفة لاستخراج النصوص من الصور لتسهيل البحث." },
-      { q: "ما هي أنظمة dms؟", options: ["أنظمة إدارة قواعد البيانات", "أنظمة إدارة الوثائق والمستندات (document management systems)", "أنظمة مراقبة الشبكات", "أنظمة التشغيل"], correct: 1, explanation: "أنظمة dms مبنية على قواعد بيانات وتهدف لأرشفة، تتبع، وإدارة الوثائق الإلكترونية." },
-      { q: "في الأرشفة الإلكترونية، لماذا تعتبر 'البيانات الوصفية' (metadata) بالغة الأهمية؟", options: ["لأنها تضيف ألواناً للوثيقة", "لأنها تصف الوثيقة (المؤلف، التاريخ، الكلمات المفتاحية) مما يسرع البحث بشكل هائل", "لأنها تحذف الوثائق القديمة", "لأنها تحول النص لصوت"], correct: 1, explanation: "أرشفة الوثائق بدون metadata كرميها في صندوق؛ الـ metadata هي الفهرس الذي يسهل العثور عليها." },
-      { q: "ماذا يقصد بـ 'التحكم في الإصدارات' (version control) في أنظمة الأرشفة dms؟", options: ["تسريع الإنترنت", "حفظ تاريخ التعديلات وتوفير نسخ متعددة لنفس الوثيقة لتتبع التغييرات", "تغيير لغة البرنامج", "حذف الوثائق تلقائياً"], correct: 1, explanation: "التحكم في الإصدارات يضمن عدم فقدان النص الأصلي عند التعديل، حيث يحتفظ النظام بإصدارات متتالية (v1, v2)." },
-      { q: "أحد التحديات القانونية للأرشفة الإلكترونية هو:", options: ["سهولة البحث", "حجية الوثيقة الإلكترونية أمام المحاكم وضمان عدم التلاعب بها", "توفير المساحات", "الاستغناء عن الورق"], correct: 1, explanation: "ضمان سلامة الوثيقة وتوقيعها الإلكتروني ضروري لتكون مقبولة قانونياً ورسمياً." },
-      { q: "ما هي 'سياسات الاحتفاظ' (retention policies) في قواعد بيانات الأرشفة؟", options: ["قواعد تحدد متى يجب حجب الإنترنت", "قواعد تحدد المدة القانونية أو التنظيمية لحفظ الوثيقة قبل إتلافها أو نقلها لأرشيف ميت", "قواعد تحديد رواتب الموظفين", "سياسات إنشاء الجداول"], correct: 1, explanation: "بعض الوثائق (كالملفات المالية) يجب حفظها قانونياً لعدة سنوات، تحدد سياسات الاحتفاظ دورة حياتها آلياً." },
-      { q: "كيف تدعم قواعد البيانات العلائقية عملية الأرشفة؟", options: ["عبر تخزين الفهارس والـ metadata المرتبطة بالملفات وتسهيل الاستعلام عنها", "بصناعة أجهزة السكنر", "بطباعة الأوراق", "بتوفير الكهرباء"], correct: 0, explanation: "تُخزن الملفات غالباً في مساحات تخزين، بينما تُخزن البيانات الوصفية في قاعدة البيانات العلائقية للبحث السريع." },
-      { q: "حقل blob (binary large object) في قواعد البيانات يُستخدم في الأرشفة من أجل:", options: ["تخزين النصوص القصيرة", "تخزين الملفات الكبيرة كصور المستندات ومقاطع الفيديو والملفات الصوتية", "إجراء العمليات الحسابية", "حفظ التواريخ"], correct: 1, explanation: "نوع البيانات blob مُصمم خصيصاً لتخزين البيانات الثنائية الضخمة داخل الجداول." },
-      { q: "المسح الضوئي (scanning) هو خطوة في الأرشفة تهدف إلى:", options: ["حذف الملف", "تحويل المستند الورقي المادي إلى شكل رقمي (صورة أو pdf)", "إرسال رسالة", "كتابة كود برمجي"], correct: 1, explanation: "هي نقطة البداية في الأرشفة لتحويل الكيانات الورقية المادية لبيانات رقمية تدخل النظام." },
-      { q: "من فوائد الأرشفة الإلكترونية المعتمدة على قواعد البيانات:", options: ["زيادة استخدام الورق", "تلف الوثائق بمرور الزمن", "سهولة الوصول والمشاركة المركزية وحماية الوثائق من الكوارث الفيزيائية", "إبطاء العمل الإداري"], correct: 2, explanation: "الأرشفة تحمي النسخ وتوفرها للمصرح لهم في أي وقت ومن أي مكان عبر الشبكة." },
-      { q: "ما هو 'التوقيع الإلكتروني' في أنظمة الوثائق؟", options: ["رسم الاسم بالفأرة", "توقيع رياضي مشفر يضمن هوية الموقع وعدم تغيير الوثيقة بعد التوقيع", "استخدام قلم حبر أزرق", "تلوين النص"], correct: 1, explanation: "التوقيع الرقمي/الإلكتروني يعتمد على التشفير ليمنح الوثيقة الموثوقية والمصداقية." },
-      { q: "الفهرسة (indexing) في الأرشفة تُشبه:", options: ["ترتيب الكتب عشوائياً", "كتابة بطاقات بيانات وتصنيفات لكل ملف لتسهيل العثور عليه لاحقاً", "حرق الملفات القديمة", "تصميم واجهة المستخدم"], correct: 1, explanation: "الفهرسة هي عملية إدخال الـ metadata وتصنيف الوثيقة ضمن شجرة التصنيفات الإدارية." },
-      { q: "ماذا يقصد بتتبع التدقيق (audit trail) في نظام الأرشفة؟", options: ["تسجيل كل عملية (من قرأ، عدّل، أو طبع الوثيقة) مع الوقت والتاريخ لأغراض الأمن والمحاسبة", "مسار الكابلات في المبنى", "البحث عن الأخطاء الإملائية", "حساب تكلفة النظام"], correct: 0, explanation: "سجلات التدقيق (audit logs) ضرورية أمنياً لمعرفة من قام بأي إجراء على الوثائق الحساسة." },
+      
 
-      { q: "في أمن قواعد البيانات، ماذا تمثل ثلاثية cia؟", options: ["اسم شركة تقنية", "السرية، السلامة، التوافر (confidentiality, integrity, availability)", "سرعة، تكلفة، دقة", "نوع من أنواع الفيروسات"], correct: 1, explanation: "ثالوث cia هو أساس أمن المعلومات ويمثل السرية للبيانات، سلامتها من التعديل، وتوفرها عند الحاجة." },
-      { q: "السرية (confidentiality) في قواعد البيانات تعني:", options: ["جعل البيانات متاحة للجميع", "ضمان عدم وصول الأشخاص غير المصرح لهم للبيانات الحساسة", "تعديل البيانات باستمرار", "تسريع استعلامات sql"], correct: 1, explanation: "السرية تتحقق بالتشفير والصلاحيات لضمان ألا يرى البيانات إلا من يملك حق الوصول." },
-      { q: "السلامة (integrity) في قواعد البيانات تضمن:", options: ["سرعة الشبكة", "عدم انقطاع الكهرباء", "دقة وصحة البيانات ومنع تعديلها أو تخريبها من جهات غير مخولة", "تشفير كلمات المرور"], correct: 2, explanation: "سلامة البيانات تعني أن البيانات أصلية ولم يتم العبث بها أو تغييرها بشكل غير شرعي." },
-      { q: "ما هو الفرق بين المصادقة (authentication) والتفويض (authorization)؟", options: ["لا يوجد فرق", "المصادقة للشبكة والتفويض للقاعدة", "المصادقة للتحقق من هوية المستخدم، والتفويض لتحديد صلاحياته وما يسمح له بفعله", "المصادقة للحذف والتفويض للإضافة"], correct: 2, explanation: "المصادقة تجيب على 'من أنت؟' (كإدخال كلمة المرور)، والتفويض يجيب على 'ماذا يحق لك أن تفعل؟'." },
-      { q: "ما هو هجوم 'حقن قواعد البيانات' (sql injection)؟", options: ["إبرة لتنظيف الخادم", "إدخال أكواد sql خبيثة عبر حقول الإدخال في التطبيق للتلاعب بقاعدة البيانات", "نسخ البيانات احتياطياً", "زيادة سرعة القاعدة"], correct: 1, explanation: "حقن sql من أخطر الثغرات، حيث يخدع المهاجم التطبيق لتنفيذ أوامر ضارة في قاعدة البيانات مباشرة." },
-      { q: "كيف يمكن الوقاية بشكل أساسي من هجمات sql injection؟", options: ["بإيقاف تشغيل الخادم", "باستخدام الاستعلامات المجهزة (parameterized queries/prepared statements) والتحقق من المدخلات", "بتلوين الواجهة", "بإلغاء كلمات المرور"], correct: 1, explanation: "الاستعلامات المجهزة تمنع النظام من تفسير مدخلات المستخدم ككود برمجي، مما يحبط الهجوم." },
-      { q: "ما المقصود بـ 'مبدأ الامتياز الأقل' (least privilege)؟", options: ["منح الجميع كافة الصلاحيات", "عدم منح أي صلاحيات", "منح المستخدم الحد الأدنى من الصلاحيات التي يحتاجها فقط لأداء عمله", "تقليل رواتب المبرمجين"], correct: 2, explanation: "هو مبدأ أمني أساسي يقلل الضرر المحتمل، فإذا تم اختراق حساب الموظف، لا يمكن للمهاجم تدمير النظام بأكمله." },
-      { q: "في سياق أمن قواعد البيانات، ما هو rbac؟", options: ["نوع من الجداول", "التحكم بالوصول المبني على الأدوار (role-based access control)", "بروتوكول شبكات", "أمر لنسخ البيانات"], correct: 1, explanation: "بدلاً من إعطاء صلاحيات لكل فرد، يتم إنشاء أدوار (مثل: مدير، مدخل بيانات) وإسناد الأفراد لهذه الأدوار." },
-      { q: "التشفير في حالة السكون (encryption at rest) يهدف إلى:", options: ["تشفير البيانات أثناء انتقالها بالشبكة", "تشفير ملفات قاعدة البيانات المخزنة على القرص الصلب لحمايتها في حال سرقة القرص", "تشفير شاشة المستخدم", "إخفاء لوحة المفاتيح"], correct: 1, explanation: "يحمي البيانات المخزنة فعلياً في الخوادم من الوصول المادي غير المصرح به (مثل تقنية tde)." },
-      { q: "التشفير أثناء النقل (encryption in transit) يعتمد غالباً على تقنيات مثل:", options: ["html", "tls/ssl", "css", "usb"], correct: 1, explanation: "يُستخدم tls/ssl لتشفير قناة الاتصال بين التطبيق وقاعدة البيانات لمنع التنصت (eavesdropping)." },
-      { q: "ما فائدة استخدام 'العروض' (views) كأداة أمنية؟", options: ["تسهل النسخ الاحتياطي", "تحجب حقولاً معينة (كالرواتب أو كلمات المرور) عن المستخدمين وتعرض لهم ما يحتاجونه فقط", "تزيد مساحة التخزين", "لا علاقة لها بالأمن"], correct: 1, explanation: "يمكن لمدير القاعدة إنشاء view يخفي الأعمدة الحساسة ومنح المستخدمين صلاحية على الـ view وليس الجدول الأصلي." },
-      { q: "تدقيق قواعد البيانات (database auditing) يعني:", options: ["مراجعة الميزانية المالية", "تسجيل ومراقبة كل الأنشطة التي تحدث في القاعدة (من دخل، متى، ماذا فعل) لاكتشاف الخروقات", "حذف السجلات القديمة", "تحديث النظام"], correct: 1, explanation: "التدقيق الأمني مهم للامتثال القانوني والتحقيقات الجنائية الرقمية عند حدوث اختراق." },
-      { q: "لماذا يُعتبر الإبقاء على 'الحسابات الافتراضية' (default accounts) خطراً أمنياً؟", options: ["لأنها تستهلك ذاكرة كبيرة", "لأن أسماءها وكلمات مرورها الافتراضية معروفة للمخترقين (مثل sa أو root)", "لأنها تبطئ النظام", "ليست خطراً"], correct: 1, explanation: "يجب دائماً تغيير أو تعطيل الحسابات الافتراضية فور تثبيت نظام dbms." },
-      { q: "أي أمر يستخدم في sql لمنح صلاحية القراءة لمستخدم معين؟", options: ["give read", "grant select", "allow view", "permit get"], correct: 1, explanation: "أمر grant select يمنح صلاحية استرجاع البيانات للمستخدم المذكور." },
-      { q: "لسحب صلاحية الإضافة من مستخدم، نستخدم الأمر:", options: ["drop insert", "delete insert", "revoke insert", "cancel insert"], correct: 2, explanation: "أمر revoke يستخدم لسحب أو إلغاء الصلاحيات الممنوحة مسبقاً." },
-      { q: "ما هو 'تشفير البيانات الشفاف' (tde)؟", options: ["تشفير الملفات بحيث تكون شفافة لا ترى", "تقنية تشفر قاعدة البيانات بالكامل على مستوى الملفات دون الحاجة لتغيير كود التطبيقات", "نوع من الفيروسات", "تشفير الشبكات"], correct: 1, explanation: "tde ميزة في أنظمة كـ sql server و oracle تشفر البيانات الاحتياطية وملفات القاعدة أوتوماتيكياً." },
-      { q: "هجوم الحرمان من الخدمة (ddos) على قاعدة البيانات يهدد أي عنصر من عناصر cia؟", options: ["السرية (confidentiality)", "السلامة (integrity)", "التوافر (availability)", "لا يهدد أي منها"], correct: 2, explanation: "يهدف الهجوم لإغراق القاعدة بالطلبات الوهمية حتى تتعطل وتصبح غير متاحة للمستخدمين الشرعيين." },
-      { q: "جدار حماية قواعد البيانات (database firewall) يتميز عن الجدار الناري العادي بأنه:", options: ["أرخص ثمناً", "يفهم أوامر sql ويستطيع حجب الاستعلامات الخبيثة أو المشبوهة المتجهة للقاعدة", "يحمي من انقطاع الكهرباء", "يفحص رسائل الإيميل"], correct: 1, explanation: "صمم خصيصاً لتحليل الحركة المرورية لبروتوكولات قواعد البيانات وفهم سلوك الاستعلامات." },
-      { q: "الترقيع الأمني (patching) لأنظمة dbms يهدف إلى:", options: ["تغيير شكل الواجهة", "إغلاق الثغرات الأمنية المكتشفة حديثاً لمنع المهاجمين من استغلالها", "تسريع الطباعة", "حذف البيانات القديمة"], correct: 1, explanation: "تحديث النظام بالرقع الأمنية هو خط الدفاع الأول ضد الهجمات المعروفة." },
-      { q: "أي من الممارسات التالية تعتبر 'خاطئة' أمنياً في قواعد البيانات؟", options: ["تجزئة الشبكة لعزل القاعدة", "تشفير كلمات المرور", "استخدام حساب مدير النظام (root/sa) من قبل جميع التطبيقات للاتصال بالقاعدة", "تطبيق مبدأ الامتياز الأقل"], correct: 2, explanation: "استخدام حساب ذو صلاحيات مطلقة (root) للتطبيقات العادية كارثة أمنية؛ إذا اخترق التطبيق، سقط الخادم بأكمله." }
-    ]
-  };
+      
+      
 
   let playerXP = parseInt(localStorage.getItem('devAhmedXP')) || 0;
-  let inventory = JSON.parse(localStorage.getItem('devAhmedInv')) || { fifty: 0, shield: 0 };
+  let inventory = JSON.parse(localStorage.getItem('devAhmedInv')) || {};
+  if(inventory.fifty === undefined) inventory.fifty = 0;
+  if(inventory.shield === undefined) inventory.shield = 0;
+  if(inventory.freeze === undefined) inventory.freeze = 0;
   let bestScore = parseInt(localStorage.getItem('devAhmedBest')) || 0;
   let currentQ = 0, streak = 0, sessionXP = 0;
   let answers = [], hintsUsed = [];
   let shieldActive = false;
+
+  /* ====== Pack 2 State ====== */
+  function todayKey(d){ let x = d || new Date(); return x.getFullYear() + '-' + String(x.getMonth()+1).padStart(2,'0') + '-' + String(x.getDate()).padStart(2,'0'); }
+  let profile = JSON.parse(localStorage.getItem('devAhmedProfile') || '{}');
+  if(!profile.name || profile.name === 'undefined') profile.name = 'زميلك';
+  if(!profile.avatar) profile.avatar = '🦊';
+  let themeName = localStorage.getItem('devAhmedTheme') || 'blue';
+  let musicOn = localStorage.getItem('devAhmedMusic') === 'on';
+  let weeklyGoal = parseInt(localStorage.getItem('devAhmedGoal')) || 500;
+  let daysDone = [];
+  try{ daysDone = JSON.parse(localStorage.getItem('devAhmedDays') || '[]'); }catch(e){}
+  let lastClaim = localStorage.getItem('devAhmedClaim') || '';
+  let sessions = [];
+  try{ sessions = JSON.parse(localStorage.getItem('devAhmedSessions') || '[]'); }catch(e){}
+  let claimDates = [];
+  try{ claimDates = JSON.parse(localStorage.getItem('devAhmedClaims') || '[]'); }catch(e){}
+  let speedCount = 0;
+  let freezeActive = false;
+  let currentTab = 'all';
+  let selectedAvatar = '🦊';
+  let musicTimer = null, musicStep = 0;
+  const AVATARS = ['🦊','🐼','🦁','🐸','🦉','🐯','🐨','🐙','🐱','🦄'];
 
   /* ====== WOW Systems ====== */
   const QUESTION_TIME = 45;
@@ -643,7 +867,7 @@ const mySubjectData = {
   }
 
   function ensureAudio(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ audioCtx = null; } } if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); }
-  function beep(f,d,t,v,w){ if(!soundOn) return; ensureAudio(); if(!audioCtx) return; try{ let o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.type=t; o.frequency.value=f; o.connect(g); g.connect(audioCtx.destination); let s=audioCtx.currentTime+(w||0); g.gain.setValueAtTime(0.0001,s); g.gain.exponentialRampToValueAtTime(v||0.1,s+0.02); g.gain.exponentialRampToValueAtTime(0.0001,s+d); o.start(s); o.stop(s+d+0.03); }catch(e){} }
+  function beep(f,d,t,v,w,force){ if(!soundOn && !force) return; ensureAudio(); if(!audioCtx) return; try{ let o=audioCtx.createOscillator(),g=audioCtx.createGain(); o.type=t; o.frequency.value=f; o.connect(g); g.connect(audioCtx.destination); let s=audioCtx.currentTime+(w||0); g.gain.setValueAtTime(0.0001,s); g.gain.exponentialRampToValueAtTime(v||0.1,s+0.02); g.gain.exponentialRampToValueAtTime(0.0001,s+d); o.start(s); o.stop(s+d+0.03); }catch(e){} }
   function sClick(){ beep(520,0.06,'triangle',0.05); }
   function sCorrect(){ beep(660,0.12,'sine',0.12); beep(880,0.16,'sine',0.12,0.09); }
   function sWrong(){ beep(220,0.28,'sawtooth',0.06); }
@@ -722,7 +946,8 @@ const mySubjectData = {
     answers[currentQ] = -1;
     streak = 0;
     sWrong();
-    let q = mySubjectData.questions[currentQ];
+    trackAttempt(false);
+    let q = activeQuiz[currentQ];
     let box = document.getElementById('explanation-box');
     box.className = 'explanation-ui fade-in-ui wrong';
     box.innerHTML = '<strong>⏰ انتهى الوقت! لم تُجب</strong><br><br>الإجابة الصحيحة: <strong style="color:var(--c-green)">'+q.options[q.correct]+'</strong><br><br>'+q.explanation;
@@ -742,7 +967,7 @@ const mySubjectData = {
   }
   function buildReview(){
     let box = document.getElementById('review-list'); box.innerHTML = '';
-    mySubjectData.questions.forEach((q,i)=>{
+    activeQuiz.forEach((q,i)=>{
       if(answers[i] === q.correct) return;
       let div = document.createElement('div'); div.className = 'review-item';
       let yourAnswer = (answers[i]===undefined || answers[i]===null || answers[i]===-1) ? 'لم تُجب' : q.options[answers[i]];
@@ -756,6 +981,309 @@ const mySubjectData = {
   }
   const LETTERS = ['أ','ب','ج','د'];
 
+  ACHIEVEMENTS.push(
+    { id:'combo5',   icon:'🥉', name:'سلسلة الخمسة',  desc:'5 إجابات متتالية في جلسة' },
+    { id:'daily1',   icon:'📅', name:'منتظم',         desc:'استلم المكافأة اليومية 5 مرات' },
+    { id:'week7',    icon:'🗓️', name:'أسبوع ذهبي',   desc:'7 أيام نشاط متتالية' },
+    { id:'freeze',   icon:'❄️', name:'سيد الزمن',    desc:'استخدم أداة تجميد الوقت' },
+    { id:'speed5',   icon:'⚡', name:'صقر السرعة',   desc:'5 مكافآت سرعة في لعبك' },
+    { id:'share',    icon:'📤', name:'مسوّق',        desc:'شارك نتيجتك مع أصحابك' },
+    { id:'theme1',   icon:'🎨', name:'مصمم',         desc:'غيّر لون المنصة' },
+    { id:'profile1', icon:'👤', name:'مميز',         desc:'حدّث ملفك الشخصي' },
+    { id:'goal1',    icon:'🎯', name:'صائد الهدف',   desc:'بلغ هدفك الأسبوعي' },
+    { id:'master10', icon:'💪', name:'البارع',       desc:'10 أسئلة في درجة الإتقان' }
+  );
+
+  function setTheme(t){
+    themeName = t;
+    localStorage.setItem('devAhmedTheme', t);
+    document.documentElement.setAttribute('data-theme', t);
+    renderThemeBtns();
+    unlockBadge('theme1');
+  }
+  function renderThemeBtns(){
+    document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-t') === themeName));
+  }
+  function openProfile(){
+    selectedAvatar = profile.avatar;
+    let ni = document.getElementById('pf-name-input'); if(ni) ni.value = profile.name;
+    let gi = document.getElementById('pf-goal-input'); if(gi) gi.value = weeklyGoal;
+    buildAvatarGrid();
+    renderThemeBtns();
+    document.getElementById('profile-modal').style.display = 'flex';
+  }
+  function buildAvatarGrid(){
+    let grid = document.getElementById('pf-avatar-grid'); if(!grid) return;
+    grid.innerHTML = '';
+    AVATARS.forEach(a => {
+      let el = document.createElement('div');
+      el.className = 'avatar-opt' + (a === selectedAvatar ? ' sel' : '');
+      el.textContent = a;
+      el.onclick = () => { selectedAvatar = a; buildAvatarGrid(); sClick(); };
+      grid.appendChild(el);
+    });
+  }
+  function saveProfile(){
+    profile.name = (document.getElementById('pf-name-input').value.trim()) || 'زميلك';
+    profile.avatar = selectedAvatar;
+    weeklyGoal = Math.max(50, parseInt(document.getElementById('pf-goal-input').value) || 500);
+    localStorage.setItem('devAhmedProfile', JSON.stringify(profile));
+    localStorage.setItem('devAhmedGoal', weeklyGoal);
+    renderProfileChip();
+    updateGoalRing();
+    closeModal('profile-modal');
+    showToast('👤 تم حفظ ملفك بنجاح','success');
+    unlockBadge('profile1');
+    sClick();
+  }
+  function renderProfileChip(){
+    let a = document.getElementById('pf-avatar'); if(a) a.textContent = profile.avatar;
+    let n = document.getElementById('pf-name'); if(n) n.textContent = profile.name;
+  }
+  function renderMusicBtn(){ let b = document.getElementById('music-btn'); if(b) b.textContent = musicOn ? '🎵' : '🔕'; }
+  function toggleMusic(){ musicOn ? stopMusic() : startMusic(); }
+  function startMusic(){
+    ensureAudio(); if(!audioCtx) return;
+    musicOn = true;
+    localStorage.setItem('devAhmedMusic','on');
+    renderMusicBtn();
+    musicLoop();
+  }
+  function stopMusic(){ musicOn = false; localStorage.setItem('devAhmedMusic','off'); clearTimeout(musicTimer); renderMusicBtn(); }
+  function musicLoop(){
+    if(!musicOn || !audioCtx) return;
+    let seq = [261,330,392,330,440,392,330,262,294,349,440,349,523,440,349,294];
+    let t = audioCtx.currentTime + 0.05;
+    for(let i=0;i<2;i++) beep(seq[(musicStep + i) % seq.length], 0.5, 'sine', 0.05, t + i*0.5, true);
+    musicStep += 2;
+    musicTimer = setTimeout(musicLoop, 980);
+  }
+
+  function claimDaily(){
+    if(lastClaim === todayKey()){ showToast('⚡ استلمت مكافأة اليوم بالفعل!','info'); return; }
+    let reward = 50 + dayStreak() * 5;
+    lastClaim = todayKey();
+    localStorage.setItem('devAhmedClaim', lastClaim);
+    claimDates.push(lastClaim);
+    localStorage.setItem('devAhmedClaims', JSON.stringify(claimDates));
+    if(!daysDone.includes(lastClaim)) daysDone.push(lastClaim);
+    localStorage.setItem('devAhmedDays', JSON.stringify(daysDone));
+    playerXP += reward;
+    localStorage.setItem('devAhmedXP', playerXP);
+    updateUI(); renderDaily(); renderCalendar();
+    sWin(); burstConfetti(80);
+    showToast('💎 مكافأة يومية +' + reward + ' نقطة!','success');
+    if(claimDates.length >= 5) unlockBadge('daily1');
+    if(dayStreak() >= 7) unlockBadge('week7');
+    awardAchievements();
+  }
+  function renderDaily(){
+    let btn = document.getElementById('daily-btn'); if(!btn) return;
+    let st = document.getElementById('daily-status');
+    if(lastClaim === todayKey()){
+      btn.classList.add('done'); btn.textContent = 'تم الاستلام ✓';
+      if(st) st.textContent = 'عد غداً لمكافأة جديدة! 💤';
+    } else {
+      btn.classList.remove('done'); btn.textContent = 'استلم';
+      if(st) st.textContent = 'استلم ' + (50 + dayStreak()*5) + ' نقطة (سلسلة أيامك: ' + dayStreak() + ')';
+    }
+  }
+  function dayStreak(){
+    let set = new Set(daysDone);
+    let s = 0, d = new Date();
+    if(!set.has(todayKey(d))) d.setDate(d.getDate() - 1);
+    while(set.has(todayKey(d))){ s++; d.setDate(d.getDate() - 1); }
+    return s;
+  }
+  function renderCalendar(){
+    let grid = document.getElementById('cal-grid'); if(!grid) return;
+    grid.innerHTML = '';
+    let set = new Set(daysDone);
+    let today = new Date();
+    for(let i=29;i>=0;i--){
+      let d = new Date(today); d.setDate(today.getDate() - i);
+      let key = todayKey(d);
+      let el = document.createElement('span');
+      el.className = 'cal-cell' + (set.has(key) ? ' on' : '');
+      el.title = key + (set.has(key) ? ' — نشط ✓' : '');
+      grid.appendChild(el);
+    }
+    let st = document.getElementById('cal-streak');
+    if(st) st.textContent = 'سلسلة الأيام: ' + dayStreak() + ' 🔥';
+  }
+  function updateGoalRing(){
+    let ring = document.getElementById('goal-ring'); if(!ring) return;
+    let pct = Math.min(100, Math.round(playerXP / weeklyGoal * 100));
+    ring.style.background = 'conic-gradient(var(--c-blue) ' + pct + '%, rgba(255,255,255,.06) 0)';
+    let pctEl = document.getElementById('goal-pct'); if(pctEl) pctEl.textContent = pct + '%';
+    if(playerXP >= weeklyGoal) unlockBadge('goal1');
+  }
+
+  function streakBonus(s){
+    if(s >= 10) return { mult: 4, xp: 60 };
+    if(s >= 6)  return { mult: 3, xp: 45 };
+    if(s >= 3)  return { mult: 2, xp: 30 };
+    return { mult: 1, xp: 15 };
+  }
+  function updateComboChip(){
+    let chip = document.getElementById('combo-chip'); if(!chip) return;
+    if(streak >= 2){
+      let t = streakBonus(streak);
+      chip.style.display = 'inline-flex';
+      chip.textContent = '🔥 x' + t.mult + '  +' + t.xp;
+      chip.className = 'combo-chip tier-' + Math.min(4, t.mult);
+    } else chip.style.display = 'none';
+  }
+  function startTimerFrom(sec){
+    clearInterval(questionTimer);
+    timerLeft = Math.max(1, sec);
+    updateTimerUI();
+    let tw = document.querySelector('.timer-wrap'); if(tw) tw.classList.remove('frozen');
+    questionTimer = setInterval(()=>{
+      timerLeft--;
+      if(timerLeft >= 1 && timerLeft <= 5) sTick();
+      updateTimerUI();
+      if(timerLeft <= 0){ clearInterval(questionTimer); onTimeUp(); }
+    },1000);
+  }
+  function useFreeze(){
+    if(!inventory.freeze){ showToast('لا تملك أداة التجميد ❄️','error'); return; }
+    if(answers[currentQ] !== null || freezeActive) return;
+    inventory.freeze--; updateUI();
+    localStorage.setItem('devAhmedInv', JSON.stringify(inventory));
+    freezeActive = true;
+    clearInterval(questionTimer);
+    let tw = document.querySelector('.timer-wrap'); if(tw) tw.classList.add('frozen');
+    showToast('❄️ تجميد الزمن! +10 ثوانٍ لأجل الإجابة','info');
+    unlockBadge('freeze');
+    sClick();
+    setTimeout(()=>{
+      freezeActive = false;
+      let tw2 = document.querySelector('.timer-wrap'); if(tw2) tw2.classList.remove('frozen');
+      if(answers[currentQ] !== null){ updateTimerUI(); return; }
+      startTimerFrom(timerLeft);
+    }, 10000);
+  }
+
+  function masteryState(q){
+    let a = q.attempts || 0;
+    if(!a) return { code:'new', label:'جديد', icon:'🆕', cls:'new' };
+    let acc = 1 - ((q.wrongs||0) / a);
+    if(acc >= 0.8) return { code:'mastered', label:'متقن', icon:'✅', cls:'mastered' };
+    if(acc >= 0.5) return { code:'review', label:'مراجعة', icon:'📖', cls:'review' };
+    return { code:'weak', label:'ضعيف', icon:'💀', cls:'weak' };
+  }
+  function setTab(t){
+    currentTab = t;
+    let labels = { all:'الكل', new:'🆕 جديد', weak:'💀 ضعيف', review:'📖 مراجعة', mastered:'✅ متقن' };
+    document.querySelectorAll('.mastery-tab').forEach(b => b.classList.toggle('active', b.textContent.trim() === labels[t]));
+    renderBankList(document.getElementById('bank-search').value);
+    renderWeakPanel();
+  }
+  function weakQuestions(){
+    return getBank().filter(q => (q.attempts||0) > 0)
+      .sort((x,y) => (x.wrongs||0)/(x.attempts||1) - (y.wrongs||0)/(y.attempts||1));
+  }
+  function renderWeakPanel(){
+    let panel = document.getElementById('weak-panel'); if(!panel) return;
+    let b = getBank();
+    let mc = b.filter(q => masteryState(q).code === 'mastered').length;
+    if(mc >= 10) unlockBadge('master10');
+    let weak = weakQuestions().slice(0, 5);
+    if(!weak.length){ panel.style.display = 'none'; return; }
+    panel.style.display = 'block';
+    let html = '<h4>💀 نقاط ضعفك — ركّز عليها!</h4>';
+    weak.forEach(q => {
+      let acc = Math.round((1 - (q.wrongs||0) / (q.attempts||1)) * 100);
+      html += '<div class="weak-item"><i>' + q.q + '</i><span class="mast weak">' + acc + '%</span></div>';
+    });
+    html += '<div style="margin-top:10px;"><button class="btn btn-primary" onclick="startQuiz(\'weak\')">⚡ اختبر نقاط ضعفك الآن</button></div>';
+    panel.innerHTML = html;
+  }
+
+  function drawChart(){
+    let c = document.getElementById('chart-canvas'); if(!c) return;
+    let box = document.getElementById('chart-box');
+    if(sessions.length < 2){ if(box) box.style.display = 'none'; return; }
+    if(box) box.style.display = 'block';
+    let ctx = c.getContext('2d');
+    c.width = Math.max(300, c.getBoundingClientRect().width || 600);
+    c.height = 140;
+    ctx.clearRect(0,0,c.width,c.height);
+    let rows = sessions.slice(-10).map(s => s.pct);
+    let pad = 12, W = c.width, H = c.height;
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1;
+    for(let g=0; g<=4; g++){ let y = pad + (H - 2*pad) * (1 - g/4); ctx.beginPath(); ctx.moveTo(pad,y); ctx.lineTo(W-pad,y); ctx.stroke(); }
+    let pts = rows.map((v,i) => ({
+      x: pad + (W - 2*pad) * (rows.length === 1 ? 0.5 : (i/(rows.length-1))),
+      y: pad + (H - 2*pad) * (1 - Math.min(100, v)/100)
+    }));
+    ctx.beginPath(); ctx.moveTo(pts[0].x, H-pad);
+    pts.forEach(p => ctx.lineTo(p.x, p.y));
+    ctx.lineTo(pts[pts.length-1].x, H-pad); ctx.closePath();
+    let grad = ctx.createLinearGradient(0, pad, 0, H);
+    grad.addColorStop(0, 'rgba(56,189,248,0.35)'); grad.addColorStop(1, 'rgba(56,189,248,0)');
+    ctx.fillStyle = grad; ctx.fill();
+    ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
+    pts.forEach(p => ctx.lineTo(p.x, p.y));
+    ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3; ctx.lineJoin = 'round'; ctx.stroke();
+    pts.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI*2); ctx.fillStyle = '#38bdf8'; ctx.fill(); });
+  }
+  function renderSessions(){
+    let list = document.getElementById('sess-list'); if(!list) return;
+    list.innerHTML = '';
+    [...sessions].reverse().slice(0, 8).forEach(s => {
+      let el = document.createElement('span');
+      el.className = 'sess-item';
+      el.textContent = s.d + ' • ' + s.pct + '%';
+      el.title = 'XP: ' + s.xp + ' • ' + (s.mode || '');
+      list.appendChild(el);
+    });
+  }
+  function medalFor(pct){
+    if(pct >= 95) return { emo:'👑', name:'ميدالية الأسطورة', cls:'medal-gold' };
+    if(pct >= 90) return { emo:'🏆', name:'ميدالية ذهبية', cls:'medal-gold' };
+    if(pct >= 75) return { emo:'🥈', name:'ميدالية فضية', cls:'medal-silver' };
+    if(pct >= 60) return { emo:'🥉', name:'ميدالية برونزية', cls:'medal-bronze' };
+    if(pct >= 40) return { emo:'🎗️', name:'شارة المحاولة', cls:'medal-legend' };
+    return { emo:'💪', name:'واصل التدريب', cls:'medal-trained' };
+  }
+  function shareResult(){
+    let pct = document.getElementById('final-score').textContent;
+    let text = '🎯 حصلت على ' + pct + ' في «بنك الأسئلة الذكي» 🧠 — جرّب تتفوق عليّ!';
+    let done = () => { showToast('📋 تم نسخ النتيجة — شاركها!','success'); unlockBadge('share'); };
+    if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+    else fallbackCopy(text, done);
+  }
+  function fallbackCopy(text, done){
+    let ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); done(); }catch(e){}
+    ta.remove();
+  }
+  function setupKeyboard(){
+    document.addEventListener('keydown', (e)=>{
+      if(e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+      if(e.key >= '1' && e.key <= '4'){
+        let qs = document.getElementById('quiz-screen');
+        if(qs && qs.style.display !== 'none'){
+          let opts = document.getElementById('options-container');
+          if(opts && opts.children[+e.key - 1]) opts.children[+e.key - 1].click();
+        }
+      } else if(e.key === 'Enter'){
+        let nb = document.getElementById('next-btn');
+        if(nb && nb.style.display !== 'none') nb.click();
+      } else if((e.key === 'f' || e.key === 'F') && answers.length){
+        if(document.getElementById('quiz-screen').style.display !== 'none') useFreeze();
+      } else if(e.key === 's' || e.key === 'S'){
+        toggleSound();
+      } else if(e.key === 'Escape'){
+        document.querySelectorAll('.modal-overlay-ui').forEach(m => { if(m.style.display === 'flex') m.style.display = 'none'; });
+      }
+    });
+  }
+
   function levelOf(xp) { return Math.floor(Math.sqrt(xp / 100)) + 1; }
 
   function updateUI() {
@@ -764,7 +1292,7 @@ const mySubjectData = {
     let xpFill = document.getElementById('xp-fill');
     if(xpFill) xpFill.style.width = Math.max(0, Math.min(100, ((playerXP-cur)/(nxt-cur))*100)) + '%';
     let xpNum = document.getElementById('xp-num');
-    if(xpNum) xpNum.textContent = (playerXP >= nxt-1) ? 'MAX' : (nxt - playerXP) + ' ⬅';
+    if(xpNum) xpNum.textContent = ((nxt - playerXP) <= 0) ? 'MAX' : (nxt - playerXP);
     document.getElementById('player-xp').textContent = playerXP;
     document.getElementById('player-level').textContent = level;
     document.getElementById('streak-count').textContent = streak;
@@ -772,6 +1300,9 @@ const mySubjectData = {
     document.getElementById('count-shield').textContent = inventory.shield;
     document.getElementById('btn-fifty').classList.toggle('inv-empty', inventory.fifty <= 0);
     document.getElementById('btn-shield').classList.toggle('inv-empty', inventory.shield <= 0);
+    document.getElementById('count-freeze').textContent = inventory.freeze;
+    document.getElementById('btn-freeze').classList.toggle('inv-empty', inventory.freeze <= 0);
+    updateGoalRing();
 
     let wsXp = document.getElementById('ws-xp');
     if(wsXp) wsXp.textContent = playerXP;
@@ -810,26 +1341,181 @@ const mySubjectData = {
     } else showToast('رصيد النقاط غير كافٍ لإتمام الشراء.', 'error');
   }
 
-  document.getElementById('main-title').textContent = mySubjectData.title;
-  document.getElementById('quiz-subtitle').textContent = "استعد لاختبارك وتدرب على الـ " + mySubjectData.questions.length + " سؤالاً عبر بيئة تفاعلية";
-  if(document.getElementById('ws-questions')) document.getElementById('ws-questions').textContent = mySubjectData.questions.length;
+  let lastMode = 'ten';
+  document.getElementById('main-title').textContent = 'بنك الأسئلة الذكي 📚';
+  let bankCountInit = getBank().length;
+  document.getElementById('quiz-subtitle').textContent = bankCountInit ? 'بنكك يحوي ' + bankCountInit + ' سؤالاً — أضف ما تشاء واجمع النقاط!' : 'أضف أسئلتك من بنك الأسئلة ثم ابدأ التحدي!';
+  if(document.getElementById('ws-questions')) document.getElementById('ws-questions').textContent = bankCountInit;
 
-  function startQuiz() {
+  function startQuiz(mode) {
+    let bankList = getBank();
+    lastMode = mode || 'ten';
+    if(!bankList.length) { showToast('📭 البنك فارغ! أضف أسئلة أولاً', 'error'); openManager(); return; }
+    let picked;
+    if(mode === 'full') picked = bankList.slice();
+    else if(mode === 'weak') picked = shuffleArray(weakQuestions()).slice(0, 10);
+    else if(mode === 'smart') picked = pickSmart(bankList, Math.min(10, bankList.length));
+    else picked = shuffleArray(bankList.slice()).slice(0, 10);
+    if(!picked.length){ showToast('📭 لا توجد أسئلة لهذا الوضع حالياً','error'); openManager(); return; }
+    activeQuiz = picked.map(randomizeOptions);
     currentQ = 0; streak = 0; sessionXP = 0; shieldActive = false;
     document.getElementById('welcome-screen').style.display = 'none';
     document.getElementById('quiz-screen').style.display = 'block';
-    answers = new Array(mySubjectData.questions.length).fill(null);
-    hintsUsed = new Array(mySubjectData.questions.length).fill(false);
+    answers = new Array(activeQuiz.length).fill(null);
+    hintsUsed = new Array(activeQuiz.length).fill(false);
     updateUI();
     renderQuestion();
-    showToast('انطلقت الرحلة! بالتوفيق 🚀', 'info');
+    showToast(mode === 'smart' ? '🧠 الوضع الذكي: سيركّز على نقاط ضعفك' : 'انطلقت الرحلة! بالتوفيق 🚀', 'info');
+    sClick();
+  }
+
+  /* ====== Question Bank Manager ====== */
+  function openManager(){
+    if(questionTimer) clearInterval(questionTimer);
+    document.getElementById('welcome-screen').style.display = 'none';
+    document.getElementById('quiz-screen').style.display = 'none';
+    document.getElementById('result-screen').style.display = 'none';
+    document.getElementById('manage-screen').style.display = 'block';
+    let searchEl = document.getElementById('bank-search'); if(searchEl) searchEl.value = '';
+    renderBankList('');
+    renderBankStats();
+    sClick();
+  }
+  function renderBankStats(){
+    let b = getBank(), el = document.getElementById('bank-stats');
+    if(!el) return;
+    let attempts = b.reduce((s,q)=>s+(q.attempts||0),0);
+    let wrongs = b.reduce((s,q)=>s+(q.wrongs||0),0);
+    let acc = attempts ? Math.round((1 - wrongs/attempts)*100) : null;
+    el.innerHTML = '<div class="bank-stat"><b>'+b.length+'</b><span>سؤال في البنك</span></div>'
+      + '<div class="bank-stat"><b>'+(acc===null?'—':acc+'%')+'</b><span>دقتك الكلية</span></div>'
+      + '<div class="bank-stat"><b>'+attempts+'</b><span>محاولة إجابة</span></div>';
+  }
+  function renderBankList(filter){
+    let b = getBank(), f = (filter||'').trim();
+    let arr = b.filter(q => {
+      let st = masteryState(q).code;
+      return (!f || q.q.indexOf(f) !== -1) && (currentTab === 'all' || st === currentTab);
+    });
+    let list = document.getElementById('bank-list'); if(!list) return;
+    list.innerHTML = '';
+    if(!arr.length){
+      list.innerHTML = '<div class="empty-state">📭 لا توجد أسئلة مطابقة<br><span style="color:var(--c-dim); font-size:0.85rem;">جرّب مسح البحث أو غيّر التبويب</span></div>';
+      return;
+    }
+    arr.forEach(q => {
+      let acc = q.attempts ? Math.round((1 - (q.wrongs||0)/q.attempts)*100) : '—';
+      let st = masteryState(q);
+      let div = document.createElement('div'); div.className = 'bank-item glass-panel';
+      div.innerHTML = '<div class="bank-idx">'+(b.indexOf(q)+1)+'</div>'
+        + '<div class="bank-body"><div class="bank-q">'+q.q+'</div>'
+        + '<div class="bank-meta"><span class="mast '+st.cls+'">'+st.icon+' '+st.label+'</span><span>✅ '+q.options[q.correct]+'</span><span>🎯 '+acc+'%</span><span>📈 '+(q.attempts||0)+'</span></div></div>'
+        + '<div class="bank-actions">'
+        + '<button class="btn btn-ghost btn-icon" onclick="openQuestionForm('+(q.id)+')" title="تعديل">✏️</button>'
+        + '<button class="btn btn-ghost btn-icon" onclick="deleteQuestion('+(q.id)+')" title="حذف">🗑️</button></div>';
+      list.appendChild(div);
+    });
+  }
+  function deleteQuestion(id){
+    if(!confirm('هل تريد حذف هذا السؤال نهائياً؟')) return;
+    bank = getBank().filter(q => q.id !== id);
+    saveBank();
+    let searchEl = document.getElementById('bank-search');
+    renderBankList(searchEl ? searchEl.value : '');
+    renderBankStats();
+    showToast('🗑️ تم حذف السؤال','info');
+  }
+
+  /* @@MGR2@@ */
+  let editingId = null;
+  let tmpCorrect = 0;
+  function openQuestionForm(id){
+    editingId = (id === undefined) ? null : id;
+    let q = null;
+    if(editingId !== null) q = getBank().find(x=>x.id === editingId);
+    let qInput = document.getElementById('qf-question');
+    if(!qInput) return;
+    qInput.value = q ? q.q : '';
+    document.getElementById('qf-explanation').value = q ? (q.explanation || '') : '';
+    tmpCorrect = q ? q.correct : 0;
+    buildQFOptions(q ? q.options : ['','','','']);
+    document.getElementById('qf-title').textContent = (editingId === null) ? '➕ أضف سؤالاً جديداً' : '✏️ تعديل السؤال رقم ' + editingId;
+    document.getElementById('qform-modal').style.display = 'flex';
+  }
+  function buildQFOptions(opts){
+    let wrap = document.getElementById('qf-options'); if(!wrap) return;
+    wrap.innerHTML = '';
+    let letters = ['أ','ب','ج','د'];
+    for(let i=0;i<4;i++){
+      let row = document.createElement('div'); row.className = 'qf-row';
+      row.innerHTML = '<label class="qf-radio"><input type="radio" name="qf-correct" '+(tmpCorrect===i?'checked':'')+' onchange="tmpCorrect='+i+'"><span class="qf-letter">'+letters[i]+'</span></label>'
+        +'<input class="qf-opt" id="qf-opt-'+i+'" value="'+(opts[i]||'')+'" placeholder="الخيار '+letters[i]+'">';
+      wrap.appendChild(row);
+    }
+  }
+  function saveQuestionForm(){
+    let text = document.getElementById('qf-question').value.trim();
+    if(!text){ showToast('📝 اكتب نص السؤال أولاً','error'); return; }
+    let opts = [];
+    for(let i=0;i<4;i++){
+      let v = document.getElementById('qf-opt-'+i).value.trim();
+      if(!v){ showToast('✏️ املأ الخيارات الأربعة','error'); return; }
+      opts.push(v);
+    }
+    let exp = document.getElementById('qf-explanation').value.trim();
+    let list = getBank();
+    if(editingId === null){
+      list.push({ id: Date.now(), q: text, options: opts, correct: tmpCorrect, explanation: exp, wrongs: 0, attempts: 0 });
+      showToast('✔ تمت إضافة السؤال بنجاح','success');
+    } else {
+      let idx = list.findIndex(x=>x.id === editingId);
+      if(idx > -1){ list[idx].q = text; list[idx].options = opts; list[idx].correct = tmpCorrect; list[idx].explanation = exp; }
+      showToast('✔ تم حفظ التعديلات','success');
+    }
+    bank = list;
+    saveBank();
+    closeModal('qform-modal');
+    let searchEl = document.getElementById('bank-search');
+    renderBankList(searchEl ? searchEl.value : '');
+    renderBankStats();
+    sClick();
+  }
+  function openImportModal(){
+    let t = document.getElementById('import-text'); if(t) t.value = '';
+    document.getElementById('import-modal').style.display = 'flex';
+  }
+  function doImport(){
+    let raw = document.getElementById('import-text').value.trim();
+    if(!raw){ showToast('📥 الصق الأسئلة أولاً','error'); return; }
+    let blocks = raw.split(/\n\s*\n/);
+    let added = 0;
+    blocks.forEach(block => {
+      let lines = block.split('\n').map(l=>l.trim()).filter(l=>l.length);
+      if(lines.length < 3) return;
+      let optLine = lines.find(l => l.indexOf('|') !== -1);
+      if(!optLine) return;
+      let opts = optLine.split('|').map(s=>s.trim());
+      if(opts.length < 2) return;
+      let correctIdx = parseInt(lines[lines.indexOf(optLine)+1], 10) - 1;
+      if(isNaN(correctIdx) || correctIdx < 0) correctIdx = 0;
+      if(correctIdx >= opts.length) correctIdx = 0;
+      let explanation = lines[lines.indexOf(optLine)+2] || '';
+      getBank().push({ id: Date.now()+added, q: lines[0], options: opts, correct: correctIdx, explanation: explanation, wrongs: 0, attempts: 0 });
+      added++;
+    });
+    bank = getBank();
+    saveBank();
+    if(added){ renderBankList(''); renderBankStats(); showToast('📥 تم استيراد '+added+' سؤالاً بنجاح','success'); }
+    else showToast('⚠️ لم يتم العثور على أسئلة صحيحة في النص','error');
+    closeModal('import-modal');
+    sClick();
   }
 
   function useFiftyFifty() {
     if(inventory.fifty <= 0) { showToast('لا تملك أداة 50/50 حالياً.', 'error'); return; }
     if(answers[currentQ] !== null || hintsUsed[currentQ]) return;
     inventory.fifty--; updateUI(); localStorage.setItem('devAhmedInv', JSON.stringify(inventory));
-    let q = mySubjectData.questions[currentQ];
+    let q = activeQuiz[currentQ];
     let opts = document.getElementById('options-container').children;
     let wrong = []; q.options.forEach((o, i) => { if(i !== q.correct) wrong.push(i); });
     let hide1 = wrong.splice(Math.floor(Math.random()*wrong.length), 1)[0];
@@ -854,12 +1540,12 @@ const mySubjectData = {
   }
 
   function renderQuestion() {
-    let q = mySubjectData.questions[currentQ];
-    let total = mySubjectData.questions.length;
+    let q = activeQuiz[currentQ];
+    let total = activeQuiz.length;
     if(questionTimer) clearInterval(questionTimer);
     let answeredCount = 0, correctCount = 0;
     for(let i = 0; i < total; i++) {
-      if(answers[i] !== null) { answeredCount++; if(answers[i] === mySubjectData.questions[i].correct) correctCount++; }
+      if(answers[i] !== null) { answeredCount++; if(answers[i] === activeQuiz[i].correct) correctCount++; }
     }
     document.getElementById('question-tracker').textContent = `${currentQ + 1} / ${total}`;
     document.getElementById('progress').style.width = `${(currentQ / total) * 100}%`;
@@ -867,6 +1553,7 @@ const mySubjectData = {
     document.getElementById('quiz-streak').textContent = streak;
     document.getElementById('quiz-xp').textContent = playerXP;
     document.getElementById('quiz-accuracy').textContent = answeredCount ? Math.round((correctCount / answeredCount) * 100) + '%' : '—';
+    updateComboChip();
     document.getElementById('question-text').textContent = q.q;
     document.getElementById('explanation-box').style.display = 'none';
     document.getElementById('next-btn').style.display = 'none';
@@ -904,7 +1591,7 @@ const mySubjectData = {
   function handleAnswer(idx, btn) {
     if(answers[currentQ] !== null && !shieldActive) return;
     if(questionTimer) clearInterval(questionTimer);
-    let q = mySubjectData.questions[currentQ];
+    let q = activeQuiz[currentQ];
     
     if(idx !== q.correct && shieldActive) {
       shieldActive = false; btn.classList.add('wrong', 'disabled', 'shake'); btn.onclick = null;
@@ -919,17 +1606,19 @@ const mySubjectData = {
     if(idx === q.correct) {
       streak++; 
       triggerStreakPulse();
-      let gained = (streak >= 3 ? 30 : 15);
+      let gained = streakBonus(streak).xp;
       let speedBonus = (timerLeft > QUESTION_TIME * 0.4) ? 5 : 0;
+      if(speedBonus){ speedCount++; if(speedCount >= 5) unlockBadge('speed5'); }
       gained += speedBonus;
       playerXP += gained; sessionXP += gained;
       localStorage.setItem('devAhmedXP', playerXP);
       stats.correctTotal++; saveStats();
+      trackAttempt(true);
       floatXP('+' + gained);
       sCorrect();
       if(speedBonus) showToast('⚡ رد سريع! مكافأة سرعة +' + speedBonus, 'success');
       if(streak === 3) showToast('🔥 سلسلة 3 إجابات متتالية! +30 نقطة', 'success');
-      if(streak === 5) showToast('🏅 سلسلة 5 إجابات متتالية! أداء رائع', 'success');
+      if(streak === 5) { showToast('🏅 سلسلة 5 إجابات متتالية! أداء رائع', 'success'); unlockBadge('combo5'); }
       if(streak === 10) { showToast('👑 سلسلة 10 متتالية! أنت الأسطورة', 'success'); unlockBadge('streak10'); }
       let lvlBefore = levelOf(playerXP - gained);
       let lvlAfter = levelOf(playerXP);
@@ -937,6 +1626,7 @@ const mySubjectData = {
     } else {
       streak = 0;
       sWrong();
+      trackAttempt(false);
       showToast('❌ إجابة خاطئة، راجع الشرح', 'error');
     }
     
@@ -946,7 +1636,7 @@ const mySubjectData = {
   }
 
   function showExp() {
-    let q = mySubjectData.questions[currentQ];
+    let q = activeQuiz[currentQ];
     let box = document.getElementById('explanation-box');
     let isCorrect = (answers[currentQ] === q.correct);
     box.className = 'explanation-ui fade-in-ui ' + (isCorrect ? 'correct' : 'wrong');
@@ -955,7 +1645,7 @@ const mySubjectData = {
   }
 
   function nextQuestion() {
-    if(currentQ < mySubjectData.questions.length - 1) {
+    if(currentQ < activeQuiz.length - 1) {
       currentQ++; renderQuestion();
     } else {
       showFinalResult();
@@ -963,12 +1653,17 @@ const mySubjectData = {
   }
 
   function showFinalResult() {
-    let qs = mySubjectData.questions, total = qs.length;
+    let qs = activeQuiz, total = qs.length;
     let correctCount = answers.filter((a, i) => a === qs[i].correct).length;
     let wrongCount = total - correctCount;
     let pct = Math.round((correctCount / total) * 100);
     if(pct > bestScore) { bestScore = pct; localStorage.setItem('devAhmedBest', bestScore); }
     if(questionTimer) clearInterval(questionTimer);
+    let keyToday = todayKey();
+    if(!daysDone.includes(keyToday)){ daysDone.push(keyToday); localStorage.setItem('devAhmedDays', JSON.stringify(daysDone)); }
+    sessions.push({ d: keyToday, pct: pct, xp: sessionXP, mode: lastMode });
+    if(sessions.length > 30) sessions = sessions.slice(-30);
+    localStorage.setItem('devAhmedSessions', JSON.stringify(sessions));
 
     document.getElementById('quiz-screen').style.display = 'none';
     document.getElementById('result-screen').style.display = 'block';
@@ -995,15 +1690,23 @@ const mySubjectData = {
 
     unlockBadge('finished');
     if(pct === 100) unlockBadge('perfect');
-    if(pct >= 75) { sWin(); burstConfetti(160); }
+    let md = medalFor(pct);
+    document.getElementById('result-medal').textContent = md.emo + ' ' + md.name;
+    document.getElementById('result-medal').className = 'medal-tag ' + md.cls;
+    document.getElementById('result-emoji').textContent = md.emo;
+    if(pct >= 75){ sWin(); burstConfetti(pct >= 90 ? 220 : 150); }
+    else if(pct >= 60) burstConfetti(60);
     awardAchievements();
     renderBadgeCount();
+    drawChart();
+    renderSessions();
+    renderCalendar();
     updateUI();
   }
 
   function restartQuiz() {
     document.getElementById('result-screen').style.display = 'none';
-    startQuiz();
+    startQuiz(lastMode);
   }
 
   const canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d');
@@ -1025,12 +1728,24 @@ const mySubjectData = {
 
   function goToMainMenu() {
       document.getElementById('result-screen').style.display = 'none';
+      document.getElementById('quiz-screen').style.display = 'none';
+      document.getElementById('manage-screen').style.display = 'none';
       document.getElementById('welcome-screen').style.display = 'block'; 
   }
 
+  document.documentElement.setAttribute('data-theme', themeName);
   setupConfetti();
   renderSound();
+  renderMusicBtn();
   renderBadgeCount();
+  renderProfileChip();
+  renderDaily();
+  renderCalendar();
+  updateGoalRing();
+  drawChart();
+  renderSessions();
+  setupKeyboard();
+  if(musicOn) startMusic();
   document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 </body>
