@@ -585,6 +585,32 @@
   .readiness-num { font-size:2.7rem; font-weight:900; color:var(--c-blue); text-shadow:0 0 18px rgba(56,189,248,.4); }
   .readiness-msg { color:var(--c-muted); font-size:.9rem; margin-top:6px; line-height:1.7; min-height:44px; }
   .readiness-comp { margin-top:10px; display:flex; flex-direction:column; gap:8px; }
+
+  /* ====== Memory Arena ====== */
+  .mem-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; max-width:640px; margin:0 auto; }
+  .mem-tile { position:relative; aspect-ratio:7/5; border-radius:14px; background:rgba(255,255,255,.04); border:1px solid var(--c-border);
+    cursor:pointer; overflow:hidden; transition:transform .18s, border-color .18s, box-shadow .18s; padding:0; font-family:var(--font); }
+  .mem-tile:hover { transform:translateY(-3px); border-color:var(--c-blue2); }
+  .mem-tile .mem-cover { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:1.4rem;
+    background:linear-gradient(135deg, rgba(14,165,233,.16), rgba(124,58,237,.14)); transition:opacity .25s, transform .3s; }
+  .mem-tile.open .mem-cover { opacity:0; transform:scale(.7); pointer-events:none; }
+  .mem-tile .mem-face { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; padding:8px;
+    font-size:.82rem; font-weight:900; text-align:center; background:rgba(13,18,32,.78); border:1px solid var(--c-border2); border-radius:13px; opacity:0; transform:scale(.85); transition:opacity .25s, transform .25s; }
+  .mem-tile.open .mem-face { opacity:1; transform:scale(1); }
+  .mem-tile .mem-face i { font-style:normal; font-size:.68rem; font-weight:600; color:var(--c-muted); line-height:1.5;
+    overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; }
+  .mem-tile.open .mem-face i { color:var(--c-green); }
+  .mem-tile.done { border-color:var(--c-green); box-shadow:0 0 14px rgba(52,211,153,.4); }
+  .mem-stats { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; max-width:640px; margin:0 auto 16px; }
+  .mem-stat { flex:1; min-width:110px; text-align:center; padding:10px; border-radius:var(--radius-md); background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06); }
+  .mem-stat b { display:block; font-size:1.25rem; color:var(--c-blue); }
+  .mem-stat span { font-size:.68rem; color:var(--c-muted); font-weight:700; }
+  .mem-status { text-align:center; font-weight:700; color:var(--c-muted); font-size:.95rem; margin-top:18px; min-height:60px; }
+  .mem-result { text-align:center; }
+  .mem-result .mem-stars { font-size:1.8rem; display:block; letter-spacing:6px; margin-bottom:4px; }
+  .mem-result b { color:var(--c-text); display:block; font-size:1rem; }
+  .mem-result p { color:var(--c-amber); font-weight:900; font-size:1.2rem; margin:6px 0; }
+  .mem-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:8px; }
 </style>
 </head>
 <body>
@@ -771,6 +797,7 @@
         <button class="hub-card h-vs" onclick="startVersus()"><b>⚔️ مواجهة لاعبَين</b><i>تحدَّ صديقك على نفس الجهاز</i></button>
         <button class="hub-card" onclick="startQuiz('srs')"><b>🔁 مراجعة SRS</b><i>يعيد لك ما نسيت تلقائياً</i></button>
         <button class="hub-card" onclick="openDashboard()"><b>📊 لوحة القيادة</b><i>مصفوفة الإتقان والتحليلات</i></button>
+        <button class="hub-card" onclick="startMemory()"><b>🧠 ذاكرة البطاقات</b><i>طابق السؤال مع جوابه!</i></button>
       </div>
       <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
         <button class="btn btn-ghost btn-lg" onclick="openManager()">📚 بنك الأسئلة</button>
@@ -970,6 +997,22 @@
         <div class="readiness-comp" id="dash-ready-comp"></div>
       </div>
     </div>
+  </div>
+
+  <div id="memory-screen" class="screen" style="display:none;">
+    <div class="glass-panel fade-in-ui" style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; padding:12px 18px; border-radius:var(--radius-lg); margin-bottom:16px;">
+      <button class="btn btn-ghost" onclick="goToMainMenu()">✖ خروج</button>
+      <b>🧠 ذاكرة البطاقات</b>
+      <span>من بنك أسئلتك 📚</span>
+    </div>
+    <div class="mem-stats">
+      <div class="mem-stat"><b id="mem-pairs">0/0</b><span>مطابقات</span></div>
+      <div class="mem-stat"><b id="mem-moves">0</b><span>محاولات</span></div>
+      <div class="mem-stat"><b id="mem-stars">—</b><span>النجوم</span></div>
+      <div class="mem-stat"><b id="mem-timer">0s</b><span>الوقت</span></div>
+    </div>
+    <div id="mem-grid" class="mem-grid"></div>
+    <div class="mem-status" id="mem-status">افتح بطاقتين متطابقتين (سؤال + إجابته)</div>
   </div>
 
 </div>
@@ -1179,7 +1222,7 @@ function trackAttempt(correct){ recordAnswer(activeQuiz[currentQ], correct); }
   let _hoverLast = 0;
   function sHover(){ beep(1500, 0.022, 'sine', 0.05); }
   function setupHoverSound(){
-    const HOVER = '.btn, .option-btn, .hub-card, .mode-btn, .mastery-tab, .bank-item, .inv-btn, .profile-chip, .theme-btn, .avatar-opt, .modal-close, .p-card, .flip-card, .welcome-stat, .daily-box, .cal-cell, .goal-ring, .leaderboard-card, .bank-stat';
+    const HOVER = '.btn, .option-btn, .hub-card, .mode-btn, .mastery-tab, .bank-item, .inv-btn, .profile-chip, .theme-btn, .avatar-opt, .modal-close, .p-card, .flip-card, .welcome-stat, .daily-box, .cal-cell, .goal-ring, .leaderboard-card, .bank-stat, .mem-tile, .chip';
     document.addEventListener('mouseover', (e) => {
       let t = e.target.closest ? e.target.closest(HOVER) : null;
       if(!t) return;
@@ -2050,6 +2093,7 @@ function trackAttempt(correct){ recordAnswer(activeQuiz[currentQ], correct); }
   function hideAllScreens(showId){
     if(questionTimer) clearInterval(questionTimer);
     if(bossTimerInt) clearInterval(bossTimerInt);
+    if(memTimer){ clearInterval(memTimer); memTimer = null; }
     freezeActive = false;
     ['welcome-screen','quiz-screen','result-screen','manage-screen','boss-screen','study-screen','versus-screen','dashboard-screen'].forEach(id => {
       let el = document.getElementById(id);
@@ -2517,6 +2561,89 @@ function trackAttempt(correct){ recordAnswer(activeQuiz[currentQ], correct); }
     if(s.indexOf('بنك') !== -1 || s.indexOf('سؤال') !== -1) return coachBankReply();
     if(s.indexOf('شكر') !== -1) return 'على الرحب والسعة دائماً! 🫶';
     return 'فهمتك! 😊 يمكنك أن تسألني:\n• "نقاط ضعفي"\n• "جاهزيتي"\n• "نصيحة اليوم"\n• "خطة"\n• "شاراتي"\n• "ملفي الشخصي"';
+  }
+
+  ACHIEVEMENTS.push({ id:'memory1', icon:'🧠', name:'عبقري الذاكرة', desc:'أكمل جولة ذاكرة البطاقات' });
+  let memDeck = [], memFirst = null, memLock = false, memPairs = 0, memMoves = 0, memStartT = 0, memTimer = null;
+  function startMemory(){
+    let bank = getBank();
+    if(bank.length < 2){ showToast('تحتاج سؤالين على الأقل 🧠','error'); openManager(); return; }
+    let n = Math.min(6, bank.length);
+    let chosen = shuffleArray(bank.slice()).slice(0, n);
+    memDeck = [];
+    chosen.forEach((q, i) => {
+      memDeck.push({ kind:'س', text: q.q, pair: i });
+      memDeck.push({ kind:'ج', text: q.options[q.correct], pair: i });
+    });
+    memDeck = shuffleArray(memDeck);
+    memFirst = null; memLock = false; memPairs = 0; memMoves = 0;
+    hideAllScreens('memory-screen');
+    document.getElementById('mem-pairs').textContent = '0/' + n;
+    document.getElementById('mem-moves').textContent = '0';
+    document.getElementById('mem-stars').textContent = '—';
+    document.getElementById('mem-timer').textContent = '0s';
+    document.getElementById('mem-status').textContent = 'افتح بطاقتين متطابقتين (سؤال + إجابته)';
+    renderMemoryGrid();
+    memStartT = Date.now();
+    memTimer = setInterval(()=>{
+      let el = document.getElementById('mem-timer');
+      if(el) el.textContent = Math.round((Date.now() - memStartT) / 1000) + 's';
+    }, 500);
+  }
+  function renderMemoryGrid(){
+    let grid = document.getElementById('mem-grid');
+    grid.innerHTML = '';
+    memDeck.forEach((card, i) => {
+      let b = document.createElement('button');
+      b.className = 'mem-tile';
+      b.title = card.text;
+      b.setAttribute('data-i', i);
+      b.innerHTML = '<span class="mem-cover">❓</span><span class="mem-face">' + card.kind + '<i>' + card.text + '</i></span>';
+      b.onclick = () => memFlip(i, b);
+      grid.appendChild(b);
+    });
+  }
+  function memFlip(idx, btn){
+    if(memLock || btn.classList.contains('open') || btn.classList.contains('done')) return;
+    btn.classList.add('open');
+    sClick();
+    if(memFirst === null){ memFirst = { i: idx, b: btn }; return; }
+    memMoves++;
+    document.getElementById('mem-moves').textContent = memMoves;
+    let c1 = memDeck[memFirst.i], c2 = memDeck[idx];
+    if(c1.pair === c2.pair){
+      memFirst.b.classList.add('done'); btn.classList.add('done');
+      memPairs++;
+      document.getElementById('mem-pairs').textContent = memPairs + '/' + (memDeck.length/2);
+      memFirst = null;
+      sCorrect(); burstConfetti(10);
+      if(memPairs >= memDeck.length/2) memRoundEnd();
+    } else {
+      memLock = true;
+      let f = memFirst; memFirst = null;
+      sWrong();
+      setTimeout(()=>{ f.b.classList.remove('open'); btn.classList.remove('open'); memLock = false; }, 850);
+    }
+  }
+  function memRoundEnd(){
+    if(memTimer){ clearInterval(memTimer); memTimer = null; }
+    let moves = memMoves, pairs = memDeck.length/2;
+    let stars = moves <= pairs + 2 ? 3 : moves <= pairs + 5 ? 2 : 1;
+    let secs = Math.round((Date.now() - memStartT)/1000);
+    let xp = 40 + stars*25 + Math.max(0, 30 - moves);
+    playerXP += xp;
+    localStorage.setItem('devAhmedXP', playerXP);
+    updateUI();
+    unlockBadge('memory1');
+    sWin(); burstConfetti(180);
+    document.getElementById('mem-stars').textContent = ('⭐').repeat(stars);
+    document.getElementById('mem-timer').textContent = secs + 's';
+    let st = document.getElementById('mem-status');
+    st.innerHTML = '<div class="mem-result"><span class="mem-stars">' + '⭐'.repeat(stars) + '</span>'
+      + '<b>أنهيتها في ' + moves + ' محاولة • ' + secs + ' ثانية</b>'
+      + '<p>+' + xp + ' XP</p>'
+      + '<div class="mem-actions"><button class="btn btn-primary" onclick="startMemory()">🔄 جولة جديدة</button>'
+      + '<button class="btn btn-ghost" onclick="goToMainMenu()">✖ خروج</button></div></div>';
   }
 
   function openDashboard(){
